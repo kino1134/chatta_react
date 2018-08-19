@@ -5,6 +5,7 @@ module.exports = {
     "strict": 0
   },
   "env": {
-    "jest": true
+    "jest": true,
+    "jasmine": true
   }
 };
