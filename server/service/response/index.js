@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { env } from '../../config'
 
 export const success = (res, status) => (entity) => {
   if (entity) {
@@ -15,16 +16,24 @@ export const notFound = (res) => (entity) => {
   return null
 }
 
-// エラー処理は暫定
-export const error = (res, next) => (err) => {
+export const errorHandler = (err, req, res, next) => {
+  logerror(err)
+
+  const message = env === 'development' ? err.stack : err.message
+
+  let code = 500
   if (err instanceof mongoose.Error.CastError) {
-    console.log(err.message)
-    res.json({ message: err.message }).status(400).end()
-  } else {
-    next()
+    code = 400
   }
+
+  res.status(code).json({ type: err.name, message: message })
 }
 
+const logerror = (err) => {
+  if (env !== 'test') console.error(err.stack || err.toString())
+}
+
+// export const authorOrAdmin = (res, user, userField) => (entity) => {
 //   if (entity) {
 //     const isAdmin = user.role === 'admin'
 //     const isAuthor = entity[userField] && entity[userField].equals(user.id)

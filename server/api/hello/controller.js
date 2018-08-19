@@ -1,4 +1,4 @@
-import { success, notFound, error } from '../../service/response/'
+import { success, notFound } from '../../service/response/'
 import { Hello } from '.'
 
 export const show = ({ params }, res, next) =>
@@ -6,4 +6,4 @@ export const show = ({ params }, res, next) =>
     .then(notFound(res))
     .then((hello) => hello ? hello.view() : null)
     .then(success(res))
-    .catch(error(res, next))
+    .catch(next)

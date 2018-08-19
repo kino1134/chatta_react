@@ -7,6 +7,7 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
 import { env } from '../'
+import { errorHandler } from '../../service/response'
 
 export default (root, routes) => {
   const app = express()
@@ -31,6 +32,7 @@ export default (root, routes) => {
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())
   app.use(root, routes)
+  app.use(errorHandler)
 
   return app
 }
