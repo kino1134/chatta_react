@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon server/index.js --exec babel-node",
+    "start:db": "docker-compose up",
     "clean": "rimraf dist",
     "build": "npm run clean && babel server -d dist",
     "serve": "node dist/index.js",
