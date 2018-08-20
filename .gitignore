@@ -2,4 +2,6 @@ dist/
 data/
 node_modules/
 
+.env.development
+
 yarn-error.log*
