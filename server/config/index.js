@@ -2,14 +2,14 @@ import dotenv from 'dotenv'
 
 const env = process.env.NODE_ENV || 'development'
 
+// Load .env per NODE_ENV
+dotenv.config({ path: '.env.' + env })
+
 // Load .env
 const result = dotenv.config()
 if (result.error) {
   throw result.error
 }
-
-// Overload .env per NODE_ENV
-dotenv.config({ path: '.env.' + env })
 
 // 環境変数の読み込み（必須チェック付き）
 const required = (name) => {
@@ -41,8 +41,8 @@ const config = {
     port: process.env.REDIS_PORT || 6379
   },
   google: {
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET
+    clientId: required('GOOGLE_CLIENT_ID'),
+    clientSecret: required('GOOGLE_CLIENT_SECRET')
   }
 }
 
