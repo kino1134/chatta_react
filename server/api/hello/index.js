@@ -1,16 +1,9 @@
 import { Router } from 'express'
 import { show } from './controller'
-import { google } from '../../service/passport'
+import { token } from '../../service/passport'
 export Hello, { schema } from './model'
 
 const router = new Router()
-
-// TODO: ちゃんとした場所に移動させる
-router.get('/auth', google())
-router.get('/callback', google(), (req, res) => {
-  console.log(req.user)
-  res.json(req.user).status(200)
-})
 
 /**
  * @api {get} /hellos/:id Retrieve hello
@@ -22,5 +15,7 @@ router.get('/callback', google(), (req, res) => {
  */
 router.get('/:id',
   show)
+
+router.get('/auth/:id', token(), show)
 
 export default router

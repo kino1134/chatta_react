@@ -1,25 +1,47 @@
 import passport from 'passport'
-import { OAuth2Strategy } from 'passport-google-oauth'
+import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth'
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt'
 import config from '../../config'
 
 // Login by Google
 const googleConfig = {
   clientID: config.google.clientId,
   clientSecret: config.google.clientSecret,
-  // TODO: ちゃんとしたAPIにする
-  callbackURL: config.api.uri + config.api.root + '/hellos/callback',
+  callbackURL: config.api.uri + config.api.root + '/auth/google',
   userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo'
 }
 const googleLogin = (accessToken, refreshToken, profile, done) => {
-  // TODO: Create User & Create Token
+  // TODO: Create User
   console.log(profile)
   return done(null, profile)
 }
-passport.use(new OAuth2Strategy(googleConfig, googleLogin))
+passport.use(new GoogleStrategy(googleConfig, googleLogin))
 export const google = (opts) => {
   const config = {
     session: false,
     scope: ['openid', 'email', 'profile']
   }
   return passport.authenticate('google', Object.assign(config, opts))
+}
+
+// Authenticate by Token
+const jwtConfig = {
+  secretOrKey: config.jwt.secret,
+  jwtFromRequest: ExtractJwt.fromExtractors([
+    ExtractJwt.fromUrlQueryParameter('access_token'),
+    ExtractJwt.fromBodyField('access_token'),
+    ExtractJwt.fromAuthHeaderAsBearerToken()
+  ])
+}
+const jwtAuth = (payload, done) => {
+  // TODO: Find User
+  console.log(payload)
+  return done(null, payload)
+}
+passport.use(new JwtStrategy(jwtConfig, jwtAuth))
+export const token = (opts) => {
+  const config = {
+    session: false
+  }
+  return passport.authenticate('jwt', Object.assign(config, opts))
 }
