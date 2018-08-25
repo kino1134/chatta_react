@@ -4,16 +4,16 @@
 * ExpressのミドルウェアにRest API用のカスタムエラーハンドラを追加
   * http://expressjs.com/ja/guide/error-handling.html
   * https://github.com/pillarjs/finalhandler
+* ソーシャルログインの追加(Google, GitHub)  
+  Implicit Flow だとリプレイ攻撃しやすくなるらしいので、普通にサーバも使って認証する
+* 認証/認可フィルターの追加
 
 ## やりたいこと
 * 動作確認用HTMLの追加（あとで消すけど）
 * APIからSocketサーバに対してのイベント発行
   * https://github.com/socketio/socket.io-emitter
   * https://socket.io/docs/rooms-and-namespaces/#Sending-messages-from-the-outside-world
-* ソーシャルログインの追加(Google, Github)  
-  SPAの場合、すべてブラウザ側の実装でトークンを取得するはずなので、Implicit Flowになる。  
-  http://openid-foundation-japan.github.io/openid-connect-core-1_0.ja.html#ImplicitFlowAuth
-* 認証/認可フィルターの追加
+* ローカルパスワードによるログイン
 * パスワードユーザの登録APIの追加
 * ロギング(各ライブラリの説明を読む感じ、そんなに準備されてないようなので後回しかも)
 * クライアント(React)の追加
