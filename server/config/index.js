@@ -47,6 +47,10 @@ const config = {
   google: {
     clientId: required('GOOGLE_CLIENT_ID'),
     clientSecret: required('GOOGLE_CLIENT_SECRET')
+  },
+  github: {
+    clientId: required('GITHUB_CLIENT_ID'),
+    clientSecret: required('GITHUB_CLIENT_SECRET')
   }
 }
 
