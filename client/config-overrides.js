@@ -5,7 +5,7 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const paths = require('react-scripts/config/paths')
 
-const authIndexJs = 'auth.js'
+const authIndexJs = 'auth.index.js'
 const authIndexHtml = 'authenticate/index.html'
 
 const setEntry = function (config, env) {
@@ -34,7 +34,7 @@ const getDefaultHtmlPlugin = function (config, env) {
 }
 
 const setDefaultHtmlPluginChunks = function (config, env) {
-  const [htmlPlugin, index] = getDefaultHtmlPlugin(config, env)
+  const [htmlPlugin] = getDefaultHtmlPlugin(config, env)
   htmlPlugin.options.chunks = ['common', 'main']
 }
 
@@ -58,8 +58,7 @@ const setCommonsChunkPlugin = function (config, env) {
   }))
 }
 
-module.exports = function override(config, env) {
-
+module.exports = function override (config, env) {
   // エントリポイントをメインと認証に分割する
   setEntry(config, env)
 
