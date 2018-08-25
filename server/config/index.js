@@ -27,6 +27,10 @@ const config = {
     root: process.env.API_ROOT || '/api',
     uri: process.env.API_URI || 'http://localhost:3003'
   },
+  client: {
+    uri: process.env.CLIENT_URI || 'http://localhost:3000',
+    auth: process.env.CLIENT_AUTH || '/authenticate'
+  },
   socket: {
     port: process.env.SOCKET_PORT || 3033
   },

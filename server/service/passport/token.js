@@ -18,8 +18,9 @@ const jwtAuth = (payload, done) => {
 }
 passport.use(new JwtStrategy(jwtConfig, jwtAuth))
 export const token = (opts) => {
-  const config = {
-    session: false
+  const option = {
+    session: false,
+    failureRedirect: config.client.uri + config.client.auth
   }
-  return passport.authenticate('jwt', Object.assign(config, opts))
+  return passport.authenticate('jwt', Object.assign(option, opts))
 }

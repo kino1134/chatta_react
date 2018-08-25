@@ -16,8 +16,8 @@ const githubLogin = (accessToken, refreshToken, profile, done) => {
 }
 passport.use(new GitHubStrategy(githubConfig, githubLogin))
 export const github = (opts) => {
-  const config = {
+  const option = {
     session: false
   }
-  return passport.authenticate('github', Object.assign(config, opts))
+  return passport.authenticate('github', Object.assign(option, opts))
 }
