@@ -10,5 +10,5 @@ export const signSync = (payload, opts) => {
 }
 
 export const sign = (payload, opts) => {
-  return new Promise(signSync(payload, opts))
+  return new Promise(resolve => resolve(signSync(payload, opts)))
 }
