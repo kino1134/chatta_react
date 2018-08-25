@@ -6,7 +6,7 @@ export Hello, { schema } from './model'
 const router = new Router()
 
 // TODO: ちゃんとした場所に移動させる
-router.get('/auth', google({ scope: ['openid', 'email', 'profile'] }))
+router.get('/auth', google())
 router.get('/callback', google(), (req, res) => {
   console.log(req.user)
   res.json(req.user).status(200)

@@ -17,5 +17,9 @@ const googleLogin = (accessToken, refreshToken, profile, done) => {
 }
 passport.use(new OAuth2Strategy(googleConfig, googleLogin))
 export const google = (opts) => {
-  return passport.authenticate('google', Object.assign({session: false}, opts))
+  const config = {
+    session: false,
+    scope: ['openid', 'email', 'profile']
+  }
+  return passport.authenticate('google', Object.assign(config, opts))
 }
