@@ -40,6 +40,10 @@ const config = {
     host: process.env.REDIS_HOST || 'localhost',
     port: process.env.REDIS_PORT || 6379
   },
+  jwt: {
+    secret: required('JWT_SECRET_KEY'),
+    expire: required('JWT_EXPIRES_IN')
+  },
   google: {
     clientId: required('GOOGLE_CLIENT_ID'),
     clientSecret: required('GOOGLE_CLIENT_SECRET')
