@@ -5,7 +5,8 @@
   * http://expressjs.com/ja/guide/error-handling.html
   * https://github.com/pillarjs/finalhandler
 * ソーシャルログインの追加(Google, GitHub)  
-  Implicit Flow だとリプレイ攻撃しやすくなるらしいので、普通にサーバも使って認証する
+  Implicit Flow だとリプレイ攻撃しやすくなるらしいので、普通にサーバも使って認証する  
+  https://qiita.com/uryyyyyyy/items/56f9a80a829161ae1f8e
 * 認証/認可フィルターの追加
 
 ## やりたいこと
@@ -20,6 +21,8 @@
   まずは、create-react-appから始める  
   https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#integrating-with-an-api-backend  
   ※全体的にとても勉強になる内容だと感じたので、随時反映していきたい
+
+* https://ramdajs.com/docs/
 
 ## 作業履歴
 
