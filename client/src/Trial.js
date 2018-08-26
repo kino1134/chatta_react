@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import socket from './socket'
 
-class Authenticate extends Component {
+class Trial extends Component {
 
   constructor(props) {
     super(props)
@@ -76,5 +76,5 @@ class Authenticate extends Component {
   }
 }
 
-export default Authenticate
+export default Trial
 
