@@ -1,10 +1,11 @@
 import { Router } from 'express'
-import { show } from './controller'
+import { show, emit } from './controller'
 import { token } from '../../service/passport'
 export Hello, { schema } from './model'
 
 const router = new Router()
 
+router.get('/io/emit', emit)
 /**
  * @api {get} /hellos/:id Retrieve hello
  * @apiName RetrieveHello

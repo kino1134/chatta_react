@@ -11,5 +11,14 @@ export default () => {
     port: redis.port
   }))
 
+  // TODO: Test Code
+  io.on('connection', function (socket) {
+    console.log('connected socket')
+
+    socket.on('disconnect', function () {
+      console.log('disconnected socket')
+    })
+  })
+
   return io
 }
