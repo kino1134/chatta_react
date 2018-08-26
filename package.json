@@ -7,7 +7,7 @@
   "scripts": {
     "start:server": "nodemon server/index.js --exec babel-node --ignore 'client/*'",
     "start:client": "cd client && yarn start",
-    "start": "yarn start:server & yarn start:client",
+    "start": "concurrently \"yarn start:server\" \"yarn start:client\"",
     "start:db": "docker-compose up",
     "clean": "rimraf dist",
     "build": "npm run clean && babel server -d dist",
@@ -49,6 +49,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-1": "^6.24.1",
+    "concurrently": "^4.0.1",
     "eslint": "^5.4.0",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.14.0",
