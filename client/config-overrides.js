@@ -5,7 +5,7 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const paths = require('react-scripts/config/paths')
 
-const authIndexJs = 'auth.index.js'
+const authIndexJs = 'index.auth.js'
 const authIndexHtml = 'authenticate/index.html'
 
 const setEntry = function (config, env) {
@@ -58,21 +58,43 @@ const setCommonsChunkPlugin = function (config, env) {
   }))
 }
 
-module.exports = function override (config, env) {
-  // エントリポイントをメインと認証に分割する
-  setEntry(config, env)
+const setFallback = function (config) {
+  config.historyApiFallback = {
+    rewrites: [
+      { from: /authenticate\/./, to: '/authenticate' },
+      { from: /./, to: '/' }
+    ]
+  }
+}
 
-  // エントリポイント毎にファイル名を変更する
-  setOutputFileName(config, env)
+module.exports = {
+  webpack: function (config, env) {
+    // エントリポイントをメインと認証に分割する
+    setEntry(config, env)
 
-  // メインHTMLに読み込むエントリポイントを指定する
-  setDefaultHtmlPluginChunks(config, env)
+    // エントリポイント毎にファイル名を変更する
+    setOutputFileName(config, env)
 
-  // 認証HTMLの設定を追加する
-  addAuthHtmlPlugin(config, env)
+    // メインHTMLに読み込むエントリポイントを指定する
+    setDefaultHtmlPluginChunks(config, env)
 
-  // ファイルサイズ抑制のため、共通部分は別ファイルに分割する
-  setCommonsChunkPlugin(config, env)
+    // 認証HTMLの設定を追加する
+    addAuthHtmlPlugin(config, env)
 
-  return config
+    // ファイルサイズ抑制のため、共通部分は別ファイルに分割する
+    setCommonsChunkPlugin(config, env)
+
+    return config
+  },
+
+  devServer: function (configFunction) {
+    return function (proxy, allowedHost) {
+      const config = configFunction(proxy, allowedHost)
+
+      // 認証側エントリポイントのフォールバック設定を追加する
+      setFallback(config)
+
+      return config
+    }
+  }
 }
