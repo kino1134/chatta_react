@@ -63,8 +63,8 @@ class Trial extends Component {
         })}
         {/* <button onClick={(e) => this.connect(e)} disabled={!!this.state.s}>接続</button> */}
         {/* <button onClick={(e) => this.disconnect(e)} disabled={!this.state.s}>切断</button> */}
-        <button onClick={(e) => this.connect(e)}>接続</button>
-        <button onClick={(e) => this.disconnect(e)}>切断</button>
+        <button class="button" onClick={(e) => this.connect(e)}>接続</button>
+        <button class="button" onClick={(e) => this.disconnect(e)}>切断</button>
         <div>
           {process.env.REACT_APP_API_ROOT}
         </div>
