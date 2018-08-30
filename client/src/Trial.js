@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import socket from './socket'
+// import GitHubLogin from 'react-github-login';
+// import GoogleLogin from 'react-google-login';
+
 import config from './constants'
 
 class Trial extends Component {
@@ -50,6 +53,12 @@ class Trial extends Component {
 
   render() {
     console.log(this.state.s)
+    // const onSuccess = response => console.log(response);
+    // const onFailure = response => console.error(response);
+    // const responseGoogle = (response) => {
+    //     console.log(response);
+    // }
+
     return (
       <div className="Authenticate">
         <div>
@@ -66,6 +75,16 @@ class Trial extends Component {
         {/* <button onClick={(e) => this.disconnect(e)} disabled={!this.state.s}>切断</button> */}
         <button class="button" onClick={(e) => this.connect(e)}>接続</button>
         <button class="button" onClick={(e) => this.disconnect(e)}>切断</button>
+        {/* <GitHubLogin clientId="7458e855d20c735d4a38"
+          redirectUri="http://localhost:3003/api/auth/github"
+          onSuccess={onSuccess}
+          onFailure={onFailure}/>
+       <GoogleLogin
+          clientId="292602580848-ted6k3hhkn5op7ehfsq0ovt1tumg6soq.apps.googleusercontent.com"
+          buttonText="Login"
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
+        /> */}
         <div>
           {process.env.REACT_APP_API_ROOT}
         </div>
