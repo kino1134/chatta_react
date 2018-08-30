@@ -5,7 +5,7 @@ import config from '../../config'
 const googleConfig = {
   clientID: config.google.clientId,
   clientSecret: config.google.clientSecret,
-  callbackURL: config.api.uri + config.api.root + '/auth/google',
+  callbackURL: config.client.uri + config.api.root + '/auth/google',
   userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo'
 }
 const googleLogin = (accessToken, refreshToken, profile, done) => {

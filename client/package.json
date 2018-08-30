@@ -2,7 +2,12 @@
   "name": "chatta_react_client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3003/",
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:3003/",
+      "ws": true
+    }
+  },
   "dependencies": {
     "bulma": "^0.7.1",
     "react": "^16.4.2",
