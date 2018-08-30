@@ -4,6 +4,7 @@ import socket from './socket'
 // import GoogleLogin from 'react-google-login';
 
 import config from './constants'
+import { openPopup, listenPopup } from './services/oAuthLogin'
 
 class Trial extends Component {
 
@@ -51,6 +52,17 @@ class Trial extends Component {
     })
   }
 
+  oAuthLogin(e, endpoint) {
+    const popup = openPopup(config.api.uri + endpoint)
+    listenPopup(popup)
+      .then((value) => {
+        console.log(value)
+      })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+
   render() {
     console.log(this.state.s)
     // const onSuccess = response => console.log(response);
@@ -73,8 +85,10 @@ class Trial extends Component {
         })}
         {/* <button onClick={(e) => this.connect(e)} disabled={!!this.state.s}>接続</button> */}
         {/* <button onClick={(e) => this.disconnect(e)} disabled={!this.state.s}>切断</button> */}
-        <button class="button" onClick={(e) => this.connect(e)}>接続</button>
-        <button class="button" onClick={(e) => this.disconnect(e)}>切断</button>
+        <button className="button" onClick={(e) => this.connect(e)}>接続</button>
+        <button className="button" onClick={(e) => this.disconnect(e)}>切断</button>
+        <button className="button" onClick={(e) => this.oAuthLogin(e, '/auth/google')}>Googleログイン</button>
+        <button className="button" onClick={(e) => this.oAuthLogin(e, '/auth/github')}>GitHubログイン</button>
         {/* <GitHubLogin clientId="7458e855d20c735d4a38"
           redirectUri="http://localhost:3003/api/auth/github"
           onSuccess={onSuccess}
