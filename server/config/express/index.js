@@ -29,6 +29,9 @@ export default (root, routes) => {
     app.use(morgan('dev'))
   }
 
+  app.set('view engine', 'ejs')
+  app.set('views', './server/views')
+
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())
   app.use(root, routes)
