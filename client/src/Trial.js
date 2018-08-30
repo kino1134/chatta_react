@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import socket from './socket'
+import config from './constants'
 
 class Trial extends Component {
 
@@ -36,7 +37,7 @@ class Trial extends Component {
   }
 
   componentDidMount() {
-    fetch(process.env.REACT_APP_API_ROOT + '/hellos/5b77fe400162f504e541081b').then(res => {
+    fetch(config.api.uri + '/hellos/5b77fe400162f504e541081b').then(res => {
       res.json().then(json => {
         console.log(json)
         this.setState({
