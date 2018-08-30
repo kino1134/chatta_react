@@ -1,10 +1,10 @@
 import { Router } from 'express'
-import { login } from './controller'
+import { oauthLogin } from './controller'
 import { google, github } from '../../service/passport'
 
 const router = new Router()
 
-router.get('/google', google(), login)
-router.get('/github', github(), login)
+router.get('/google', google(), oauthLogin)
+router.get('/github', github(), oauthLogin)
 
 export default router
