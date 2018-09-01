@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 import mongoose, { Schema } from 'mongoose'
-import randomString from 'crypto-random-string'
+import { randomId, randomPassword } from '../service/random'
 import { env } from '../config'
 
 const roles = ['user', 'admin']
@@ -93,7 +93,7 @@ userSchema.statics = {
         return user
       } else {
         const createUserId = () => {
-          const userId = randomString(8)
+          const userId = randomId(8)
           return this.count({ userId }).then(cnt => {
             return cnt === 0 ? userId : createUserId()
           })
@@ -114,7 +114,7 @@ userSchema.statics = {
       userId = email.replace(/^(.+)@.+$/, '$1')
     }
 
-    const password = randomString(16)
+    const password = randomPassword(16)
     const hash = crypto.createHash('md5').update(email).digest('hex')
     const photo = `https://gravatar.com/avatar/${hash}?d=identicon`
     return this.create({ userId, email, password, displayName, photo })

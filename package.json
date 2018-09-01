@@ -30,7 +30,6 @@
     "compression": "^1.7.3",
     "connect-redis": "^3.3.3",
     "cors": "^2.8.4",
-    "crypto-random-string": "^1.0.0",
     "dotenv": "^6.0.0",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
