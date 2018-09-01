@@ -19,18 +19,16 @@ export const listenPopup = async (popup, resolve, reject) => {
   } else {
     // 認証情報の取得
     // same origin policyの回避のため、エラーは握りつぶす
-    let token, user
+    let token
     try {
-      // TODO: 取得内容・方法は要検討
       const form = popup.document.forms.auth
       token = form.token.value
-      user = form.user.value
     } catch (err) {}
 
     if (token) {
       // 取得できた場合
       popup.close()
-      resolve({ token, user })
+      resolve({ token })
     } else if (popup.closed) {
       // 取得前にポップアップを閉じてしまった場合
       reject({ errors: "Authenticated was cancelled." })

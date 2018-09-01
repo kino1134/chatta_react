@@ -1,13 +1,10 @@
 import { sign } from '../../service/jwt'
 // import { success } from '../../service/response'
 
-export const oAuthLogin = (req, res, next) => {
-  // TODO レスポンス内容の精査
-  console.log(req.user)
-  sign(req.user)
+export const oAuthLogin = ({ user }, res, next) => {
+  sign({ id: user.id })
     .then(token => {
       res.render('oauth_login', {
-        user: JSON.stringify(req.user),
         token
       })
     })
