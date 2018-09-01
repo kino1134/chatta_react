@@ -7,7 +7,8 @@ const googleConfig = {
   clientID: config.google.clientId,
   clientSecret: config.google.clientSecret,
   callbackURL: config.client.uri + config.api.root + '/auth/google',
-  userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo'
+  userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
+  state: true
 }
 const googleLogin = (accessToken, refreshToken, profile, done) => {
   return User.createFromService(profile)

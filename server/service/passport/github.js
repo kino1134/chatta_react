@@ -7,7 +7,8 @@ const githubConfig = {
   clientID: config.github.clientId,
   clientSecret: config.github.clientSecret,
   callbackURL: config.client.uri + config.api.root + '/auth/github',
-  scope: ['read:user', 'user:email']
+  scope: ['read:user', 'user:email'],
+  state: true
 }
 const githubLogin = (accessToken, refreshToken, profile, done) => {
   return User.createFromService(profile)

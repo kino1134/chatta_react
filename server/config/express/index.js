@@ -1,4 +1,6 @@
 import express from 'express'
+import session from 'express-session'
+import connectRedis from 'connect-redis'
 
 import helmet from 'helmet'
 // import forceSSL from 'express-force-ssl'
@@ -6,7 +8,7 @@ import helmet from 'helmet'
 // import compression from 'compression'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
-import { env } from '../'
+import { env, api, redis } from '../'
 import { errorHandler } from '../../service/response'
 
 export default (root, routes) => {
@@ -29,8 +31,17 @@ export default (root, routes) => {
     app.use(morgan('dev'))
   }
 
+  // ソーシャルログイン時、HTMLを返すために使用
   app.set('view engine', 'ejs')
   app.set('views', './server/views')
+
+  // ソーシャルログイン時、stateチェックを行うために使用
+  const RedisStore = connectRedis(session)
+  const store = new RedisStore({
+    host: redis.host,
+    port: redis.port
+  })
+  app.use(session({ secret: api.sessionSecret, store }))
 
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())

@@ -25,7 +25,8 @@ const config = {
     port: process.env.API_PORT || 3003,
     ip: process.env.API_IP || '0.0.0.0',
     root: process.env.API_ROOT || '/api',
-    uri: process.env.API_URI || 'http://localhost:3003'
+    uri: process.env.API_URI || 'http://localhost:3003',
+    sessionSecret: process.env.API_SESSION_SECRET || 'keyboard cat'
   },
   client: {
     uri: process.env.CLIENT_URI || 'http://localhost:3000',
