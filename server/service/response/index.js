@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { validationResult } from 'express-validator/check'
 import { env } from '../../config'
 
 export const success = (res, status) => (entity) => {
@@ -14,6 +15,20 @@ export const notFound = (res) => (entity) => {
   }
   res.status(404).end()
   return null
+}
+
+export const validate = (checkList, message) => {
+  const handler = (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      res.status(400).json({ message, errors: errors.array() }).end()
+    } else {
+      next()
+    }
+  }
+
+  checkList = checkList || []
+  return [...checkList, handler]
 }
 
 export const errorHandler = (err, req, res, next) => {
