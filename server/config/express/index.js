@@ -41,7 +41,11 @@ export default (root, routes) => {
     host: redis.host,
     port: redis.port
   })
-  app.use(session({ secret: api.sessionSecret, store }))
+  app.use(session({
+    secret: api.sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+    store }))
 
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())
