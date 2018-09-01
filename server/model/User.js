@@ -31,8 +31,7 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    required: true,
-    minlength: 6
+    minlength: 8
   },
   role: {
     type: String,
@@ -99,10 +98,9 @@ userSchema.statics = {
         }
 
         return createUserId().then(userId => {
-          const password = randomString(16)
           const email = emails[0].value
           const photo = photos[0].value
-          return this.create({ providerId: provider + '_' + id, userId, email, password, displayName, photo })
+          return this.create({ providerId: provider + '_' + id, userId, email, displayName, photo })
         })
       }
     })
