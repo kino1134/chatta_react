@@ -14,7 +14,8 @@ class Trial extends Component {
       t: "",
       m: "",
       message: [],
-      s: null
+      s: null,
+      token: null
     }
   }
 
@@ -55,8 +56,8 @@ class Trial extends Component {
   oAuthLogin(e, endpoint) {
     const popup = openPopup(config.api.uri + endpoint)
     listenPopup(popup)
-      .then((value) => {
-        console.log(value)
+      .then(value => {
+        this.setState({ token: value.token })
       })
     .catch(err => {
       console.log(err)
@@ -103,7 +104,7 @@ class Trial extends Component {
           {process.env.REACT_APP_API_ROOT}
         </div>
         <div>
-          Authenticate
+          {this.state.token || 'unAuthorized'}
         </div>
       </div>
     );
