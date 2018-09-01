@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import socket from './socket'
+import socket from '../services/socket'
 // import GitHubLogin from 'react-github-login';
 // import GoogleLogin from 'react-google-login';
 
-import config from './constants'
-import { openPopup, listenPopup } from './services/oAuthLogin'
+import config from '../constants'
+import { openPopup, listenPopup } from '../services/oAuthLogin'
 
 class Trial extends Component {
 

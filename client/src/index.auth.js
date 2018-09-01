@@ -4,8 +4,8 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 
-import Login from './Login'
-import Trial from './Trial'
+import Login from './modules/Login'
+import Trial from './modules/Trial'
 
 ReactDOM.render((
   <BrowserRouter basename="/authenticate">
