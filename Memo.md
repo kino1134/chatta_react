@@ -13,6 +13,8 @@
   * https://socket.io/docs/rooms-and-namespaces/#Sending-messages-from-the-outside-world
 * サーバとクライアントの起動同期  
   https://www.fullstackreact.com/articles/using-create-react-app-with-a-server/#concurrently
+* ローカルパスワードによるログイン
+* パスワードユーザの登録APIの追加
 
 ## やったこと（クライアント側）
 * クライアント(React)の環境整備  
@@ -27,11 +29,11 @@
   https://qiita.com/park-jh/items/b4c7b16ea9eb0cf44942
 
 ## やりたいこと
+* 初期パスワード通知
+* パスワード初期化
 * クライアント側の認証フィルタ  
   ソーシャルログインをするのでそのままは使えないと思うけど  
   https://reacttraining.com/react-router/web/example/auth-workflow
-* ローカルパスワードによるログイン
-* パスワードユーザの登録APIの追加
 * ロギング(各ライブラリの説明を読む感じ、そんなに準備されてないようなので後回しかも)
 * Redux or MobX 投入
 * manifest.json 更新
