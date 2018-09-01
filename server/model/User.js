@@ -118,6 +118,10 @@ userSchema.statics = {
     const hash = crypto.createHash('md5').update(email).digest('hex')
     const photo = `https://gravatar.com/avatar/${hash}?d=identicon`
     return this.create({ userId, email, password, displayName, photo })
+      .then(user => {
+        console.log(password)
+        return user
+      })
   }
 }
 
