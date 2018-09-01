@@ -1,5 +1,6 @@
 import passport from 'passport'
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth'
+import User from '../../model/User'
 import config from '../../config'
 
 const googleConfig = {
@@ -9,9 +10,9 @@ const googleConfig = {
   userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo'
 }
 const googleLogin = (accessToken, refreshToken, profile, done) => {
-  // TODO: Create User
-  console.log(profile)
-  return done(null, profile)
+  return User.createFromService(profile)
+    .then(user => done(null, user))
+    .catch(err => done(err, null))
 }
 passport.use(new GoogleStrategy(googleConfig, googleLogin))
 export const google = (opts) => {

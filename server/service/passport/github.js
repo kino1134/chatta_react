@@ -1,5 +1,6 @@
 import passport from 'passport'
 import { Strategy as GitHubStrategy } from 'passport-github'
+import User from '../../model/User'
 import config from '../../config'
 
 const githubConfig = {
@@ -9,10 +10,9 @@ const githubConfig = {
   scope: ['read:user', 'user:email']
 }
 const githubLogin = (accessToken, refreshToken, profile, done) => {
-  // TODO: Create User
-  console.log(accessToken)
-  console.log(profile)
-  return done(null, profile)
+  return User.createFromService(profile)
+    .then(user => done(null, user))
+    .catch(err => done(err, null))
 }
 passport.use(new GitHubStrategy(githubConfig, githubLogin))
 export const github = (opts) => {
