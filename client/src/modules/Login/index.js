@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import './Login.css'
 
 class Login extends Component {
@@ -44,15 +45,15 @@ class Login extends Component {
             </div>
           </div>
           <p className="has-text-grey has-text-centered">
-            <a href="../">ユーザ登録</a>&nbsp; /&nbsp;
+                <Link to="/signup">ユーザ登録</Link>&nbsp; /&nbsp;
             <a href="../">パスワードを忘れた？</a>
           </p>
         </div>
       </div>
     </div>
   </section>
-    );
+    )
   }
 }
 
-export default Login;
+export default Login
