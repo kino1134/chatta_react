@@ -7,32 +7,32 @@ class SignUp extends Component {
       <section id="app" className="hero is-fullheight">
         <div className="hero-body">
           <div className="container">
-            <div class="column is-6 is-offset-3">
-              <h3 class="title has-text-grey has-text-centered">ユーザ登録</h3>
-              <div class="box">
-                <div class="field">
-                  <div class="control">
-                    <input className="input is-large" type="text" placeholder="メールアドレス" autofocus=""/>
+            <div className="column is-6 is-offset-3">
+              <h3 className="title has-text-grey has-text-centered">ユーザ登録</h3>
+              <div className="box">
+                <div className="field">
+                  <div className="control">
+                    <input className="input is-large" type="text" placeholder="メールアドレス" autoFocus/>
                   </div>
                 </div>
-                <div class="field">
-                  <div class="control">
+                <div className="field">
+                  <div className="control">
                     <input className="input is-large" type="text" placeholder="ID"/>
                   </div>
-                  <p class="help">※英数字とアンダーバー(_)のみ使用出来ます。</p>
+                  <p className="help">※英数字とアンダーバー(_)のみ使用出来ます。</p>
                 </div>
-                <div class="field">
-                  <div class="control">
+                <div className="field">
+                  <div className="control">
                     <input className="input is-large" type="text" placeholder="名前"/>
                   </div>
                 </div>
-                <div class="field">
-                  <div class="control has-text-centered">
+                <div className="field">
+                  <div className="control has-text-centered">
                     <button className="button is-primary is-large">登録</button>
                   </div>
                 </div>
               </div>
-              <p class="has-text-grey has-text-centered">
+              <p className="has-text-grey has-text-centered">
                 <Link to="/">戻る</Link>
               </p>
             </div>
