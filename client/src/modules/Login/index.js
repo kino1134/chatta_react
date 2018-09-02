@@ -80,15 +80,14 @@ class Login extends Component {
               <div>{this.state.token}</div>
               <div className="box">
                 <div className="field">
-                  <div className="control has-text-centered">
-                    <button onClick={(e) => this.oAuthLogin(e, '/api/auth/google')} className="button is-link is-large" tabIndex="0"
-                      style={{ marginRight: 10 + 'px' }}>
+                  <div className="buttons oauth-buttons is-centered">
+                    <button onClick={(e) => this.oAuthLogin(e, '/api/auth/google')} className="button is-link is-large" tabIndex="0">
                       <span className="icon">
                         <i className="fab fa-google"></i>
                       </span>
                       <span>でログイン</span>
                     </button>
-                  <button onClick={(e) => this.oAuthLogin(e, '/api/auth/github')} className="button is-info is-large" tabIndex="0">
+                    <button onClick={(e) => this.oAuthLogin(e, '/api/auth/github')} className="button is-info is-large" tabIndex="0">
                       <span className="icon">
                         <i className="fab fa-github"></i>
                       </span>
