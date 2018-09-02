@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 import mongoose, { Schema } from 'mongoose'
 import { randomId, randomPassword } from '../service/random'
+import mailer from '../service/mailer'
 import { env } from '../config'
 
 const roles = ['user', 'admin']
@@ -119,7 +120,11 @@ userSchema.statics = {
     const photo = `https://gravatar.com/avatar/${hash}?d=identicon`
     return this.create({ userId, email, password, displayName, photo })
       .then(user => {
-        console.log(password)
+        mailer.send({
+          to: user.email,
+          subject: 'サインアップ完了',
+          html: mailer.render('signUp.ejs', { user, password })
+        })
         return user
       })
   }
