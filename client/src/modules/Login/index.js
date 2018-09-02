@@ -29,12 +29,12 @@ class Login extends Component {
             <hr/>
             <div className="field">
               <div className="control">
-                <input className="input is-large" type="text" placeholder="ID" autoFocus="" />
+                <input className="input" type="text" placeholder="ID" autoFocus="" />
               </div>
             </div>
             <div className="field">
               <div className="control">
-                <input className="input is-large" type="password" placeholder="パスワード" />
+                <input className="input" type="password" placeholder="パスワード" />
               </div>
             </div>
             <div className="field">
