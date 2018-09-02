@@ -5,12 +5,14 @@ import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 
 import Login from './modules/Login'
+import SignUp from './modules/SignUp'
 import Trial from './modules/Trial'
 
 ReactDOM.render((
   <BrowserRouter basename="/authenticate">
     <Switch>
       <Route exact path="/" component={ Login } />
+      <Route exact path="/signup" component={ SignUp } />
       <Route exact path="/trial" component={ Trial } />
       <Route component={ Login } />
     </Switch>
