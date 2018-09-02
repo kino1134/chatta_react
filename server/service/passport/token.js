@@ -1,5 +1,4 @@
 import passport from 'passport'
-import http from 'http'
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt'
 import config from '../../config'
 import User from '../../model/User'
@@ -14,7 +13,6 @@ const jwtConfig = {
   ])
 }
 const jwtAuth = ({ id }, done) => {
-  console.log('id' + id)
   return User.findById(id)
     .then(user => done(null, user))
     .catch(err => done(err, null))
@@ -25,14 +23,14 @@ export const token = ({ required = true, roles = User.roles } = {}) => {
     const auth = passport.authenticate('jwt', { session: false }, (err, user, info) => {
       // ユーザ情報の取得に失敗、または権限がなかった場合
       if (err || (required && !user) || (required && !~roles.indexOf(user.role))) {
-        res.status(401).end(http.STATUS_CODES[401])
+        res.status(401).json({ message: '認証できませんでした。' })
         return null
       }
 
       // passportのログイン処理を呼び出す
       req.logIn(user, { session: false }, (err) => {
         if (err) {
-          res.status(401).end(http.STATUS_CODES[401])
+          res.status(401).json({ message: 'エラーが発生しました。' })
           return null
         }
         next()
