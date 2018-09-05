@@ -1,34 +1,94 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
+
+import TopMessage from '../TopMessage'
+import TextInput from '../TextInput'
+
+import api from '../../services/api'
 
 class SignUp extends Component {
+
+  constructor (props) {
+    super(props)
+
+    this.changeHandler = this.changeHandler.bind(this)
+
+    this.state = {
+      email: "",
+      userId: "",
+      displayName: "",
+      executing: false,
+      topMessage: "",
+      inputMessages: []
+    }
+  }
+
+  changeHandler (e) {
+    // メールアドレスの内容をID欄に連携する
+    if (e.target.name === 'email') {
+      const name = this.emailName(this.state.email)
+      if (name === this.state.userId) {
+        this.setState({ userId: this.emailName(e.target.value) })
+      }
+    }
+
+    this.setState({ [e.target.name]: e.target.value })
+  }
+
+  emailName (email) {
+    return email.split('@')[0].replace(/[^\w\d_]/g, '')
+  }
+
+  callSignUp (e) {
+    if (this.state.executing) return false
+
+    this.setState({ executing: true })
+
+    const { email, userId, displayName } = this.state
+    api.post('/api/users', JSON.stringify({ email, userId, displayName })).then(res => {
+      res.json().then(data => {
+        if (res.ok) {
+          this.props.history.push('/', {
+            topMessage: 'ユーザが登録されました。メールを確認してログインしてください',
+            color: 'info'
+          })
+        } else {
+          // TODO: メッセージの表示処理を共通化したい
+          this.setState({ topMessage: data.message, inputMessages: data.errors })
+        }
+      })
+    }).catch(err => {
+      // TODO: メッセージ表示
+      console.log(err)
+    }).then(() => this.setState({ executing: false }))
+  }
+
   render () {
     return (
       <section id="app" className="hero is-fullheight">
         <div className="hero-body">
           <div className="container">
-            <div className="column is-6 is-offset-3">
+            <div className="column is-4 is-offset-4">
               <h3 className="title has-text-grey has-text-centered">ユーザ登録</h3>
               <div className="box">
-                <div className="field">
-                  <div className="control">
-                    <input className="input is-large" type="text" placeholder="メールアドレス" autoFocus/>
-                  </div>
-                </div>
-                <div className="field">
-                  <div className="control">
-                    <input className="input is-large" type="text" placeholder="ID"/>
-                  </div>
-                  <p className="help">※英数字とアンダーバー(_)のみ使用出来ます。</p>
-                </div>
-                <div className="field">
-                  <div className="control">
-                    <input className="input is-large" type="text" placeholder="名前"/>
-                  </div>
-                </div>
+                <TopMessage message={this.state.topMessage} color="danger"/>
+                <TextInput name="email" placeholder="メールアドレス" className="is-medium" required autoFocus
+                  onChange={this.changeHandler} errors={this.state.inputMessages}
+                />
+                <TextInput name="userId" placeholder="ID" className="is-medium" required
+                  onChange={this.changeHandler} value={this.state.userId} errors={this.state.inputMessages}>
+                  <p className="help">※英数字とアンダーバー(_)のみ使用できます</p>
+                </TextInput>
+                <TextInput name="displayName" placeholder="名前" className="is-medium" required
+                  onChange={this.changeHandler} errors={this.state.inputMessages}
+                />
                 <div className="field">
                   <div className="control has-text-centered">
-                    <button className="button is-primary is-large">登録</button>
+                    <button onClick={(e) => this.callSignUp(e)}
+                      className={'button is-primary is-large' + (this.state.executing ? ' is-loading' : '')}
+                      disabled={this.state.executing}>
+                      登録
+                    </button>
                   </div>
                 </div>
               </div>
@@ -43,4 +103,4 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp
+export default withRouter(SignUp)
