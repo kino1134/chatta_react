@@ -42,8 +42,8 @@ class TextInput extends Component {
           <input type="text" name={name} className={classes} {...rest} />
           {requireIcon}
         </div>
-        <InputMessage name={name} color={color || 'danger'} errors={errors} />
         {children}
+        <InputMessage name={name} color={color || 'danger'} errors={errors} />
       </div>
     )
   }
