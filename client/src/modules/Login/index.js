@@ -14,10 +14,12 @@ class Login extends Component {
     this.changeHandler = this.changeHandler.bind(this)
 
     this.state = {
-      token: "",
-      userId: "",
+      token: "", // TODO: あとで消す
       topMessage: "",
       inputMessages: [],
+      loggingIn: false,
+      executing: false,
+      userId: "",
       password: ""
     }
   }
@@ -27,20 +29,32 @@ class Login extends Component {
   }
 
   oAuthLogin (e, endpoint) {
+    if (this.state.logginIn) {
+      return false
+    }
+
+    this.setState({ loggingIn: true, executing: true })
+
     const popup = openPopup(endpoint)
     listenPopup(popup)
       .then(value => {
         // TODO: ローカルストレージに保存 & 中へリダイレクト
-        this.setState({ token: value.token })
+        this.setState({ token: value.token, topMessage: "", inputMessages: [] })
       })
     .catch(err => {
-      // TODO: メッセージ表示
-      console.log(err)
-    })
+      // TODO: メッセージの表示処理を共通化したい
+      this.setState({ topMessage: err.message })
+    }).then(() => this.setState({ loggingIn: false, executing: false }))
   }
 
   passwordLogin (e) {
     e.preventDefault()
+
+    if (this.state.executing) {
+      return false
+    }
+    this.setState({ executing: true })
+
     // TODO: フェッチ処理を共通化したい
     fetch('/api/auth/password', {
       method: 'POST',
@@ -52,7 +66,7 @@ class Login extends Component {
       res.json().then(data => {
         if (res.ok) {
           // TODO: ローカルストレージに保存 & 中へリダイレクト
-          this.setState({ token: data.token })
+          this.setState({ token: data.token, topMessage: "", inputMessages: [] })
         } else {
           // TODO: メッセージの表示処理を共通化したい
           this.setState({ topMessage: data.message, inputMessages: data.errors })
@@ -61,7 +75,7 @@ class Login extends Component {
     }).catch(err => {
       // TODO: メッセージ表示
       console.log(err)
-    })
+    }).then(() => this.setState({ executing: false }))
   }
 
   // TODO: 共通的に持ちたい
@@ -77,8 +91,8 @@ class Login extends Component {
           <div className="container">
             <div className="column is-6 is-offset-3">
               <h3 className="title has-text-grey has-text-centered">ログイン</h3>
-              <div>{this.state.token}</div>
-              <div className="box">
+              <div>{this.state.token}</div>{/* TODO: デバッグ用 */}
+              <div className={['box', this.state.loggingIn ? 'is-loggingIn' : ''].join(' ')}>
                 <div className="field">
                   <div className="buttons oauth-buttons is-centered">
                     <button onClick={(e) => this.oAuthLogin(e, '/api/auth/google')} className="button is-link is-large" tabIndex="0">
@@ -112,7 +126,11 @@ class Login extends Component {
                   </div>
                   <div className="field">
                     <div className="control has-text-centered">
-                      <button type="submit" className="button is-primary is-medium" tabIndex="0">ログイン</button>
+                      <button type="submit" tabIndex="0"
+                        className={['button', 'is-primary', 'is-medium', this.state.executing ? 'is-loading' : ''].join(' ')}
+                        disabled={this.state.executing}>
+                        ログイン
+                      </button>
                     </div>
                   </div>
                 </form>
