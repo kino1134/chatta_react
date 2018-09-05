@@ -31,7 +31,7 @@ export const listenPopup = async (popup, resolve, reject) => {
       resolve({ token })
     } else if (popup.closed) {
       // 取得前にポップアップを閉じてしまった場合
-      reject({ errors: "Authenticated was cancelled." })
+      reject({ message: "ログインが中断されました。" })
     } else {
       // それ以外の場合は待つ
       setTimeout(() => {
