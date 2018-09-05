@@ -5,6 +5,7 @@ import './Login.css'
 import TopMessage from '../TopMessage'
 import TextInput from '../TextInput'
 import { openPopup, listenPopup } from '../../services/oAuthLogin'
+import api from '../../services/api'
 
 class Login extends Component {
 
@@ -55,14 +56,8 @@ class Login extends Component {
     }
     this.setState({ executing: true })
 
-    // TODO: フェッチ処理を共通化したい
-    fetch('/api/auth/password', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({ userId: this.state.userId, password: this.state.password })
-    }).then(res => {
+    const { userId, password } = this.state
+    api.post('/api/auth/password', JSON.stringify({ userId, password })).then(res => {
       res.json().then(data => {
         if (res.ok) {
           // TODO: ローカルストレージに保存 & 中へリダイレクト
