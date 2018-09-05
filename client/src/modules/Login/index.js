@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import './Login.css'
 
 import TopMessage from '../TopMessage'
-import InputMessage from '../InputMessage'
+import TextInput from '../TextInput'
 import { openPopup, listenPopup } from '../../services/oAuthLogin'
 
 class Login extends Component {
@@ -96,15 +96,11 @@ class Login extends Component {
                 <div className="field">
                   <div className="buttons oauth-buttons is-centered">
                     <button onClick={(e) => this.oAuthLogin(e, '/api/auth/google')} className="button is-link is-large" tabIndex="0">
-                      <span className="icon">
-                        <i className="fab fa-google"></i>
-                      </span>
+                      <span className="icon"><i className="fab fa-google"></i></span>
                       <span>でログイン</span>
                     </button>
                     <button onClick={(e) => this.oAuthLogin(e, '/api/auth/github')} className="button is-info is-large" tabIndex="0">
-                      <span className="icon">
-                        <i className="fab fa-github"></i>
-                      </span>
+                      <span className="icon"><i className="fab fa-github"></i></span>
                       <span>でログイン</span>
                     </button>
                   </div>
@@ -112,22 +108,16 @@ class Login extends Component {
                 <hr/>
                 <TopMessage message={this.state.topMessage} color="danger"/>
                 <form onSubmit={(e) => this.passwordLogin(e)}>
-                  <div className="field">
-                    <div className="control">
-                      <input name="userId" className={['input', this.isError('userId')].join(' ')} type="text" placeholder="ID" autoFocus onChange={this.changeHandler} />
-                    </div>
-                    <InputMessage name="userId" color="danger" errors={this.state.inputMessages}/>
-                  </div>
-                  <div className="field">
-                    <div className="control">
-                      <input name="password" className={['input', this.isError('password')].join(' ')} type="password" placeholder="パスワード" onChange={this.changeHandler} />
-                    </div>
-                    <InputMessage name="password" color="danger" errors={this.state.inputMessages}/>
-                  </div>
+                  <TextInput name="userId" placeholder="ID" autoFocus
+                    onChange={this.changeHandler} errors={this.state.inputMessages}
+                  />
+                  <TextInput name="password" placeholder="パスワード"
+                    onChange={this.changeHandler} errors={this.state.inputMessages}
+                  />
                   <div className="field">
                     <div className="control has-text-centered">
                       <button type="submit" tabIndex="0"
-                        className={['button', 'is-primary', 'is-medium', this.state.executing ? 'is-loading' : ''].join(' ')}
+                        className={'button is-primary is-medium' + (this.state.executing ? ' is-loading' : '')}
                         disabled={this.state.executing}>
                         ログイン
                       </button>
