@@ -11,11 +11,10 @@ export const create = (req, res, next) => {
     .catch(err => {
       if (err.name === 'MongoError' && err.code === 11000) {
         res.status(409).json({
-          message: 'IDはすでに使われています。',
-          errors: {
-            param: 'userId',
-            msg: 'IDはすでに使われています。'
-          }
+          message: '入力内容が正しくありません',
+          errors: [
+            { param: 'userId', msg: 'IDはすでに使われています' }
+          ]
         })
       } else {
         next(err)
