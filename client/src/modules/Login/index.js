@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import './Login.css'
 
 import TopMessage from '../TopMessage'
@@ -17,12 +17,21 @@ class Login extends Component {
     this.state = {
       token: "", // TODO: あとで消す
       topMessage: "",
+      color: "danger",
       inputMessages: [],
       loggingIn: false,
       executing: false,
       userId: "",
       password: ""
     }
+
+    // flashメッセージの表示
+    // TODO: うまいやり方を考える
+    if (this.props.history.location.state) {
+      const flash = this.props.history.location.state
+      this.state = Object.assign(this.state, flash)
+    }
+
   }
 
   changeHandler (e) {
@@ -101,7 +110,7 @@ class Login extends Component {
                   </div>
                 </div>
                 <hr/>
-                <TopMessage message={this.state.topMessage} color="danger"/>
+                <TopMessage message={this.state.topMessage} color={this.state.color} />
                 <form onSubmit={(e) => this.passwordLogin(e)}>
                   <TextInput name="userId" placeholder="ID" autoFocus
                     onChange={this.changeHandler} errors={this.state.inputMessages}
@@ -132,4 +141,4 @@ class Login extends Component {
   }
 }
 
-export default Login
+export default withRouter(Login)
