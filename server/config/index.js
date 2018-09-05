@@ -56,6 +56,10 @@ const config = {
   github: {
     clientId: required('GITHUB_CLIENT_ID'),
     clientSecret: required('GITHUB_CLIENT_SECRET')
+  },
+  sendgrid: {
+    enabled: required('SENDGRID_ENABLED'),
+    apiKey: required('SENDGRID_API_KEY')
   }
 }
 

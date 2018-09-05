@@ -3,9 +3,13 @@ import ejs from 'ejs'
 import path from 'path'
 import fs from 'fs'
 
+import { sendgrid } from '../../config'
+
 export default {
   send ({ to, subject, text, html }) {
-    mailer.setApiKey(process.env.SENDGRID_API_KEY)
+    if (!sendgrid.enabled) return true
+
+    mailer.setApiKey(sendgrid.apiKey)
 
     const from = 'test@example.com'
     const message = {
