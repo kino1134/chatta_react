@@ -4,9 +4,11 @@ import './Login.css'
 
 import TopMessage from '../TopMessage'
 import TextInput from '../TextInput'
+
 import config from '../../constants'
 import { openPopup, listenPopup } from '../../services/oAuthLogin'
 import api from '../../services/api'
+import storage from '../../services/storage'
 
 class Login extends Component {
 
@@ -16,7 +18,6 @@ class Login extends Component {
     this.changeHandler = this.changeHandler.bind(this)
 
     this.state = {
-      token: "", // TODO: あとで消す
       topMessage: "",
       color: "danger",
       inputMessages: [],
@@ -40,53 +41,53 @@ class Login extends Component {
   }
 
   oAuthLogin (e, endpoint) {
+    // 処理中であるかの判断
     if (this.state.logginIn) {
       return false
     }
 
+    // 処理中フラグを立てる
     this.setState({ loggingIn: true, executing: true })
 
+    // 認証用の別窓を開けて、待ち合わせる
     const popup = openPopup(config.api.uri + endpoint)
     listenPopup(popup)
       .then(value => {
-        // TODO: ローカルストレージに保存 & 中へリダイレクト
-        this.setState({ token: value.token, topMessage: "", inputMessages: [] })
+        storage.setAccessToken(value.token)
+        window.location.href = '/'
       })
     .catch(err => {
-      // TODO: メッセージの表示処理を共通化したい
       this.setState({ topMessage: err.message })
+    // 処理中フラグを戻す
     }).then(() => this.setState({ loggingIn: false, executing: false }))
   }
 
   passwordLogin (e) {
     e.preventDefault()
 
+    // 処理中であるかの判断
     if (this.state.executing) {
       return false
     }
+
+    // 処理中フラグを立てる
     this.setState({ executing: true })
 
     const { userId, password } = this.state
     api.post('/api/auth/password', JSON.stringify({ userId, password })).then(res => {
       res.json().then(data => {
         if (res.ok) {
-          // TODO: ローカルストレージに保存 & 中へリダイレクト
-          this.setState({ token: data.token, topMessage: "", inputMessages: [] })
+          storage.setAccessToken(data.token)
+          window.location.href = '/'
         } else {
-          // TODO: メッセージの表示処理を共通化したい
           this.setState({ topMessage: data.message, inputMessages: data.errors })
         }
       })
     }).catch(err => {
-      // TODO: メッセージ表示
       console.log(err)
+      this.setState({ topMessage: 'ログインに失敗しました' })
+    // 処理中フラグを戻す
     }).then(() => this.setState({ executing: false }))
-  }
-
-  // TODO: 共通的に持ちたい
-  isError (name) {
-    if (!this.state.inputMessages) return ''
-    return this.state.inputMessages.find(e => e.param === name) ? 'is-danger' : ''
   }
 
   render() {
@@ -96,7 +97,6 @@ class Login extends Component {
           <div className="container">
             <div className="column is-6 is-offset-3">
               <h3 className="title has-text-grey has-text-centered">ログイン</h3>
-              <div>{this.state.token}</div>{/* TODO: デバッグ用 */}
               <div className={['box', this.state.loggingIn ? 'is-loggingIn' : ''].join(' ')}>
                 <div className="field">
                   <div className="buttons oauth-buttons is-centered">
@@ -110,7 +110,9 @@ class Login extends Component {
                     </button>
                   </div>
                 </div>
+
                 <hr/>
+
                 <TopMessage message={this.state.topMessage} color={this.state.color} />
                 <form onSubmit={(e) => this.passwordLogin(e)}>
                   <TextInput name="userId" placeholder="ID" autoFocus
@@ -132,7 +134,7 @@ class Login extends Component {
               </div>
               <p className="has-text-grey has-text-centered">
                 <Link to="/signup">ユーザ登録</Link>&nbsp; /&nbsp;
-                <a href="../">パスワードを忘れた？</a>
+                <Link to="/">パスワードを忘れた？</Link>
               </p>
             </div>
           </div>
