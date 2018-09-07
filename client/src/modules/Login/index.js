@@ -8,7 +8,7 @@ import TextInput from '../TextInput'
 import config from '../../constants'
 import { openPopup, listenPopup } from '../../services/oAuthLogin'
 import api from '../../services/api'
-import storage from '../../services/storage'
+import { setAccessToken } from '../../services/storage'
 
 class Login extends Component {
 
@@ -53,7 +53,7 @@ class Login extends Component {
     const popup = openPopup(config.api.uri + endpoint)
     listenPopup(popup)
       .then(value => {
-        storage.setAccessToken(value.token)
+        setAccessToken(value.token)
         window.location.href = '/'
       })
     .catch(err => {
@@ -77,7 +77,7 @@ class Login extends Component {
     api.post('/api/auth/password', JSON.stringify({ userId, password })).then(res => {
       res.json().then(data => {
         if (res.ok) {
-          storage.setAccessToken(data.token)
+          setAccessToken(data.token)
           window.location.href = '/'
         } else {
           this.setState({ topMessage: data.message, inputMessages: data.errors })
