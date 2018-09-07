@@ -21,7 +21,7 @@ export const listenPopup = async (popup, resolve, reject) => {
     // same origin policyの回避のため、エラーは握りつぶす
     let token
     try {
-      const form = popup.document.forms.auth
+      const form = popup.document.forms.oauth
       token = form.token.value
     } catch (err) {}
 
