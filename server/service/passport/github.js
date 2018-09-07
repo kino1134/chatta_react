@@ -6,7 +6,7 @@ import config from '../../config'
 const githubConfig = {
   clientID: config.github.clientId,
   clientSecret: config.github.clientSecret,
-  callbackURL: config.client.uri + config.api.root + '/auth/github',
+  callbackURL: config.client.uri + '/authenticate/oauth/callback/github',
   scope: ['read:user', 'user:email'],
   state: true
 }
