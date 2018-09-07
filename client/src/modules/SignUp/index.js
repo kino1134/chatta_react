@@ -53,13 +53,12 @@ class SignUp extends Component {
             color: 'info'
           })
         } else {
-          // TODO: メッセージの表示処理を共通化したい
           this.setState({ topMessage: data.message, inputMessages: data.errors })
         }
       })
     }).catch(err => {
-      // TODO: メッセージ表示
       console.log(err)
+      this.setState({ topMessage: 'ユーザ登録できませんでした' })
     }).then(() => this.setState({ executing: false }))
   }
 
