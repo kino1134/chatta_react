@@ -31,10 +31,6 @@ export default (root, routes) => {
     app.use(morgan('dev'))
   }
 
-  // ソーシャルログイン時、HTMLを返すために使用
-  app.set('view engine', 'ejs')
-  app.set('views', './server/views')
-
   // ソーシャルログイン時、stateチェックを行うために使用
   const RedisStore = connectRedis(session)
   const store = new RedisStore({
