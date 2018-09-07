@@ -4,6 +4,7 @@ import './Login.css'
 
 import TopMessage from '../TopMessage'
 import TextInput from '../TextInput'
+import config from '../../constants'
 import { openPopup, listenPopup } from '../../services/oAuthLogin'
 import api from '../../services/api'
 
@@ -45,7 +46,7 @@ class Login extends Component {
 
     this.setState({ loggingIn: true, executing: true })
 
-    const popup = openPopup(endpoint)
+    const popup = openPopup(config.api.uri + endpoint)
     listenPopup(popup)
       .then(value => {
         // TODO: ローカルストレージに保存 & 中へリダイレクト
