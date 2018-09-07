@@ -1,6 +1,8 @@
 import io from 'socket.io-client'
 
-const socket = io.connect('http://localhost:3033', {
+import config from '../constants'
+
+const socket = io.connect(config.socket.uri, {
   autoConnect: false
 })
 
