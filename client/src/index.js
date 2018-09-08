@@ -7,6 +7,7 @@ import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 
 import LoginCheck from './modules/LoginCheck'
+import Main from './modules/Main'
 import App from './modules/App'
 import reducer from './reducers'
 
@@ -17,7 +18,7 @@ ReactDOM.render((
     <Provider store={store}>
       <LoginCheck>
         <Switch>
-          <Route exact path="/"component={ App } />
+          <Route exact path="/"component={ Main } />
           <Route component={ App } />
         </Switch>
       </LoginCheck>
