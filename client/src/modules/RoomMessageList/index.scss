@@ -1,0 +1,32 @@
+#room-message-list {
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  font-size: 14px;
+
+  .media {
+    padding: 8px 30px 8px 20px;
+    .avator {
+      width: 36px;
+      height: 36px;
+    }
+    &:hover {
+      background-color: rgba(0,0,0,.05);
+    }
+    & + .media {
+      margin-top: 0;
+      padding-top: 8px;
+      border-top: none;
+    }
+  }
+  .message-info > * {
+    margin-right: 5px;
+  }
+
+  .message-content {
+    & > pre, & > p > code {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  }
+}

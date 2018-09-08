@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './index.css'
 
 import RoomHeader from '../RoomHeader'
+import RoomMessageList from '../RoomMessageList'
 import RoomPost from '../RoomPost'
 
 class RoomMain extends Component {
@@ -11,9 +12,7 @@ class RoomMain extends Component {
         <RoomHeader />
         <div className="room-wrapper">
           <div className="messages-wrapper">
-            <div className="messages">
-              (仮)メッセージ
-            </div>
+            <RoomMessageList />
             <RoomPost />
             {/*- 右サイドバー */}
           </div>
