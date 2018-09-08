@@ -58,7 +58,7 @@ const config = {
     clientSecret: required('GITHUB_CLIENT_SECRET')
   },
   sendgrid: {
-    enabled: required('SENDGRID_ENABLED'),
+    enabled: process.env.SENDGRID_ENABLED || 'true',
     apiKey: required('SENDGRID_API_KEY')
   }
 }

@@ -7,7 +7,11 @@ import { sendgrid } from '../../config'
 
 export default {
   send ({ to, subject, text, html }) {
-    if (!sendgrid.enabled) return true
+    if (sendgrid.enabled === 'false') {
+      console.log(text)
+      console.log(html)
+      return true
+    }
 
     mailer.setApiKey(sendgrid.apiKey)
 
