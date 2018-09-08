@@ -16,6 +16,7 @@
   https://www.fullstackreact.com/articles/using-create-react-app-with-a-server/#concurrently
 * ローカルパスワードによるログイン
 * パスワードユーザの登録APIの追加
+* 初期パスワード通知
 
 ## やったこと（クライアント側）
 * クライアント(React)の環境整備  
@@ -28,15 +29,16 @@
 * Bulma 投入
 * React-Router 投入  
   https://qiita.com/park-jh/items/b4c7b16ea9eb0cf44942
-
-## やりたいこと
-* 初期パスワード通知
-* パスワード初期化
 * クライアント側の認証フィルタ  
   ソーシャルログインをするのでそのままは使えないと思うけど  
-  https://reacttraining.com/react-router/web/example/auth-workflow
+  https://reacttraining.com/react-router/web/example/auth-workflow  
+  https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html
+
+## やりたいこと
+* Redux or MobX 投入  
+  https://qiita.com/mpyw/items/a816c6380219b1d5a3bf
+* パスワード初期化
 * ロギング(各ライブラリの説明を読む感じ、そんなに準備されてないようなので後回しかも)
-* Redux or MobX 投入
 * manifest.json 更新
 
 * https://ramdajs.com/docs/
