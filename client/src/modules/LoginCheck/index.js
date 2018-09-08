@@ -25,7 +25,6 @@ class LoginCheck extends Component {
     }).catch(err => { console.log(err) })
   }
 
-
   render () {
     const { loginUser, children } = this.props
 
