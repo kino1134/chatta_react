@@ -9,11 +9,11 @@ class RoomHeader extends Component {
           <i className="fa fa-bars fa-lg"></i>
         </a>
         <div className="room-info">
-         (仮)ヘッダ
+         (未完)ヘッダ
         </div>
         <div className="spacer"></div>
         <div className="room-action">
-          (仮)アクション
+          (未完)アクション
         </div>
       </header>
     )
