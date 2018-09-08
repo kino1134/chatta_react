@@ -1,5 +1,13 @@
-const apiCall = async ({ url, method, body }) =>
-  fetch(url, { method, body, headers: { 'content-type': 'application/json' } })
+import { getAccessToken } from './storage'
+
+const apiCall = async ({ url, method, body }) => {
+  const headers = { 'content-type': 'application/json' }
+  const token = getAccessToken()
+  if (token) {
+    headers['Authorization'] = 'Bearer ' + token
+  }
+  return fetch(url, { method, body, headers })
+}
 
 export default {
   post: async (url, body) =>
