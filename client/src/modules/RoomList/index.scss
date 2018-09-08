@@ -1,0 +1,61 @@
+$sidebar-width: 280px;
+
+@media(max-width: 779px) {
+  #room-list {
+    transform: translate3d($sidebar-width * -1, 0, 0);
+    z-index: 2;
+    &.show {
+      transform: translate3d(0px, 0px, 0px);
+    }
+  }
+}
+
+#room-list {
+  flex: 0 0 $sidebar-width;
+  max-width: $sidebar-width;
+  background-color: #abcdef;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform 0.3s;
+
+  .login-user {
+    font-size: 1.2em;
+    .name {
+      display: inline-block;
+      width: $sidebar-width - 48px;
+    }
+    #account-menu {
+      left: 24px;
+    }
+    .field {
+      padding: 4px 12px;
+      .search-box {
+        flex-shrink: 1;
+      }
+    }
+  }
+
+  .room-list {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    flex: 1 1 0;
+    .menu-label {
+      padding: 0 24px;
+    }
+  }
+
+  .menu-list {
+    .menu-item {
+      padding-left: 24px;
+      padding-right: 24px;
+      width: $sidebar-width;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      i:before {
+        display: block;
+      }
+    }
+  }
+}
