@@ -45,7 +45,7 @@ class SignUp extends Component {
     this.setState({ executing: true })
 
     const { email, userId, displayName } = this.state
-    api.post('/api/users', JSON.stringify({ email, userId, displayName })).then(res => {
+    api.post('/api/users', { email, userId, displayName }).then(res => {
       res.json().then(data => {
         if (res.ok) {
           this.props.history.push('/', {

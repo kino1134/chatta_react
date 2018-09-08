@@ -74,7 +74,7 @@ class Login extends Component {
     this.setState({ executing: true })
 
     const { userId, password } = this.state
-    api.post('/api/auth/password', JSON.stringify({ userId, password })).then(res => {
+    api.post('/api/auth/password', { userId, password }).then(res => {
       res.json().then(data => {
         if (res.ok) {
           setAccessToken(data.token)
