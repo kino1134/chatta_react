@@ -6,7 +6,8 @@
   * https://github.com/pillarjs/finalhandler
 * ソーシャルログインの追加(Google, GitHub)  
   Implicit Flow だとリプレイ攻撃しやすくなるらしいので、普通にサーバも使って認証する  
-  https://qiita.com/uryyyyyyy/items/56f9a80a829161ae1f8e
+  https://qiita.com/uryyyyyyy/items/56f9a80a829161ae1f8e  
+  https://auth0.com/blog/jp-reactjs-authentication-tutorial
 * 認証/認可フィルターの追加
 * APIからSocketサーバに対してのイベント発行
   * https://github.com/socketio/socket.io-emitter
