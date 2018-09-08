@@ -11,6 +11,7 @@ class TextInput extends Component {
 
   render () {
     const {
+      type,
       children,
       className,
       name,
@@ -39,7 +40,7 @@ class TextInput extends Component {
     return (
       <div className="field">
         <div className={'control' + (this.props.required ?  ' has-icons-right' : '')}>
-          <input type="text" name={name} className={classes} {...rest} />
+          <input type={type||'text'} name={name} className={classes} {...rest} />
           {requireIcon}
         </div>
         {children}

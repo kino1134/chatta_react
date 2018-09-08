@@ -118,7 +118,7 @@ class Login extends Component {
                   <TextInput name="userId" placeholder="ID" autoFocus
                     onChange={this.changeHandler} errors={this.state.inputMessages}
                   />
-                  <TextInput name="password" placeholder="パスワード"
+                  <TextInput name="password" type="password" placeholder="パスワード"
                     onChange={this.changeHandler} errors={this.state.inputMessages}
                   />
                   <div className="field">
