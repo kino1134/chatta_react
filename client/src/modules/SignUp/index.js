@@ -23,6 +23,13 @@ class SignUp extends Component {
     }
   }
 
+  componentDidMount () {
+    this._isMounted = true
+  }
+  componentWillUnmount () {
+    this._isMounted = false
+  }
+
   changeHandler (e) {
     // メールアドレスの内容をID欄に連携する
     if (e.target.name === 'email') {
@@ -59,7 +66,9 @@ class SignUp extends Component {
     }).catch(err => {
       console.log(err)
       this.setState({ topMessage: 'ユーザ登録できませんでした' })
-    }).then(() => this.setState({ executing: false }))
+    }).then(() => {
+      if (this._isMounted) this.setState({ executing: false })
+    })
   }
 
   render () {
