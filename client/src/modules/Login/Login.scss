@@ -1,13 +1,12 @@
-.hero {
-  background: #F2F6FA;
-}
+#login {
 
-.buttons.oauth-buttons .button {
-  margin-left: .2em;
-  margin-right: .2em;
-}
+  .buttons.oauth-buttons .button {
+    margin-left: .2em;
+    margin-right: .2em;
+  }
 
-.is-loggingIn {
-  opacity: .3;
-  pointer-events: none;
+  .is-loggingIn {
+    opacity: .3;
+    pointer-events: none;
+  }
 }

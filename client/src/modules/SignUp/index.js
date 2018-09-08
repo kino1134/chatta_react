@@ -64,7 +64,7 @@ class SignUp extends Component {
 
   render () {
     return (
-      <section id="app" className="hero is-fullheight">
+      <section id="sign-up" className="hero is-fullheight">
         <div className="hero-body">
           <div className="container">
             <div className="column is-4 is-offset-4">

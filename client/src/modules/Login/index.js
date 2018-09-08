@@ -92,7 +92,7 @@ class Login extends Component {
 
   render() {
     return (
-      <section id="app" className="hero is-fullheight">
+      <section id="login" className="hero is-fullheight">
         <div className="hero-body">
           <div className="container">
             <div className="column is-6 is-offset-3">

@@ -1,8 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import './index.css'
 import registerServiceWorker from './registerServiceWorker'
+import './index.css'
+import './index.auth.css'
 
 import Login from './modules/Login'
 import SignUp from './modules/SignUp'
