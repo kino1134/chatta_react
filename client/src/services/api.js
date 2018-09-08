@@ -1,4 +1,5 @@
 import { getAccessToken } from './storage'
+import config from '../constants'
 
 const apiCall = async ({ url, method, body }) => {
   const headers = { 'content-type': 'application/json' }
@@ -6,7 +7,7 @@ const apiCall = async ({ url, method, body }) => {
   if (token) {
     headers['Authorization'] = 'Bearer ' + token
   }
-  return fetch(url, { method, body, headers })
+  return fetch(config.api.uri + url, { method, body, headers })
 }
 
 export default {
