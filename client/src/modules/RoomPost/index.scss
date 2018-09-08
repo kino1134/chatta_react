@@ -1,0 +1,26 @@
+#room-post {
+  padding: 24px;
+
+  .field {
+    border: 2px solid #919193;
+    border-radius: 6px;
+  }
+
+  .has-addons {
+    .button {
+      height: 100%;
+    }
+    .control.main {
+      flex: 1 1 auto;
+    }
+  }
+
+  .textarea {
+    resize: none;
+    &, &:focus, &:hover {
+      border: none;
+      box-shadow: unset;
+    }
+  }
+
+}
