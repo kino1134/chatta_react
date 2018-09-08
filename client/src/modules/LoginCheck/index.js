@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 
 import { loggedIn } from '../../services/storage'
+import socket from '../../services/socket'
 import * as loginUserActions from '../../actions/loginUser'
 import api from '../../services/api'
 
@@ -21,6 +22,7 @@ class LoginCheck extends Component {
 
       res.json().then(json =>{
         setLoginUser(json)
+        socket.open()
       }).catch(err => { console.log(err) })
     }).catch(err => { console.log(err) })
   }
