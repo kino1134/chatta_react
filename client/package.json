@@ -5,6 +5,7 @@
   "proxy": "http://localhost:3003/",
   "dependencies": {
     "bulma": "^0.7.1",
+    "jwt-decode": "^2.2.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-router-dom": "^4.3.1",
