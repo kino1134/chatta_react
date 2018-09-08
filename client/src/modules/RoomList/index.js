@@ -6,9 +6,10 @@ class RoomList extends Component {
     return (
       <aside id="room-list" className="menu">
         <header className="login-user">
-          (仮){this.props.loginUser.displayName}
+          {this.props.loginUser.displayName}
         </header>
         <div className="room-list">
+          (未完)チャンネルリスト
         </div>
       </aside>
     )
