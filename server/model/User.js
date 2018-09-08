@@ -41,7 +41,7 @@ const userSchema = new Schema({
     enum: roles,
     default: 'user'
   },
-  picture: {
+  photo: {
     type: String,
     trim: true
   }
@@ -65,7 +65,7 @@ userSchema.methods = {
   // 表示に使う属性を返す
   view (full) {
     let view = {}
-    let fields = ['userId', 'displayName', 'picture']
+    let fields = ['userId', 'displayName', 'photo']
 
     if (full) {
       fields = [...fields, 'email', 'createdAt']
