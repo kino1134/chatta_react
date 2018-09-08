@@ -17,7 +17,10 @@ export const loggedIn = () => {
 }
 
 const getTokenExpirationDate = (token) => {
-  const claim = decode(token)
+  let claim
+  try {
+    claim = decode(token)
+  } catch (err) { return null }
   if (!claim.exp) return null
 
   const date = new Date(0)
