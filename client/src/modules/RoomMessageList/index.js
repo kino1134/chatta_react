@@ -46,6 +46,8 @@ class RoomMessageList extends Component {
   }
 
   componentDidUpdate (prevProps, prevState, snapshot) {
+    // TODO: 強制的に下に行くのは不親切かも
+    // TODO: 現在のスクロール位置に応じて判断したい
     this.scrollLast()
   }
 
