@@ -1,21 +1,16 @@
 import React, { Component, Fragment } from 'react'
+import { connect } from 'react-redux'
 
 import { loggedIn } from '../../services/storage'
+import * as loginUserActions from '../../actions/loginUser'
 import api from '../../services/api'
 
 class LoginCheck extends Component {
 
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      // TODO: グローバルに見えるようにする
-      user: null
-    }
-  }
-
   componentDidMount () {
-    if (this.state.user) {
+    const { loginUser, setLoginUser } = this.props
+
+    if (loginUser) {
       return
     }
 
@@ -23,22 +18,25 @@ class LoginCheck extends Component {
       if (!res.ok) {
         window.location.href = '/authenticate'
       }
+
       res.json().then(json =>{
-        this.setState({ user: json })
+        setLoginUser(json)
       }).catch(err => { console.log(err) })
     }).catch(err => { console.log(err) })
   }
 
 
   render () {
+    const { loginUser, children } = this.props
+
     if (!loggedIn()) {
       window.location.href = '/authenticate'
       return null
     }
 
-    if (this.state.user) {
+    if (loginUser) {
       return (
-        <Fragment>{this.props.children}</Fragment>
+        <Fragment>{children}</Fragment>
       )
     } else {
       // TODO: ローディング画面にしたほうがいい？
@@ -49,4 +47,7 @@ class LoginCheck extends Component {
 
 }
 
-export default LoginCheck
+export default connect(
+  state => ({ loginUser: state.loginUser }),
+  { setLoginUser: loginUserActions.setLoginUser }
+)(LoginCheck)
