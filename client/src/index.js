@@ -8,18 +8,18 @@ import registerServiceWorker from './registerServiceWorker'
 
 import LoginCheck from './modules/LoginCheck'
 import Main from './modules/Main'
-import App from './modules/App'
 import reducer from './reducers'
 
 const store = createStore(reducer)
 
+// TODO: 404ページは設けたほうがいい？
 ReactDOM.render((
   <BrowserRouter>
     <Provider store={store}>
       <LoginCheck>
         <Switch>
-          <Route exact path="/"component={ Main } />
-          <Route component={ App } />
+          <Route exact path="/" component={ Main } />
+          <Route component={ Main } />
         </Switch>
       </LoginCheck>
     </Provider>
