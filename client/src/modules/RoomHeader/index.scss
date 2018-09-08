@@ -1,0 +1,32 @@
+#room-header {
+  padding: 16px;
+  display: flex;
+  .room-burger {
+    display: none;
+    color: #444;
+  }
+  * {
+    flex-shrink: 0;
+  }
+  .spacer {
+    flex-grow: 1;
+  }
+  .toggle-star, .action-link {
+    padding: 0 1rem;
+    color: #cbced1;
+  }
+  .action-link:hover, .action-link.current {
+    color: #23d160;
+  }
+  .toggle-star.on, .toggle-star:hover {
+    color: #f6c502;
+  }
+
+  @media(max-width: 779px) {
+    & {
+      .room-burger {
+        display: flex;
+      }
+    }
+  }
+}
