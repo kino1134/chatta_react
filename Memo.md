@@ -38,7 +38,7 @@
   https://qiita.com/mpyw/items/a816c6380219b1d5a3bf
 
 
-# 追加したい機能
+## 追加したい機能
 * ログアウト
 * パスワードリセット
 * 画面ごとのタイトル変更
@@ -48,7 +48,7 @@
 * ダイレクトメッセージ
 * TODO消す
 
-# できればやってみたい
+## できればやってみたい
 * ファイル添付
 * 投稿後のメッセージ編集
 * 通知
@@ -90,3 +90,6 @@ $ ./node_modules/.bin/eslint --init
 
 ### nginx
 Homebrew で入れた時の設定ファイル `/usr/local/etc/nginx/nginx.conf`
+
+複数エントリポイントがある時でも、そんなに複雑な設定をしなくていいみたい
+https://qiita.com/oshiro/items/39aaed7cc2e33ce25eeb
