@@ -25,8 +25,9 @@ export default (root, routes) => {
 
   if (env === 'production' || env === 'development') {
     app.use(helmet())
+    // TODO: 設定ファイル化
+    app.use(cors({ origin: api.corsOrigin }))
     // 圧縮は必要性が感じられるまでコメントアウト
-    app.use(cors({ origin: ['http://localhost:3000', 'http://localhost'] }))
     // app.use(compression())
     app.use(morgan('dev'))
   }

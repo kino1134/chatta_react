@@ -2,7 +2,6 @@
   "name": "chatta_react_client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3003/",
   "dependencies": {
     "bulma": "^0.7.1",
     "jwt-decode": "^2.2.0",
