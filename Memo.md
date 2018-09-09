@@ -33,13 +33,29 @@
   ソーシャルログインをするのでそのままは使えないと思うけど  
   https://reacttraining.com/react-router/web/example/auth-workflow  
   https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html
-
-## やりたいこと
 * Redux or MobX 投入  
+  結局Reduxを入れた。ただ、まだログインユーザの情報を管理しているだけ。
   https://qiita.com/mpyw/items/a816c6380219b1d5a3bf
-* パスワード初期化
+
+
+# 追加したい機能
+* ログアウト
+* パスワードリセット
+* 画面ごとのタイトル変更
+* ユーザプロフィール編集
+* チャンネル機能
+* ダイレクトメッセージ
+
+# できればやってみたい
+* ファイル添付
+* 投稿後のメッセージ編集
+* 通知
+* 絵文字表示 :+1:
+
+## 整備したい基盤
+* Herokuとかにあげる
 * ロギング(各ライブラリの説明を読む感じ、そんなに準備されてないようなので後回しかも)
-* manifest.json 更新
+* manifest.json とはなんなのか？
 
 * https://ramdajs.com/docs/
 
@@ -69,3 +85,6 @@ $ ./node_modules/.bin/eslint --init
 ? Which style guide do you want to follow? Standard (https://github.com/standard/standard)
 ? What format do you want your config file to be in? JavaScript
 ```
+
+### nginx
+Homebrew で入れた時の設定ファイル `/usr/local/etc/nginx/nginx.conf`
