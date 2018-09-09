@@ -1,0 +1,17 @@
+FROM node:8.11.4
+MAINTAINER kino1134
+
+WORKDIR /opt
+# キャッシュ回避
+ADD package.json /data/
+RUN git clone https://github.com/kino1134/chatta_react.git \
+  && cd chatta_react \
+  && yarn install \
+  && yarn build
+
+COPY .env.production /opt/chatta_react/
+
+EXPOSE 3003 3033
+
+WORKDIR /opt/chatta_react
+CMD ["yarn", "serve"]

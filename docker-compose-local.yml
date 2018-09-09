@@ -1,0 +1,41 @@
+version: "2.2"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile_server
+    init: true
+    ports:
+      - "3003:3003"
+      - "3033:3033"
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/chatta_react?authSource=admin
+      REDIS_HOST: redis
+      NODE_ENV: production
+    depends_on:
+      - mongodb
+      - redis
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile_client
+    init: true
+    ports:
+      - "80:80"
+  mongodb:
+    image: mongo:3.6.3
+    ports:
+      - "27017:27017"
+    volumes:
+      - "./data/mongo/db:/data/db"
+      - "./data/mongo/config:/data/configdb"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: pass1!
+  redis:
+    image: redis:4.0.9
+    ports:
+      - "6379:6379"
+    volumes:
+      - "./data/redis/db:/data"
