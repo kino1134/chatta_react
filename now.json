@@ -1,0 +1,32 @@
+{
+  "name": "chatta_react",
+  "type": "npm",
+  "env": {
+    "NODE_ENV": "production",
+
+    "API_SESSION_SECRET": "@api-session-secret",
+    "API_CORS_ORIGIN": "xxx",
+
+    "CLIENT_URI": "xxx",
+
+    "MONGO_URI": "@mongo-uri",
+    "MONGO_USER": "@mongo-user",
+    "MONGO_PASSWORD": "@mongo-password",
+
+    "REDIS_HOST": "@redis-host",
+    "REDIS_PORT": "@redis-port",
+    "REDIS_PASSWORD": "@redis-password",
+
+    "JWT_EXPIRES_IN": "7d",
+    "JWT_SECRET_KEY": "@jwt-secret-key",
+
+    "GOOGLE_CLIENT_ID": "@google-client-id",
+    "GOOGLE_CLIENT_SECRET": "@google-client-secret",
+
+    "GITHUB_CLIENT_ID": " @github-client-id",
+    "GITHUB_CLIENT_SECRET": "@github-client-secret",
+
+    "SENDGRID_ENABLED": "true",
+    "SENDGRID_API_KEY": "@sendgrid-api-key"
+  }
+}
