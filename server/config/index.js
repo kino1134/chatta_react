@@ -25,13 +25,11 @@ const config = {
     port: process.env.API_PORT || 3003,
     ip: process.env.API_IP || '0.0.0.0',
     root: process.env.API_ROOT || '/api',
-    uri: process.env.API_URI || 'http://localhost:3003',
     sessionSecret: process.env.API_SESSION_SECRET || 'keyboard cat',
     corsOrigin: (process.env.API_CORS_ORIGIN || 'http://localhost:3000 http://localhost').split(' ')
   },
   client: {
-    uri: process.env.CLIENT_URI || 'http://localhost:3000',
-    auth: process.env.CLIENT_AUTH || '/authenticate'
+    uri: process.env.CLIENT_URI || 'http://localhost:3000'
   },
   socket: {
     port: process.env.SOCKET_PORT || 3033
