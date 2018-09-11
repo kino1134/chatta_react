@@ -32,7 +32,7 @@ const config = {
     uri: process.env.CLIENT_URI || 'http://localhost:3000'
   },
   socket: {
-    port: process.env.SOCKET_PORT || 3033
+    port: process.env.SOCKET_PORT
   },
   mongo: {
     uri: required('MONGO_URI'),
