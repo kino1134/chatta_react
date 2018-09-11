@@ -1,9 +1,9 @@
 {
-  "name": "chatta_react",
+  "name": "chatta-react",
+  "alias": "chatta-react.now.sh",
+  "public": true,
   "type": "npm",
   "env": {
-    "NODE_ENV": "production",
-
     "API_SESSION_SECRET": "@api-session-secret",
     "API_CORS_ORIGIN": "xxx",
 

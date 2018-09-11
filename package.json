@@ -11,7 +11,8 @@
     "start:db": "docker-compose up",
     "clean": "rimraf dist",
     "build": "npm run clean && babel server -d dist",
-    "now-start": "node dist/index.js",
+    "now-build": "NODE_ENV=production npm run clean && babel server -d dist",
+    "now-start": "NODE_ENV=production node dist/index.js",
     "lint": "eslint server",
     "test": "jest --watch"
   },
