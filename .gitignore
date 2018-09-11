@@ -4,5 +4,6 @@ node_modules/
 
 .env.development
 .env.production
+.env.memo
 
 yarn-error.log*
