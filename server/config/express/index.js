@@ -36,7 +36,8 @@ export default (root, routes) => {
   const RedisStore = connectRedis(session)
   const store = new RedisStore({
     host: redis.host,
-    port: redis.port
+    port: redis.port,
+    pass: redis.password
   })
   app.use(session({
     secret: api.sessionSecret,
