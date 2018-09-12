@@ -22,20 +22,23 @@ $sidebar-width: 250px;
 
   .login-user {
     font-size: 1.2em;
-    padding: 0 16px;
 
-    .name {
-      display: inline-block;
-      width: $sidebar-width - 48px;
-    }
-    #account-menu {
-      left: 24px;
-    }
-    .field {
-      padding: 4px 12px;
-      .search-box {
-        flex-shrink: 1;
+    .menu-button {
+      width: 100%;
+      background-color: transparent;
+      color: #fff;
+      border: none;
+      border-radius: 0;
+
+      &:hover {
+        background-color: #63A7E5;
       }
+    }
+
+    .login-user-name {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 
