@@ -50,16 +50,16 @@ const config = {
     expire: required('JWT_EXPIRES_IN')
   },
   google: {
-    clientId: required('GOOGLE_CLIENT_ID'),
-    clientSecret: required('GOOGLE_CLIENT_SECRET')
+    clientId: process.env.GOOGLE_CLIENT_ID || 'dummy',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'dummy'
   },
   github: {
-    clientId: required('GITHUB_CLIENT_ID'),
-    clientSecret: required('GITHUB_CLIENT_SECRET')
+    clientId: process.env.GITHUB_CLIENT_ID || 'dummy',
+    clientSecret: process.env.GITHUB_CLIENT_SECRET || 'dummy'
   },
   sendgrid: {
     enabled: process.env.SENDGRID_ENABLED || 'true',
-    apiKey: required('SENDGRID_API_KEY')
+    apiKey: process.env.SENDGRID_API_KEY || 'dummy'
   }
 }
 
