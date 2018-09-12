@@ -1,6 +1,6 @@
 import express from 'express'
-import session from 'express-session'
-import connectRedis from 'connect-redis'
+// import session from 'express-session'
+// import connectRedis from 'connect-redis'
 
 import helmet from 'helmet'
 // import forceSSL from 'express-force-ssl'
@@ -8,7 +8,7 @@ import cors from 'cors'
 // import compression from 'compression'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
-import { env, api, redis } from '../'
+import { env, api } from '../'
 import { errorHandler } from '../../service/response'
 
 export default (root, routes) => {
@@ -32,18 +32,19 @@ export default (root, routes) => {
     app.use(morgan('dev'))
   }
 
+  // TODO: Cookieのドメインが違う場合にチェックが通らなくなるので、一旦使わない
   // ソーシャルログイン時、stateチェックを行うために使用
-  const RedisStore = connectRedis(session)
-  const store = new RedisStore({
-    host: redis.host,
-    port: redis.port,
-    pass: redis.password
-  })
-  app.use(session({
-    secret: api.sessionSecret,
-    resave: false,
-    saveUninitialized: false,
-    store }))
+  // const RedisStore = connectRedis(session)
+  // const store = new RedisStore({
+  //   host: redis.host,
+  //   port: redis.port,
+  //   pass: redis.password
+  // })
+  // app.use(session({
+  //   secret: api.sessionSecret,
+  //   resave: false,
+  //   saveUninitialized: false,
+  //   store }))
 
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())
