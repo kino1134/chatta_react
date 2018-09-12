@@ -4,6 +4,8 @@ node_js:
 cache: yarn
 # The lines below should fix the travis build according to this issue (https://github.com/kelektiv/node.bcrypt.js/issues/366)
 env:
+  global:
+    secure: "AECSLBoMaDmfuzl5efdkYHVJvltYYPmgSuak182nQO1pHngjqebRu6ojyqY0RikUGD8vbYqxJXF1TIbAfti6HIob2KjZCDbixkll32BsOzsE4GULRXK24NwoTPD9s7QX4OoBk/+T7MiBg4qwEFjml+1oNywnK3//YLh3ni8m8Tl1IUpscuCu3EqW2q4l9EHiODcGej2yS0+t8ZxhuBz1cJGClxgT+b3JD5UFM7R4Wo/HVz3qiPX5cxwmKeo5KOIVgElKJuj0VAHrFUHs7d+xirQQnf9q1mdTQ+QB3kEhsiPy5nxlybKeozjKZ1Gzaz2vjd2DtgapnPeuFTQtsqrbHsJpKZzdsbFo8IEtIqBcz3y5I2bK/aEPGo9TYVv419T6OlBgaKrSqbxXGqDCW4mwWqA6vOkb6+REK/Br7DZpNvow4dV2c1G27NS7ixZB59rxSXe2j8Cm4kefJYDoXouieljWvuQWIwO+mKsEtbn8pkRJb0sRLuLUEmFnXJuxmxejs1l1v9iz0vLdPGdJIMZm15p9NjaHUz3D+aeBAwXyb0KnySe+x9Uc/uTBMkSFV75jcMzMeqxPt+LU/7mAXHeH0O+WGOmGNZr3lqXMz5T7VYv+OQq5rgHgWfWiM/sq5u9KGlh7e3a1KqfH78DC4TZL9by81xdxbUEYPcF5OPQ0cgc="
   - CXX=g++-4.8
 addons:
   apt:
