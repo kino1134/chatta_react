@@ -3,6 +3,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const paths = require('react-scripts/config/paths')
 
 const authIndexJs = 'index.auth.js'
@@ -58,6 +59,17 @@ const setCommonsChunkPlugin = function (config, env) {
   }))
 }
 
+const getSWPrecacheWebpackPlugin = function (config, env) {
+  const index = config.plugins.findIndex(e => e instanceof SWPrecacheWebpackPlugin)
+  return [config.plugins[index], index]
+}
+
+const clearNavigateFallback = function (config, env) {
+  const [plugin] = getSWPrecacheWebpackPlugin(config, env)
+  plugin.options.navigateFallback = ''
+  plugin.options.navigateFallbackWhitelist = []
+}
+
 const setFallback = function (config) {
   config.historyApiFallback = {
     rewrites: [
@@ -83,6 +95,9 @@ module.exports = {
 
     // ファイルサイズ抑制のため、共通部分は別ファイルに分割する
     setCommonsChunkPlugin(config, env)
+
+    // Serivce WorkerのFallback機能を無効化する
+    clearNavigateFallback(config, env)
 
     return config
   },
