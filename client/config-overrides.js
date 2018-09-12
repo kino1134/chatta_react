@@ -65,6 +65,10 @@ const getSWPrecacheWebpackPlugin = function (config, env) {
 }
 
 const clearNavigateFallback = function (config, env) {
+  if (env !== 'production') {
+    return
+  }
+
   const [plugin] = getSWPrecacheWebpackPlugin(config, env)
   plugin.options.navigateFallback = ''
   plugin.options.navigateFallbackWhitelist = []
