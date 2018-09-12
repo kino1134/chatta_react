@@ -5,9 +5,9 @@
   "type": "npm",
   "env": {
     "API_SESSION_SECRET": "@api-session-secret",
-    "API_CORS_ORIGIN": "xxx",
+    "API_CORS_ORIGIN": "https://chatta-react.netlify.com",
 
-    "CLIENT_URI": "xxx",
+    "CLIENT_URI": "https://chatta-react.netlify.com",
 
     "MONGO_URI": "@mongo-uri",
     "MONGO_USER": "@mongo-user",
