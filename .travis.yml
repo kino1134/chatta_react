@@ -19,7 +19,7 @@ deploy:
     on:
       branch: master
   - provider: script # required env variables NETLIFY_AUTH_TOKEN
-    script: cd client && yarn && yarn build && yarn netlify deploy --dir build --prod
+    script: cd client && yarn && yarn build && yarn netlify deploy --dir client/build --prod
     skip_cleanup: true
     on:
       branch: master
