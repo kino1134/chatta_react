@@ -1,8 +1,16 @@
 {
-  "name": "chatta-react",
-  "alias": "chatta-react.now.sh",
+  "name": "chatta-api",
+  "alias": "chatta-api.now.sh",
   "public": true,
   "type": "npm",
+  "files": [
+    "server",
+    ".babelrc",
+    ".env",
+    ".env.production",
+    "package.json",
+    "yarn.lock"
+  ],
   "env": {
     "API_SESSION_SECRET": "@api-session-secret",
     "API_CORS_ORIGIN": "https://chatta-react.netlify.com",
