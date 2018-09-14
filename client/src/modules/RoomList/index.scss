@@ -10,6 +10,10 @@ $sidebar-width: 250px;
   }
 }
 
+.ReactModal__Overlay {
+  z-index: 3;
+}
+
 #room-list {
   flex: 0 0 $sidebar-width;
   max-width: $sidebar-width;
