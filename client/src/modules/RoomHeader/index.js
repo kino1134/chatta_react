@@ -5,7 +5,7 @@ class RoomHeader extends Component {
   render () {
     return (
       <header id="room-header">
-        <a className="room-burger">
+        <a className="room-burger" onClick={(e) => this.props.visibleRoomList(true)}>
           <i className="fa fa-bars fa-lg"></i>
         </a>
         <div className="room-info">

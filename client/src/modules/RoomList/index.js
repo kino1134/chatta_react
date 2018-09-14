@@ -8,7 +8,7 @@ const customStyles = {
     top: '30px',
     left: '20px',
     right: 'auto',
-    bottom: 'auto',
+    bottom: 'auto'
   },
   overlay: {
     backgroundColor: 'transparent'
@@ -35,7 +35,7 @@ class RoomList extends Component {
 
   render () {
     return (
-      <aside id="room-list" className="menu">
+      <aside id="room-list" className={'menu' + (this.props.roomList.show ? ' show' : '')}>
         <header className="login-user">
           <button className="button menu-button" onClick={(e) => this.showMenu(e)}>
             <span className="login-user-name">{this.props.loginUser.displayName}</span>

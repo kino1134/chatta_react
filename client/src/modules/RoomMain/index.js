@@ -7,9 +7,11 @@ import RoomPost from '../RoomPost'
 
 class RoomMain extends Component {
   render () {
+    const { visibleRoomList } = this.props
+
     return (
       <div id="room-main">
-        <RoomHeader />
+        <RoomHeader {...{visibleRoomList}} />
         <div className="room-wrapper">
           <div className="messages-wrapper">
             <RoomMessageList />
