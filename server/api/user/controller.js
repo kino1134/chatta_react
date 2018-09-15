@@ -4,6 +4,21 @@ import User from '../../model/User'
 export const showMe = ({ user }, res) =>
   res.json(user.view(true))
 
+export const updatePassword = ({ user, body }, res, next) => {
+  user.authenticate(body.current)
+    .then(user => {
+      if (user) {
+        user.password = body.newer
+        user.save()
+          .then(() => res.json({ message: 'パスワードが変更されました' }))
+          .catch(next)
+      } else {
+        res.status(400).json({ message: '今のパスワードが間違っています' })
+      }
+    })
+    .catch(next)
+}
+
 export const create = (req, res, next) => {
   User.createFromLocal(req.body)
     .then(user => ({ userId: user.userId }))

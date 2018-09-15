@@ -13,4 +13,14 @@ const email = check('email').trim()
   .not().isEmpty().withMessage('必須です。')
   .custom((value) => value ? validator.isEmail(value) : true).withMessage('形式が間違っています。')
 
+export const updatePasswordValidator = [
+  check('current').trim()
+    .not().isEmpty().withMessage('必須です'),
+  check('newer').trim()
+    // https://qiita.com/mpyw/items/886218e7b418dfed254b
+    .matches(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{8,100}$/).withMessage('条件を満たしていません'),
+  check('confirm').trim()
+    .custom((value, { req }) => value === req.body.newer).withMessage('パスワードが一致していません')
+]
+
 export default [ userId, displayName, email ]

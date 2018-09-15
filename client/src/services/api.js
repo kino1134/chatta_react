@@ -14,5 +14,7 @@ export default {
   post: async (url, body) =>
     apiCall({ method: 'POST', url, body: JSON.stringify(body) }),
   get: async (url) =>
-    apiCall({ method: 'GET', url })
+    apiCall({ method: 'GET', url }),
+  put: async (url, body) =>
+    apiCall({ method: 'PUT', url, body: JSON.stringify(body) }),
 }
