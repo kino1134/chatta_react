@@ -72,6 +72,7 @@ userSchema.methods = {
     }
 
     fields.forEach((field) => { view[field] = this[field] })
+    view.password = !!this.password
 
     return view
   },
