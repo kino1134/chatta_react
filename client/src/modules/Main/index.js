@@ -24,7 +24,7 @@ class Main extends Component {
     return (
       <div id="main" className="container is-fluid">
         <RoomList {...{loginUser, roomList}}  />
-        <RoomMain {...{visibleRoomList}} />
+        <RoomMain {...{loginUser, visibleRoomList}} />
         {overlay}
       </div>
     )
