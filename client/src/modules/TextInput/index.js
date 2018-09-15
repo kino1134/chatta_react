@@ -27,6 +27,15 @@ class TextInput extends Component {
       className
     ].join(' ')
 
+
+    // ラベルを付与する
+    let label = null
+    if (this.props.label) {
+      label = (
+        <label className="label">{this.props.label}</label>
+      )
+    }
+
     // 必須アイコンを付与する
     let requireIcon = null
     if (this.props.required) {
@@ -39,6 +48,7 @@ class TextInput extends Component {
 
     return (
       <div className="field">
+        {label}
         <div className={'control' + (this.props.required ?  ' has-icons-right' : '')}>
           <input type={type||'text'} name={name} className={classes} {...rest} />
           {requireIcon}
