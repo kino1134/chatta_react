@@ -61,7 +61,7 @@ class SettingPassword extends Component {
         <TextInput name="newer" type="password" label="新しいパスワード"
           placeholder="新しいパスワード" required
           onChange={this.changeHandler} errors={this.state.inputMessages}>
-          <p className="help">8文字以上で大小英文字と数字を組み合わせてください</p>
+          <p className="help">8文字以上で大小英字と数字を組み合わせてください</p>
         </TextInput>
         <TextInput name="confirm" type="password" label="新しいパスワード（確認）"
           placeholder="新しいパスワード（確認）" required
