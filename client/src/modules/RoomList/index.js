@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import Modal from 'react-modal'
 import './index.css'
 
@@ -56,7 +57,7 @@ class RoomList extends Component {
             onRequestClose={(e) => this.hideMenu(e)} shouldReturnFocusAfterClose={false}>
             <div className="menu" role="menu">
               <ul className="menu-list">
-                <li><a>(仮)プロフィールの変更</a></li>
+                <li><Link to="/settings/profile">プロフィールの変更</Link></li>
                 <li><a onClick={(e) => this.logOut(e)}>ログアウト</a></li>
               </ul>
             </div>
