@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 
 import { loggedIn } from '../../services/storage'
 import socket from '../../services/socket'
@@ -48,7 +49,7 @@ class LoginCheck extends Component {
 
 }
 
-export default connect(
+export default withRouter(connect(
   state => ({ loginUser: state.loginUser }),
   { setLoginUser: loginUserActions.setLoginUser }
-)(LoginCheck)
+)(LoginCheck))
