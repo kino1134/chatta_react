@@ -7,7 +7,7 @@ import RoomPost from '../RoomPost'
 
 class RoomMain extends Component {
   render () {
-    const { visibleRoomList } = this.props
+    const { visibleRoomList, loginUser } = this.props
 
     return (
       <div id="room-main">
@@ -15,7 +15,7 @@ class RoomMain extends Component {
         <div className="room-wrapper">
           <div className="messages-wrapper">
             <RoomMessageList />
-            <RoomPost />
+            <RoomPost {...{loginUser}} />
             {/*- 右サイドバー */}
           </div>
         </div>
