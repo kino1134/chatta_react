@@ -57,8 +57,12 @@ class RoomList extends Component {
             onRequestClose={(e) => this.hideMenu(e)} shouldReturnFocusAfterClose={false}>
             <div className="menu" role="menu">
               <ul className="menu-list">
-                <li><Link to="/settings/profile">プロフィールの変更</Link></li>
-                <li><a onClick={(e) => this.logOut(e)}>ログアウト</a></li>
+                <li><Link to="/settings/profile">
+                  <i className="fas fa-user" style={{marginRight: '5px'}}></i>プロフィールの変更
+                </Link></li>
+                <li><a onClick={(e) => this.logOut(e)}>
+                  <i className="fas fa-sign-out-alt" style={{marginRight: '5px'}}></i>ログアウト
+                </a></li>
               </ul>
             </div>
           </Modal>
