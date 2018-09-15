@@ -1,0 +1,22 @@
+#setting-header {
+  box-shadow: 0 1px 2px 0 rgba(31, 35, 41, .3);
+  min-height: 62px;
+  padding: 10px 16px;
+  position: relative;
+  text-align: center;
+
+  .tabs {
+    display: inline-flex;
+    margin-bottom: 0;
+  }
+
+  .back {
+    color: #717274;
+    position: absolute;
+    right: 1em;
+    top: 1.2em;
+    &:hover {
+      color: #3273DC;
+    }
+  }
+}

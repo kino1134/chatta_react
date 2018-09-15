@@ -8,6 +8,7 @@ import registerServiceWorker from './registerServiceWorker'
 
 import LoginCheck from './modules/LoginCheck'
 import Main from './modules/Main'
+import SettingMain from './modules/SettingMain'
 import reducer from './reducers'
 
 const store = createStore(reducer)
@@ -19,6 +20,7 @@ ReactDOM.render((
       <LoginCheck>
         <Switch>
           <Route exact path="/" component={ Main } />
+          <Route path="/settings" component={ SettingMain } />
           <Route component={ Main } />
         </Switch>
       </LoginCheck>
