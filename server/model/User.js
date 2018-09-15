@@ -79,6 +79,7 @@ userSchema.methods = {
 
   // パスワードのよる認証を行う
   authenticate (password) {
+    if (!this.password) return Promise.resolve(false)
     return bcrypt.compare(password, this.password).then((valid) => valid ? this : false)
   }
 }
