@@ -13,6 +13,8 @@ const email = check('email').trim()
   .not().isEmpty().withMessage('必須です。')
   .custom((value) => value ? validator.isEmail(value) : true).withMessage('形式が間違っています。')
 
+const photo = check('photo').trim()
+  .isURL({ protocols: ['http', 'https'], require_protocol: true, allow_underscores: true }).withMessage('URL形式で入力してください')
 export const updatePasswordValidator = [
   check('current').trim()
     .not().isEmpty().withMessage('必須です'),
@@ -26,6 +28,10 @@ export const updatePasswordValidator = [
 export const initPasswordValidator = [
   check('email').trim().not().isEmpty().withMessage('必須です。'),
   check('userId').trim().not().isEmpty().withMessage('必須です。')
+]
+
+export const updateProfileValidator = [
+  displayName, email, userId, photo
 ]
 
 export default [ userId, displayName, email ]
