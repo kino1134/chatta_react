@@ -92,7 +92,7 @@ userSchema.statics = {
   createFromService ({ provider, id, emails, displayName, photos }) {
     return this.findOne({ providerId: provider + '_' + id }).then(user => {
       if (user) {
-        // TODO: ログイン元でユーザ更新があった場合を考慮してUpdateしてもいいかも。
+        // 一度ログインした後、元サービスでの変更は反映しない
         return user
       } else {
         const createUserId = () => {

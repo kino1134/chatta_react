@@ -3,7 +3,6 @@ import express from 'express'
 // import connectRedis from 'connect-redis'
 
 import helmet from 'helmet'
-// import forceSSL from 'express-force-ssl'
 import cors from 'cors'
 // import compression from 'compression'
 import morgan from 'morgan'
@@ -14,18 +13,8 @@ import { errorHandler } from '../../service/response'
 export default (root, routes) => {
   const app = express()
 
-  if (env === 'production') {
-    // SSL化は前にいる人(LBとか)がやってくれるんじゃないかなぁ
-    // app.set('forceSSLOptions', {
-    //   enable301Redirects: false,
-    //   trustXFPHeader: true
-    // })
-    // app.use(forceSSL)
-  }
-
   if (env === 'production' || env === 'development') {
     app.use(helmet())
-    // TODO: 設定ファイル化
     app.use(cors({ origin: api.corsOrigin }))
     // 圧縮は必要性が感じられるまでコメントアウト
     // app.use(compression())
