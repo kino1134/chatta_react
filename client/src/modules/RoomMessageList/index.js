@@ -4,6 +4,8 @@ import 'moment/locale/ja'
 import marked from 'marked'
 import './index.css'
 
+import RoomLoading from '../RoomLoading'
+
 import socket from '../../services/socket'
 import api from '../../services/api'
 
@@ -92,8 +94,7 @@ class RoomMessageList extends Component {
   }
 
   render () {
-    // TODO: ローディング
-    let result = 'しばらくお待ち下さい..'
+    let result = (<RoomLoading />)
     if (!this.state.loading) {
       result = this.state.list.map(m => this.showMessage(m))
     }

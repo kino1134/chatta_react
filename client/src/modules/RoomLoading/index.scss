@@ -1,0 +1,17 @@
+#room-loading {
+  padding-top: 30px;
+
+  .loader-text {
+    display: block;
+    padding-bottom: 10px;
+  }
+
+  .loader {
+    border-color: #3273dc;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    display: inline-block;
+    height: 5em;
+    width: 5em;
+  }
+}
