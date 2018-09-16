@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 import './index.css'
 
 import * as roomListActions from '../../actions/roomList'
@@ -23,6 +24,7 @@ class RoomMain extends Component {
 
     return (
       <div id="main" className="container is-fluid">
+        <Helmet title="chatta" />
         <RoomList {...{loginUser, roomList}}  />
         <RoomContent {...{loginUser, visibleRoomList}} />
         {overlay}

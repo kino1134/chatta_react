@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 import './Login.css'
 
 import TopMessage from '../TopMessage'
@@ -93,6 +94,7 @@ class Login extends Component {
   render() {
     return (
       <section id="login" className="hero is-fullheight">
+        <Helmet title="ログイン | chatta" />
         <div className="hero-body">
           <div className="container">
             <div className="column is-6 is-offset-3">

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Helmet } from 'react-helmet'
 import './index.css'
 
 import TopMessage from '../TopMessage'
@@ -53,6 +54,7 @@ class SettingPassword extends Component {
 
     return (
       <div id="setting-password">
+        <Helmet title="パスワード変更 | chatta" />
         <TopMessage message={this.state.topMessage} color={this.state.messageColor}/>
         <TextInput name="current" type="password" label="今のパスワード"
           placeholder="今のパスワード" required autoFocus

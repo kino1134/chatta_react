@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Helmet } from 'react-helmet'
 import './index.css'
 
 import TopMessage from '../TopMessage'
@@ -52,6 +53,7 @@ class SettingProfile extends Component {
   render () {
     return (
       <div id="setting-profile">
+        <Helmet title="プロフィール設定 | chatta" />
         <TopMessage message={this.state.topMessage} color={this.state.messageColor}/>
         <TextInput name="displayName" label="名前" placeholder="名前" required autoFocus
           value={this.state.displayName} onChange={this.changeHandler} errors={this.state.inputMessages}>
