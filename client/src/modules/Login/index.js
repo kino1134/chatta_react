@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import './Login.css'
 
+import AuthenticateLayout from '../AuthenticateLayout'
 import ButtonField from '../ButtonField'
 import TopMessage from '../TopMessage'
 import TextInput from '../TextInput'
@@ -94,52 +95,48 @@ class Login extends Component {
 
   render() {
     return (
-      <section id="login" className="hero is-fullheight">
+      <AuthenticateLayout>
         <Helmet title="ログイン | chatta" />
-        <div className="hero-body">
-          <div className="container">
-            <div className="column is-6 is-offset-3">
-              <h3 className="title has-text-grey has-text-centered">ログイン</h3>
-              <div className={['box', this.state.loggingIn ? 'is-loggingIn' : ''].join(' ')}>
-                <div className="field">
-                  <div className="buttons oauth-buttons is-centered">
-                    <button onClick={(e) => this.oAuthLogin(e, '/api/auth/google')}
-                      className="button is-link is-large">
-                      <span className="icon"><i className="fab fa-google"></i></span>
-                      <span>でログイン</span>
-                    </button>
-                    <button onClick={(e) => this.oAuthLogin(e, '/api/auth/github')}
-                      className="button is-info is-large">
-                      <span className="icon"><i className="fab fa-github"></i></span>
-                      <span>でログイン</span>
-                    </button>
-                  </div>
-                </div>
 
-                <hr/>
-
-                <TopMessage message={this.state.topMessage} color={this.state.color} />
-                <form onSubmit={(e) => this.passwordLogin(e)}>
-                  <TextInput name="userId" placeholder="ID" autoFocus
-                    onChange={this.changeHandler} errors={this.state.inputMessages}
-                  />
-                  <TextInput name="password" type="password" placeholder="パスワード"
-                    onChange={this.changeHandler} errors={this.state.inputMessages}
-                  />
-                  <ButtonField type="submit" align="center" className="is-primary is-medium"
-                    loading={this.state.executing}>
-                    ログイン
-                  </ButtonField>
-                </form>
-              </div>
-              <p className="has-text-grey has-text-centered">
-                <Link to="/signup">ユーザ登録</Link>&nbsp; /&nbsp;
-                <Link to="/password-init">パスワードを忘れた？</Link>
-              </p>
+        <h3 className="title has-text-grey has-text-centered">ログイン</h3>
+        <div id="login" className={`box ${this.state.loggingIn ? 'is-loggingIn' : ''}`}>
+          <div className="field">
+            <div className="buttons oauth-buttons is-centered">
+              <button className="button is-link is-large"
+                onClick={(e) => this.oAuthLogin(e, '/api/auth/google')}>
+                <span className="icon"><i className="fab fa-google"></i></span>
+                <span>でログイン</span>
+              </button>
+              <button className="button is-info is-large"
+                onClick={(e) => this.oAuthLogin(e, '/api/auth/github')}>
+                <span className="icon"><i className="fab fa-github"></i></span>
+                <span>でログイン</span>
+              </button>
             </div>
           </div>
+
+          <hr/>
+
+          <TopMessage message={this.state.topMessage} color={this.state.color} />
+          <form onSubmit={(e) => this.passwordLogin(e)} className="field">
+            <TextInput name="userId" placeholder="ID" autoFocus
+              onChange={this.changeHandler} errors={this.state.inputMessages} />
+            <TextInput name="password" type="password" placeholder="パスワード"
+              onChange={this.changeHandler} errors={this.state.inputMessages} />
+            <ButtonField type="submit" align="center" className="is-primary is-medium"
+              loading={this.state.executing}>
+              ログイン
+            </ButtonField>
+          </form>
         </div>
-      </section>
+
+        <nav className="breadcrumb is-centered" aria-label="breadcrumbs">
+          <ul>
+            <li><Link to="/signup">ユーザ登録</Link></li>
+            <li><Link to="/password-init">パスワードを忘れた？</Link></li>
+          </ul>
+        </nav>
+      </AuthenticateLayout>
     )
   }
 }

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
+import AuthenticateLayout from '../AuthenticateLayout'
 import ButtonField from '../ButtonField'
 import TopMessage from '../TopMessage'
 import TextInput from '../TextInput'
@@ -75,36 +76,32 @@ class SignUp extends Component {
 
   render () {
     return (
-      <section id="sign-up" className="hero is-fullheight">
+      <AuthenticateLayout>
         <Helmet title="ユーザ登録 | chatta" />
-        <div className="hero-body">
-          <div className="container">
-            <div className="column is-6 is-offset-3">
-              <h3 className="title has-text-grey has-text-centered">ユーザ登録</h3>
-              <div className="box">
-                <TopMessage message={this.state.topMessage} color="danger"/>
-                <TextInput name="email" placeholder="メールアドレス" className="is-medium" required autoFocus
-                  onChange={this.changeHandler} errors={this.state.inputMessages}
-                />
-                <TextInput name="userId" placeholder="ID" className="is-medium" required
-                  onChange={this.changeHandler} value={this.state.userId} errors={this.state.inputMessages}>
-                  <p className="help">※英数字とアンダーバー(_)のみ使用できます</p>
-                </TextInput>
-                <TextInput name="displayName" placeholder="名前" className="is-medium" required
-                  onChange={this.changeHandler} errors={this.state.inputMessages}
-                />
-                <ButtonField align="center" className="is-primary is-large"
-                  loading={this.state.executing} onClick={(e) => this.callSignUp(e)}>
-                  登録
-                </ButtonField>
-              </div>
-              <p className="has-text-grey has-text-centered">
-                <Link to="/">戻る</Link>
-              </p>
-            </div>
-          </div>
+
+        <h3 className="title has-text-grey has-text-centered">ユーザ登録</h3>
+        <div className="box">
+          <TopMessage message={this.state.topMessage} color="danger"/>
+          <TextInput name="email" placeholder="メールアドレス" className="is-medium" required autoFocus
+            onChange={this.changeHandler} errors={this.state.inputMessages}
+          />
+          <TextInput name="userId" placeholder="ID" className="is-medium" required
+            onChange={this.changeHandler} value={this.state.userId} errors={this.state.inputMessages}>
+            <p className="help">※英数字とアンダーバー(_)のみ使用できます</p>
+          </TextInput>
+          <TextInput name="displayName" placeholder="名前" className="is-medium" required
+            onChange={this.changeHandler} errors={this.state.inputMessages}
+          />
+          <ButtonField align="center" className="is-primary is-large"
+            loading={this.state.executing} onClick={(e) => this.callSignUp(e)}>
+            登録
+          </ButtonField>
         </div>
-      </section>
+
+        <p className="has-text-grey has-text-centered">
+          <Link to="/">戻る</Link>
+        </p>
+      </AuthenticateLayout>
     )
   }
 }

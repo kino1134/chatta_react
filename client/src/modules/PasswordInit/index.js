@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
+import AuthenticateLayout from '../AuthenticateLayout'
 import ButtonField from '../ButtonField'
 import TopMessage from '../TopMessage'
 import TextInput from '../TextInput'
@@ -62,32 +63,28 @@ class PasswordInit extends Component {
 
   render () {
     return (
-      <section id="password-init" className="hero is-fullheight">
+      <AuthenticateLayout>
         <Helmet title="パスワード初期化 | chatta" />
-        <div className="hero-body">
-          <div className="container">
-            <div className="column is-6 is-offset-3">
-              <h3 className="title has-text-grey has-text-centered">パスワード初期化</h3>
-              <div className="box">
-                <TopMessage message={this.state.topMessage} color="danger"/>
-                <TextInput name="email" placeholder="メールアドレス" className="is-medium" required autoFocus
-                  onChange={this.changeHandler} errors={this.state.inputMessages}
-                />
-                <TextInput name="userId" placeholder="ID" className="is-medium" required
-                  onChange={this.changeHandler} errors={this.state.inputMessages}>
-                </TextInput>
-                <ButtonField align="center" className="is-primary is-large"
-                  loading={this.state.executing} onClick={(e) => this.initPassword(e)}>
-                  初期化
-                </ButtonField>
-              </div>
-              <p className="has-text-grey has-text-centered">
-                <Link to="/">戻る</Link>
-              </p>
-            </div>
-          </div>
+
+        <h3 className="title has-text-grey has-text-centered">パスワード初期化</h3>
+        <div className="box">
+          <TopMessage message={this.state.topMessage} color="danger"/>
+          <TextInput name="email" placeholder="メールアドレス" className="is-medium" required autoFocus
+            onChange={this.changeHandler} errors={this.state.inputMessages}
+          />
+          <TextInput name="userId" placeholder="ID" className="is-medium" required
+            onChange={this.changeHandler} errors={this.state.inputMessages}>
+          </TextInput>
+          <ButtonField align="center" className="is-primary is-large"
+            loading={this.state.executing} onClick={(e) => this.initPassword(e)}>
+            初期化
+          </ButtonField>
         </div>
-      </section>
+
+        <p className="has-text-grey has-text-centered">
+          <Link to="/">戻る</Link>
+        </p>
+      </AuthenticateLayout>
     )
   }
 }
