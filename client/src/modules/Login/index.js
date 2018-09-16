@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import './Login.css'
 
+import ButtonField from '../ButtonField'
 import TopMessage from '../TopMessage'
 import TextInput from '../TextInput'
 
@@ -102,11 +103,13 @@ class Login extends Component {
               <div className={['box', this.state.loggingIn ? 'is-loggingIn' : ''].join(' ')}>
                 <div className="field">
                   <div className="buttons oauth-buttons is-centered">
-                    <button onClick={(e) => this.oAuthLogin(e, '/api/auth/google')} className="button is-link is-large" tabIndex="0">
+                    <button onClick={(e) => this.oAuthLogin(e, '/api/auth/google')}
+                      className="button is-link is-large">
                       <span className="icon"><i className="fab fa-google"></i></span>
                       <span>でログイン</span>
                     </button>
-                    <button onClick={(e) => this.oAuthLogin(e, '/api/auth/github')} className="button is-info is-large" tabIndex="0">
+                    <button onClick={(e) => this.oAuthLogin(e, '/api/auth/github')}
+                      className="button is-info is-large">
                       <span className="icon"><i className="fab fa-github"></i></span>
                       <span>でログイン</span>
                     </button>
@@ -123,15 +126,10 @@ class Login extends Component {
                   <TextInput name="password" type="password" placeholder="パスワード"
                     onChange={this.changeHandler} errors={this.state.inputMessages}
                   />
-                  <div className="field">
-                    <div className="control has-text-centered">
-                      <button type="submit" tabIndex="0"
-                        className={'button is-primary is-medium' + (this.state.executing ? ' is-loading' : '')}
-                        disabled={this.state.executing}>
-                        ログイン
-                      </button>
-                    </div>
-                  </div>
+                  <ButtonField type="submit" align="center" className="is-primary is-medium"
+                    loading={this.state.executing}>
+                    ログイン
+                  </ButtonField>
                 </form>
               </div>
               <p className="has-text-grey has-text-centered">

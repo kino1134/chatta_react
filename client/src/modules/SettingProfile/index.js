@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Helmet } from 'react-helmet'
 import './index.css'
 
+import ButtonField from '../ButtonField'
 import TopMessage from '../TopMessage'
 import TextInput from '../TextInput'
 
@@ -54,7 +55,9 @@ class SettingProfile extends Component {
     return (
       <div id="setting-profile">
         <Helmet title="プロフィール設定 | chatta" />
+
         <TopMessage message={this.state.topMessage} color={this.state.messageColor}/>
+
         <TextInput name="displayName" label="名前" placeholder="名前" required autoFocus
           value={this.state.displayName} onChange={this.changeHandler} errors={this.state.inputMessages}>
         </TextInput>
@@ -67,15 +70,10 @@ class SettingProfile extends Component {
         <TextInput name="photo" label="プロフィール写真" placeholder="プロフィール写真" required
           value={this.state.photo} onChange={this.changeHandler} errors={this.state.inputMessages}>
         </TextInput>
-        <div className="field">
-          <div className="control has-text-centered">
-            <button onClick={(e) => this.updateProfile(e)}
-              className={'button is-info' + (this.state.executing ? ' is-loading' : '')}
-              disabled={this.state.executing}>
-              変更
-            </button>
-          </div>
-        </div>
+        <ButtonField align="center" className="is-info" loading={this.state.executing}
+          onClick={(e) => this.updateProfile(e)}>
+          変更
+        </ButtonField>
       </div>
     )
   }

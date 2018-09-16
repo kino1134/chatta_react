@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
+import ButtonField from '../ButtonField'
 import TopMessage from '../TopMessage'
 import TextInput from '../TextInput'
 
@@ -92,15 +93,10 @@ class SignUp extends Component {
                 <TextInput name="displayName" placeholder="名前" className="is-medium" required
                   onChange={this.changeHandler} errors={this.state.inputMessages}
                 />
-                <div className="field">
-                  <div className="control has-text-centered">
-                    <button onClick={(e) => this.callSignUp(e)}
-                      className={'button is-primary is-large' + (this.state.executing ? ' is-loading' : '')}
-                      disabled={this.state.executing}>
-                      登録
-                    </button>
-                  </div>
-                </div>
+                <ButtonField align="center" className="is-primary is-large"
+                  loading={this.state.executing} onClick={(e) => this.callSignUp(e)}>
+                  登録
+                </ButtonField>
               </div>
               <p className="has-text-grey has-text-centered">
                 <Link to="/">戻る</Link>

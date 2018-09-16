@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Helmet } from 'react-helmet'
 import './index.css'
 
+import ButtonField from '../ButtonField'
 import TopMessage from '../TopMessage'
 import TextInput from '../TextInput'
 
@@ -55,7 +56,9 @@ class SettingPassword extends Component {
     return (
       <div id="setting-password">
         <Helmet title="パスワード変更 | chatta" />
+
         <TopMessage message={this.state.topMessage} color={this.state.messageColor}/>
+
         <TextInput name="current" type="password" label="今のパスワード"
           placeholder="今のパスワード" required autoFocus
           onChange={this.changeHandler} errors={this.state.inputMessages}>
@@ -69,15 +72,10 @@ class SettingPassword extends Component {
           placeholder="新しいパスワード（確認）" required
           onChange={this.changeHandler} errors={this.state.inputMessages}>
         </TextInput>
-        <div className="field">
-          <div className="control has-text-centered">
-            <button onClick={(e) => this.updatePassword(e)}
-              className={'button is-info' + (this.state.executing ? ' is-loading' : '')}
-              disabled={this.state.executing}>
-              変更
-            </button>
-          </div>
-        </div>
+        <ButtonField align="center" className="is-info" loading={this.state.executing}
+          onClick={(e) => this.updatePassword(e)}>
+          変更
+        </ButtonField>
       </div>
     )
   }

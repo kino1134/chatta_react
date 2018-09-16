@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
+import ButtonField from '../ButtonField'
 import TopMessage from '../TopMessage'
 import TextInput from '../TextInput'
 
@@ -61,7 +62,7 @@ class PasswordInit extends Component {
 
   render () {
     return (
-      <section id="sign-up" className="hero is-fullheight">
+      <section id="password-init" className="hero is-fullheight">
         <Helmet title="パスワード初期化 | chatta" />
         <div className="hero-body">
           <div className="container">
@@ -75,15 +76,10 @@ class PasswordInit extends Component {
                 <TextInput name="userId" placeholder="ID" className="is-medium" required
                   onChange={this.changeHandler} errors={this.state.inputMessages}>
                 </TextInput>
-                <div className="field">
-                  <div className="control has-text-centered">
-                    <button onClick={(e) => this.initPassword(e)}
-                      className={'button is-primary is-large' + (this.state.executing ? ' is-loading' : '')}
-                      disabled={this.state.executing}>
-                      初期化
-                    </button>
-                  </div>
-                </div>
+                <ButtonField align="center" className="is-primary is-large"
+                  loading={this.state.executing} onClick={(e) => this.initPassword(e)}>
+                  初期化
+                </ButtonField>
               </div>
               <p className="has-text-grey has-text-centered">
                 <Link to="/">戻る</Link>
