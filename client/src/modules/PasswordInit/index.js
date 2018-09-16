@@ -70,20 +70,19 @@ class PasswordInit extends Component {
         <div className="box">
           <TopMessage message={this.state.topMessage} color="danger"/>
           <TextInput name="email" placeholder="メールアドレス" className="is-medium" required autoFocus
-            onChange={this.changeHandler} errors={this.state.inputMessages}
-          />
+            onChange={this.changeHandler} errors={this.state.inputMessages}>
+          </TextInput>
           <TextInput name="userId" placeholder="ID" className="is-medium" required
             onChange={this.changeHandler} errors={this.state.inputMessages}>
           </TextInput>
-          <ButtonField align="center" className="is-primary is-large"
+          <ButtonField align="center" className="is-primary is-medium is-fullwidth"
             loading={this.state.executing} onClick={(e) => this.initPassword(e)}>
             初期化
           </ButtonField>
+          <p className="has-text-grey has-text-centered">
+            <Link to="/">戻る</Link>
+          </p>
         </div>
-
-        <p className="has-text-grey has-text-centered">
-          <Link to="/">戻る</Link>
-        </p>
       </AuthenticateLayout>
     )
   }
