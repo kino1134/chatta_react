@@ -7,7 +7,7 @@ import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 
 import LoginCheck from './modules/LoginCheck'
-import Main from './modules/Main'
+import RoomMain from './modules/RoomMain'
 import SettingMain from './modules/SettingMain'
 import reducer from './reducers'
 
@@ -19,9 +19,9 @@ ReactDOM.render((
     <Provider store={store}>
       <LoginCheck>
         <Switch>
-          <Route exact path="/" component={ Main } />
+          <Route exact path="/" component={ RoomMain } />
           <Route path="/settings" component={ SettingMain } />
-          <Route component={ Main } />
+          <Route component={ RoomMain } />
         </Switch>
       </LoginCheck>
     </Provider>
