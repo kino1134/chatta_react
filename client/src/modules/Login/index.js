@@ -134,7 +134,7 @@ class Login extends Component {
               </div>
               <p className="has-text-grey has-text-centered">
                 <Link to="/signup">ユーザ登録</Link>&nbsp; /&nbsp;
-                <Link to="/">(まだない)パスワードを忘れた？</Link>
+                <Link to="/password-init">パスワードを忘れた？</Link>
               </p>
             </div>
           </div>

@@ -1,5 +1,7 @@
 import { success } from '../../service/response'
 import User from '../../model/User'
+import { randomPassword } from '../../service/random'
+import mailer from '../../service/mailer'
 
 export const showMe = ({ user }, res) =>
   res.json(user.view(true))
@@ -14,6 +16,28 @@ export const updatePassword = ({ user, body }, res, next) => {
           .catch(next)
       } else {
         res.status(400).json({ message: '今のパスワードが間違っています' })
+      }
+    })
+    .catch(next)
+}
+
+export const initPassword = ({ body }, res, next) => {
+  User.findOne({ userId: body.userId, email: body.email })
+    .then(user => {
+      if (user) {
+        const password = randomPassword(16)
+        user.password = password
+        user.save()
+          .then(user => {
+            mailer.send({
+              to: user.email,
+              subject: 'パスワード初期化完了',
+              html: mailer.render('passwordInit.ejs', { user, password })
+            })
+          })
+          .then(() => res.json({ userId: user.userId }))
+      } else {
+        res.status(400).json({ message: 'ユーザが存在しません' })
       }
     })
     .catch(next)

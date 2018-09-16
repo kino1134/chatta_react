@@ -23,4 +23,9 @@ export const updatePasswordValidator = [
     .custom((value, { req }) => value === req.body.newer).withMessage('パスワードが一致していません')
 ]
 
+export const initPasswordValidator = [
+  check('email').trim().not().isEmpty().withMessage('必須です。'),
+  check('userId').trim().not().isEmpty().withMessage('必須です。')
+]
+
 export default [ userId, displayName, email ]
