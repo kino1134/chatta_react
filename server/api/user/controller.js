@@ -6,6 +6,16 @@ import mailer from '../../service/mailer'
 export const showMe = ({ user }, res) =>
   res.json(user.view(true))
 
+export const updateProfile = ({ user, body }, res, next) => {
+  user.displayName = body.displayName
+  user.email = body.email
+  user.userId = body.userId
+  user.photo = body.photo
+  user.save()
+    .then(() => res.json({ message: 'プロフィールが変更されました' }))
+    .catch(uniqueError(res, next))
+}
+
 export const updatePassword = ({ user, body }, res, next) => {
   user.authenticate(body.current)
     .then(user => {
@@ -47,16 +57,18 @@ export const create = (req, res, next) => {
   User.createFromLocal(req.body)
     .then(user => ({ userId: user.userId }))
     .then(success(res, 201))
-    .catch(err => {
-      if (err.name === 'MongoError' && err.code === 11000) {
-        res.status(409).json({
-          message: '入力内容が正しくありません',
-          errors: [
-            { param: 'userId', msg: 'IDはすでに使われています' }
-          ]
-        })
-      } else {
-        next(err)
-      }
+    .catch(uniqueError(res, next))
+}
+
+const uniqueError = (res, next) => (err) => {
+  if (err.name === 'MongoError' && err.code === 11000) {
+    res.status(409).json({
+      message: '入力内容が正しくありません',
+      errors: [
+        { param: 'userId', msg: 'IDはすでに使われています' }
+      ]
     })
+  } else {
+    next(err)
+  }
 }
