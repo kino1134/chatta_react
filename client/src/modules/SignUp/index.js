@@ -76,7 +76,7 @@ class SignUp extends Component {
       <section id="sign-up" className="hero is-fullheight">
         <div className="hero-body">
           <div className="container">
-            <div className="column is-4 is-offset-4">
+            <div className="column is-6 is-offset-3">
               <h3 className="title has-text-grey has-text-centered">ユーザ登録</h3>
               <div className="box">
                 <TopMessage message={this.state.topMessage} color="danger"/>
