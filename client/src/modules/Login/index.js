@@ -123,19 +123,19 @@ class Login extends Component {
               onChange={this.changeHandler} errors={this.state.inputMessages} />
             <TextInput name="password" type="password" placeholder="パスワード"
               onChange={this.changeHandler} errors={this.state.inputMessages} />
-            <ButtonField type="submit" align="center" className="is-primary is-medium"
+            <ButtonField type="submit" align="center" className="is-primary is-medium is-fullwidth"
               loading={this.state.executing}>
               ログイン
             </ButtonField>
           </form>
-        </div>
 
-        <nav className="breadcrumb is-centered" aria-label="breadcrumbs">
-          <ul>
-            <li><Link to="/signup">ユーザ登録</Link></li>
-            <li><Link to="/password-init">パスワードを忘れた？</Link></li>
-          </ul>
-        </nav>
+          <div className="has-text-grey has-text-centered">
+            <ul>
+              <li><Link to="/signup">ユーザ登録</Link></li>
+              <li><Link to="/password-init">パスワードを忘れた？</Link></li>
+            </ul>
+          </div>
+        </div>
       </AuthenticateLayout>
     )
   }
