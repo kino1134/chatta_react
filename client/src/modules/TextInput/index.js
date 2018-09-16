@@ -46,11 +46,21 @@ class TextInput extends Component {
       )
     }
 
+    let icon = null
+    if (this.props.icon) {
+      icon = (
+        <span className="icon is-left">
+          <i className={this.props.icon}></i>
+        </span>
+      )
+    }
+
     return (
       <div className="field">
         {label}
-        <div className={'control' + (this.props.required ?  ' has-icons-right' : '')}>
+        <div className={'control' + (this.props.required ?  ' has-icons-right' : '') + (icon ? ' has-icons-left' : '')}>
           <input type={type||'text'} name={name} className={classes} {...rest} />
+          {icon}
           {requireIcon}
         </div>
         {children}
