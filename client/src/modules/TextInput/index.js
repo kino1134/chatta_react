@@ -17,6 +17,8 @@ class TextInput extends Component {
       name,
       color,
       errors,
+      icon,
+      label,
       ...rest
     } = this.props
 
@@ -29,10 +31,10 @@ class TextInput extends Component {
 
 
     // ラベルを付与する
-    let label = null
-    if (this.props.label) {
-      label = (
-        <label className="label">{this.props.label}</label>
+    let labelTag = null
+    if (label) {
+      labelTag = (
+        <label className="label">{label}</label>
       )
     }
 
@@ -46,21 +48,22 @@ class TextInput extends Component {
       )
     }
 
-    let icon = null
-    if (this.props.icon) {
-      icon = (
+    // 項目欄左にアイコンを付与する
+    let iconTag = null
+    if (icon) {
+      iconTag = (
         <span className="icon is-left">
-          <i className={this.props.icon}></i>
+          <i className={icon}></i>
         </span>
       )
     }
 
     return (
       <div className="field">
-        {label}
+        {labelTag}
         <div className={'control' + (this.props.required ?  ' has-icons-right' : '') + (icon ? ' has-icons-left' : '')}>
           <input type={type||'text'} name={name} className={classes} {...rest} />
-          {icon}
+          {iconTag}
           {requireIcon}
         </div>
         {children}
