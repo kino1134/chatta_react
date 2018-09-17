@@ -42,7 +42,7 @@ class PasswordInit extends Component {
     this.setState({ executing: true })
 
     const { email, userId } = this.state
-    api.put('/api/users/password/init', { email, userId }).then(res => {
+    api.putJson('/api/users/password/init', { email, userId }).then(res => {
       if (res.ok) {
         this.props.history.push('/', {
           topMessage: 'パスワードを初期化しました。メールを確認してログインしてください',
