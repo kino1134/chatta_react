@@ -37,17 +37,23 @@ class SettingProfile extends Component {
     this.setState({ executing: true })
 
     const { displayName, email, userId, photo } = this.state
-    api.put('/api/users/profile', {displayName, email, userId, photo}).then(res => {
-      res.json().then(data => {
-        this.setState({ topMessage: data.message, inputMessages: data.errors })
+    api.putJson('/api/users/profile', {displayName, email, userId, photo})
+      .then(res => {
+        this.setState({
+          topMessage: res.data.message,
+          inputMessages: res.data.errors
+        })
         if (res.ok) {
           this.setState({ messageColor: 'info' })
+          this.props.updateLoginUser({ displayName, email, userId, photo })
         } else {
           this.setState({ messageColor: 'danger' })
         }
-      }).catch (err => { console.log(err) })
-    }).catch(err => { console.log(err) })
-      .then(() => this.props.updateLoginUser({ displayName, email, userId, photo }))
+      })
+      .catch(err => {
+        console.log(err)
+        this.setState({ topMessage: '変更できませんでした' })
+      })
       .then(() => this.setState({ executing: false }))
   }
 

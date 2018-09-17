@@ -77,15 +77,13 @@ class Login extends Component {
     this.setState({ executing: true })
 
     const { userId, password } = this.state
-    api.post('/api/auth/password', { userId, password }).then(res => {
-      res.json().then(data => {
-        if (res.ok) {
-          setAccessToken(data.token)
-          window.location.href = '/'
-        } else {
-          this.setState({ topMessage: data.message, inputMessages: data.errors })
-        }
-      })
+    api.postJson('/api/auth/password', { userId, password }).then(res => {
+      if (res.ok) {
+        setAccessToken(res.data.token)
+        window.location.href = '/'
+      } else {
+        this.setState({ topMessage: res.data.message, inputMessages: res.data.errors })
+      }
     }).catch(err => {
       console.log(err)
       this.setState({ topMessage: 'ログインに失敗しました' })

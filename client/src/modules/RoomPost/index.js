@@ -75,15 +75,11 @@ class RoomPost extends Component {
   }
 
   posting (e) {
-    api.post('/api/messages', { content: this.state.text }).then(res => {
-      res.json().then(json => {
-        console.log(json)
-        if (res.ok) {
-          this.setState({ text: "" })
-        } else {
-          // TODO: エラー処理
-        }
-      })
+    api.postJson('/api/messages', { content: this.state.text }).then(res => {
+      console.log(res.data)
+      if (res.ok) {
+        this.setState({ text: "" })
+      }
     }).catch(err => { console.log(err) })
   }
 

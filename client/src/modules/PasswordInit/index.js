@@ -43,16 +43,14 @@ class PasswordInit extends Component {
 
     const { email, userId } = this.state
     api.put('/api/users/password/init', { email, userId }).then(res => {
-      res.json().then(data => {
-        if (res.ok) {
-          this.props.history.push('/', {
-            topMessage: 'パスワードを初期化しました。メールを確認してログインしてください',
-            color: 'info'
-          })
-        } else {
-          this.setState({ topMessage: data.message, inputMessages: data.errors })
-        }
-      }).catch(err => { console.log(err) })
+      if (res.ok) {
+        this.props.history.push('/', {
+          topMessage: 'パスワードを初期化しました。メールを確認してログインしてください',
+          color: 'info'
+        })
+      } else {
+        this.setState({ topMessage: res.data.message, inputMessages: res.data.errors })
+      }
     }).catch(err => {
       console.log(err)
       this.setState({ topMessage: '初期化できませんでした' })

@@ -28,23 +28,20 @@ class RoomMessageList extends Component {
   componentDidMount () {
     // TODO: 全件取得しているので、スクロールに応じて追加取得できるようにしたい
     // TODO: Storeに持ったほうがいいかな？
-    api.get('/api/messages/all').then(res => {
-      res.json().then(json => {
-        if (res.ok) {
-          this.setState({
-            list: json.messages,
-            loading: false
-          })
-        } else {
-          // TODO: エラー処理
-        }
-      })
-    }).then(this.scrollLast).then(() => {
+    api.getJson('/api/messages/all').then(res => {
+      if (res.ok) {
+        this.setState({ list: res.data.messages })
+      } else {
+        console.log(res.data)
+      }
+
+      this.scrollLast()
       // TODO: ソケットのイベントリスナーを置く場所は、ここじゃない方がいいかも
       socket.on('postMessage', data => {
         this.setState({ list: [...this.state.list, data] })
       })
     }).catch(err => { console.log(err) })
+      .then(() => this.setState({ loading: false }))
   }
 
   componentDidUpdate (prevProps, prevState, snapshot) {
@@ -54,15 +51,15 @@ class RoomMessageList extends Component {
   }
 
   markdown (content) {
-      return marked(content, {
-        sanitize: true,
-        gfm: true,
-        breaks: true
-        // TODO: コードハイライト
-        // highlight: function (code, lang) {
-        //   return lang ? highlight.highlight(lang, code).value : highlight.highlightAuto(code).value
-        // }
-      })
+    return marked(content, {
+      sanitize: true,
+      gfm: true,
+      breaks: true
+      // TODO: コードハイライト
+      // highlight: function (code, lang) {
+      //   return lang ? highlight.highlight(lang, code).value : highlight.highlightAuto(code).value
+      // }
+    })
   }
 
   showMessage (message) {

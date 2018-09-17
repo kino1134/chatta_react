@@ -36,15 +36,13 @@ class SettingPassword extends Component {
     this.setState({ executing: true })
 
     const { current, newer, confirm } = this.state
-    api.put('/api/users/password', {current, newer, confirm}).then(res => {
-      res.json().then(data => {
-        this.setState({ topMessage: data.message, inputMessages: data.errors })
-        if (res.ok) {
-          this.setState({ messageColor: 'info' })
-        } else {
-          this.setState({ messageColor: 'danger' })
-        }
-      }).catch (err => { console.log(err) })
+    api.putJson('/api/users/password', {current, newer, confirm}).then(res => {
+      this.setState({ topMessage: res.data.message, inputMessages: res.data.errors })
+      if (res.ok) {
+        this.setState({ messageColor: 'info' })
+      } else {
+        this.setState({ messageColor: 'danger' })
+      }
     }).catch(err => { console.log(err) })
       .then(() => this.setState({ executing: false }))
   }

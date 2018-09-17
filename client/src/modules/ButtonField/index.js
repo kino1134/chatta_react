@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 
 class ButtonField extends Component {
-
   render () {
     const { align, className, loading, children, ...rest } = this.props
 
@@ -26,7 +25,6 @@ class ButtonField extends Component {
       </div>
     )
   }
-
 }
 
 export default ButtonField

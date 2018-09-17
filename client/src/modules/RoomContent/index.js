@@ -16,7 +16,7 @@ class RoomContent extends Component {
           <div className="messages-wrapper">
             <RoomMessageList />
             <RoomPost {...{loginUser}} />
-            {/*- 右サイドバー */}
+            {/* TODO: 右サイドバー */}
           </div>
         </div>
       </div>

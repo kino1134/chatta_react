@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import api from '../../services/api'
 
+import RoomLoading from '../RoomLoading'
+
 class OAuthCallback extends Component {
 
   constructor (props) {
@@ -14,33 +16,26 @@ class OAuthCallback extends Component {
   componentDidMount () {
     const { provider } = this.props.match.params
     const url = '/api/auth/' + provider + window.location.search
-    api.get(url).then(res => {
+    api.getJson(url).then(res => {
       if (res.ok) {
-        res.json().then(json => {
-          this.setState({ token: json.token })
-        }).catch(err => {
-          console.log(err)
-          window.close()
-        })
+        this.setState({ token: res.data.token })
       } else {
-        window.close()
+        console.log(res.data)
       }
     }).catch(err => {
-        console.log(err)
-      window.close()
-    })
+      console.log(err)
+    }).then(() => window.close())
   }
 
   render () {
     return (
-      <span>しばらくお待ち下さい..
+      <RoomLoading>
         <form id="oauth" name="oauth" action="">
           <input type="hidden" name="token" value={this.state.token} />
         </form>
-      </span>
+      </RoomLoading>
     )
   }
-
 }
 
 export default OAuthCallback

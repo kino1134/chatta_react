@@ -10,6 +10,17 @@ const apiCall = async ({ url, method, body }) => {
   return fetch(config.api.uri + url, { method, body, headers })
 }
 
+const json = async ({ url, method, body }) => {
+  try {
+    const res = await apiCall({ url, method, body })
+    const json = await res.json()
+    res.data = json
+    return res
+  } catch (err) {
+    throw err
+  }
+}
+
 export default {
   post: async (url, body) =>
     apiCall({ method: 'POST', url, body: JSON.stringify(body) }),
@@ -17,4 +28,11 @@ export default {
     apiCall({ method: 'GET', url }),
   put: async (url, body) =>
     apiCall({ method: 'PUT', url, body: JSON.stringify(body) }),
+
+  postJson: async (url, body) =>
+    json({ method: 'POST', url, body: JSON.stringify(body) }),
+  getJson: async (url) =>
+    json({ method: 'GET', url }),
+  putJson: async (url, body) =>
+    json({ method: 'PUT', url, body: JSON.stringify(body) }),
 }

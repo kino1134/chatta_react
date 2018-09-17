@@ -7,6 +7,7 @@ class RoomLoading extends Component {
       <div id="room-loading" className="container has-text-centered">
         <span className="loader-text">しばらくお待ち下さい..</span>
         <div className="loader"></div>
+        {this.props.children}
       </div>
     )
   }

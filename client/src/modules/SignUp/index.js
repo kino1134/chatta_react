@@ -55,17 +55,15 @@ class SignUp extends Component {
     this.setState({ executing: true })
 
     const { email, userId, displayName } = this.state
-    api.post('/api/users', { email, userId, displayName }).then(res => {
-      res.json().then(data => {
-        if (res.ok) {
-          this.props.history.push('/', {
-            topMessage: 'ユーザが登録されました。メールを確認してログインしてください',
-            color: 'info'
-          })
-        } else {
-          this.setState({ topMessage: data.message, inputMessages: data.errors })
-        }
-      })
+    api.postJson('/api/users', { email, userId, displayName }).then(res => {
+      if (res.ok) {
+        this.props.history.push('/', {
+          topMessage: 'ユーザが登録されました。メールを確認してログインしてください',
+          color: 'info'
+        })
+      } else {
+        this.setState({ topMessage: res.data.message, inputMessages: res.data.errors })
+      }
     }).catch(err => {
       console.log(err)
       this.setState({ topMessage: 'ユーザ登録できませんでした' })
