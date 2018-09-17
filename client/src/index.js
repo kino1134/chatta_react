@@ -9,11 +9,12 @@ import registerServiceWorker from './registerServiceWorker'
 import LoginCheck from './modules/LoginCheck'
 import RoomMain from './modules/RoomMain'
 import SettingMain from './modules/SettingMain'
+import NotFound from './modules/NotFound'
+
 import reducer from './reducers'
 
 const store = createStore(reducer)
 
-// TODO: 404ページは設けたほうがいい？
 ReactDOM.render((
   <BrowserRouter>
     <Provider store={store}>
@@ -21,7 +22,7 @@ ReactDOM.render((
         <Switch>
           <Route exact path="/" component={ RoomMain } />
           <Route path="/settings" component={ SettingMain } />
-          <Route component={ RoomMain } />
+          <Route component={ NotFound } />
         </Switch>
       </LoginCheck>
     </Provider>

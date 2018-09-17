@@ -10,7 +10,6 @@ import SettingProfile from '../SettingProfile'
 import SettingPassword from '../SettingPassword'
 
 class SettingMain extends Component {
-  // TODO: 404の考慮
   render () {
     const { loginUser, updateLoginUser } = this.props
 
@@ -21,6 +20,7 @@ class SettingMain extends Component {
           <Switch>
             <Route path="/settings/profile" render={()=><SettingProfile {...{loginUser, updateLoginUser}} />} />
             <Route path="/settings/password" render={()=><SettingPassword {...{loginUser}} />} />
+            <Route render={()=><div>ページが存在しません</div>} />
           </Switch>
         </div>
       </div>
