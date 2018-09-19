@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
+import apiHandler from '../../helpers/apiHandler'
+
 import AuthenticateLayout from '../AuthenticateLayout'
 import ButtonField from '../ButtonField'
 import TopMessage from '../TopMessage'
@@ -18,10 +20,7 @@ class PasswordInit extends Component {
 
     this.state = {
       email: "",
-      userId: "",
-      executing: false,
-      topMessage: "",
-      inputMessages: []
+      userId: ""
     }
   }
 
@@ -37,9 +36,7 @@ class PasswordInit extends Component {
   }
 
   initPassword (e) {
-    if (this.state.executing) return false
-
-    this.setState({ executing: true })
+    if (this.props.preventExecute()) return
 
     const { email, userId } = this.state
     api.putJson('/api/users/password/init', { email, userId }).then(res => {
@@ -49,32 +46,34 @@ class PasswordInit extends Component {
           color: 'info'
         })
       } else {
-        this.setState({ topMessage: res.data.message, inputMessages: res.data.errors })
+        this.props.setTopMessage(res.data.message)
+        this.props.setInputMessages(res.data.errors)
       }
     }).catch(err => {
       console.log(err)
-      this.setState({ topMessage: '初期化できませんでした' })
+      this.props.setTopMessage('初期化できませんでした')
     }).then(() => {
-      if (this._isMounted) this.setState({ executing: false })
+      if (this._isMounted) this.props.endExecute()
     })
   }
 
   render () {
+    const { topMessage, inputMessages, executing } = this.props
     return (
       <AuthenticateLayout>
         <Helmet title="パスワード初期化 | chatta" />
 
         <h3 className="title has-text-grey has-text-centered">パスワード初期化</h3>
         <div className="box">
-          <TopMessage message={this.state.topMessage} color="danger"/>
+          <TopMessage message={topMessage} color="danger"/>
           <TextInput name="email" placeholder="メールアドレス" className="is-medium" required autoFocus
-            onChange={this.changeHandler} errors={this.state.inputMessages}>
+            onChange={this.changeHandler} errors={inputMessages}>
           </TextInput>
           <TextInput name="userId" placeholder="ID" className="is-medium" required
-            onChange={this.changeHandler} errors={this.state.inputMessages}>
+            onChange={this.changeHandler} errors={inputMessages}>
           </TextInput>
           <ButtonField align="center" className="is-primary is-medium is-fullwidth"
-            loading={this.state.executing} onClick={(e) => this.initPassword(e)}>
+            onClick={(e) => this.initPassword(e)} loading={executing}>
             初期化
           </ButtonField>
           <p className="has-text-grey has-text-centered">
@@ -86,4 +85,4 @@ class PasswordInit extends Component {
   }
 }
 
-export default withRouter(PasswordInit)
+export default apiHandler(withRouter(PasswordInit))

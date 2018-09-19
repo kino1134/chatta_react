@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
+import apiHandler from '../../helpers/apiHandler'
+
 import AuthenticateLayout from '../AuthenticateLayout'
 import ButtonField from '../ButtonField'
 import TopMessage from '../TopMessage'
@@ -19,10 +21,7 @@ class SignUp extends Component {
     this.state = {
       email: "",
       userId: "",
-      displayName: "",
-      executing: false,
-      topMessage: "",
-      inputMessages: []
+      displayName: ""
     }
   }
 
@@ -50,9 +49,7 @@ class SignUp extends Component {
   }
 
   callSignUp (e) {
-    if (this.state.executing) return false
-
-    this.setState({ executing: true })
+    if (this.props.preventExecute()) return
 
     const { email, userId, displayName } = this.state
     api.postJson('/api/users', { email, userId, displayName }).then(res => {
@@ -62,36 +59,38 @@ class SignUp extends Component {
           color: 'info'
         })
       } else {
-        this.setState({ topMessage: res.data.message, inputMessages: res.data.errors })
+        this.props.setTopMessage(res.data.message)
+        this.props.setInputMessages(res.data.errors)
       }
     }).catch(err => {
       console.log(err)
-      this.setState({ topMessage: 'ユーザ登録できませんでした' })
+      this.props.setTopMessage('ユーザ登録できませんでした')
     }).then(() => {
-      if (this._isMounted) this.setState({ executing: false })
+      if (this._isMounted) this.props.endExecute()
     })
   }
 
   render () {
+    const { topMessage, inputMessages, executing } = this.props
     return (
       <AuthenticateLayout>
         <Helmet title="ユーザ登録 | chatta" />
 
         <h3 className="title has-text-grey has-text-centered">ユーザ登録</h3>
         <div className="box">
-          <TopMessage message={this.state.topMessage} color="danger"/>
+          <TopMessage message={topMessage} color="danger"/>
           <TextInput name="email" placeholder="メールアドレス" className="is-medium" required autoFocus
-            onChange={this.changeHandler} errors={this.state.inputMessages}>
+            onChange={this.changeHandler} errors={inputMessages}>
           </TextInput>
           <TextInput name="userId" placeholder="ID" className="is-medium" required
-            onChange={this.changeHandler} value={this.state.userId} errors={this.state.inputMessages}>
+            onChange={this.changeHandler} value={this.state.userId} errors={inputMessages}>
             <p className="help">※英数字とアンダーバー(_)のみ使用できます</p>
           </TextInput>
           <TextInput name="displayName" placeholder="名前" className="is-medium" required
-            onChange={this.changeHandler} errors={this.state.inputMessages}>
+            onChange={this.changeHandler} errors={inputMessages}>
           </TextInput>
           <ButtonField align="center" className="is-primary is-medium is-fullwidth"
-            loading={this.state.executing} onClick={(e) => this.callSignUp(e)}>
+            loading={executing} onClick={(e) => this.callSignUp(e)}>
             登録
           </ButtonField>
           <p className="has-text-grey has-text-centered">
@@ -103,4 +102,4 @@ class SignUp extends Component {
   }
 }
 
-export default withRouter(SignUp)
+export default apiHandler(withRouter(SignUp))
