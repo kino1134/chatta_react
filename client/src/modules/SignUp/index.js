@@ -56,7 +56,7 @@ class SignUp extends Component {
       if (res.ok) {
         this.props.history.push('/', {
           topMessage: 'ユーザが登録されました。メールを確認してログインしてください',
-          color: 'info'
+          messageColor: 'info'
         })
       } else {
         this.props.setTopMessage(res.data.message)

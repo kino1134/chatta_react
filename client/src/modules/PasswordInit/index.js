@@ -43,7 +43,7 @@ class PasswordInit extends Component {
       if (res.ok) {
         this.props.history.push('/', {
           topMessage: 'パスワードを初期化しました。メールを確認してログインしてください',
-          color: 'info'
+          messageColor: 'info'
         })
       } else {
         this.props.setTopMessage(res.data.message)
