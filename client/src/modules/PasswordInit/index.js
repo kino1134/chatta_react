@@ -4,10 +4,10 @@ import { Helmet } from 'react-helmet'
 
 import apiHandler from '../../helpers/apiHandler'
 
-import AuthenticateLayout from '../AuthenticateLayout'
-import ButtonField from '../ButtonField'
-import TopMessage from '../TopMessage'
-import TextInput from '../TextInput'
+import AuthenticateLayout from '../../components/AuthenticateLayout'
+import ButtonField from '../../components/ButtonField'
+import TopMessage from '../../components/TopMessage'
+import TextInput from '../../components/TextInput'
 
 import api from '../../services/api'
 

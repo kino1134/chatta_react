@@ -4,9 +4,9 @@ import './index.css'
 
 import apiHandler from '../../helpers/apiHandler'
 
-import ButtonField from '../ButtonField'
-import TopMessage from '../TopMessage'
-import TextInput from '../TextInput'
+import ButtonField from '../../components/ButtonField'
+import TopMessage from '../../components/TopMessage'
+import TextInput from '../../components/TextInput'
 
 import api from '../../services/api'
 
