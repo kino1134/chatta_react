@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import moment from 'moment'
 import 'moment/locale/ja'
 import marked from 'marked'
@@ -18,10 +19,13 @@ class RoomMessageList extends Component {
       list: [],
       loading: true
     }
+
+  selfDOM () {
+    return ReactDOM.findDOMNode(this)
   }
 
   scrollLast () {
-    const container = document.querySelector('#room-message-list')
+    const container = this.selfDOM()
     container.scrollTop = container.scrollHeight
   }
 
