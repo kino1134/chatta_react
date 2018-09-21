@@ -3,10 +3,12 @@ import { Link, withRouter } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import './Login.css'
 
-import AuthenticateLayout from '../AuthenticateLayout'
-import ButtonField from '../ButtonField'
-import TopMessage from '../TopMessage'
-import TextInput from '../TextInput'
+import apiHandler from '../../helpers/apiHandler'
+
+import AuthenticateLayout from '../../components/AuthenticateLayout'
+import ButtonField from '../../components/ButtonField'
+import TopMessage from '../../components/TopMessage'
+import TextInput from '../../components/TextInput'
 
 import config from '../../constants'
 import { openPopup, listenPopup } from '../../services/oAuthLogin'
@@ -21,9 +23,6 @@ class Login extends Component {
     this.changeHandler = this.changeHandler.bind(this)
 
     this.state = {
-      topMessage: "",
-      color: "danger",
-      inputMessages: [],
       loggingIn: false,
       executing: false,
       userId: "",
@@ -34,9 +33,9 @@ class Login extends Component {
     // TODO: うまいやり方を考える
     if (this.props.history.location.state) {
       const flash = this.props.history.location.state
-      this.state = Object.assign(this.state, flash)
+      this.props.setTopMessage(flash.topMessage)
+      this.props.setMessageColor(flash.messageColor)
     }
-
   }
 
   changeHandler (e) {
@@ -44,12 +43,7 @@ class Login extends Component {
   }
 
   oAuthLogin (e, endpoint) {
-    // 処理中であるかの判断
-    if (this.state.logginIn) {
-      return false
-    }
-
-    // 処理中フラグを立てる
+    if (this.state.logginIn || this.state.executing) return
     this.setState({ loggingIn: true, executing: true })
 
     // 認証用の別窓を開けて、待ち合わせる
@@ -68,12 +62,7 @@ class Login extends Component {
   passwordLogin (e) {
     e.preventDefault()
 
-    // 処理中であるかの判断
-    if (this.state.executing) {
-      return false
-    }
-
-    // 処理中フラグを立てる
+    if (this.state.executing) return
     this.setState({ executing: true })
 
     const { userId, password } = this.state
@@ -82,16 +71,19 @@ class Login extends Component {
         setAccessToken(res.data.token)
         window.location.href = '/'
       } else {
-        this.setState({ topMessage: res.data.message, inputMessages: res.data.errors })
+        this.props.setTopMessage(res.data.message)
+        this.props.setInputMessages(res.data.errors)
+        this.props.setMessageColor('danger')
       }
     }).catch(err => {
       console.log(err)
-      this.setState({ topMessage: 'ログインに失敗しました' })
+      this.props.setTopMessage('ログインに失敗しました')
     // 処理中フラグを戻す
     }).then(() => this.setState({ executing: false }))
   }
 
   render() {
+    const { topMessage, inputMessages, messageColor } = this.props
     return (
       <AuthenticateLayout>
         <Helmet title="ログイン | chatta" />
@@ -115,12 +107,12 @@ class Login extends Component {
 
           <hr/>
 
-          <TopMessage message={this.state.topMessage} color={this.state.color} />
+          <TopMessage message={topMessage} color={messageColor} />
           <form onSubmit={(e) => this.passwordLogin(e)} className="field">
             <TextInput name="userId" placeholder="ID" autoFocus
-              onChange={this.changeHandler} errors={this.state.inputMessages} />
+              onChange={this.changeHandler} errors={inputMessages} />
             <TextInput name="password" type="password" placeholder="パスワード"
-              onChange={this.changeHandler} errors={this.state.inputMessages} />
+              onChange={this.changeHandler} errors={inputMessages} />
             <ButtonField type="submit" align="center" className="is-primary is-medium is-fullwidth"
               loading={this.state.executing}>
               ログイン
@@ -139,4 +131,4 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login)
+export default apiHandler(withRouter(Login))

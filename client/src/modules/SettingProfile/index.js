@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import { Helmet } from 'react-helmet'
 import './index.css'
 
-import ButtonField from '../ButtonField'
-import TopMessage from '../TopMessage'
-import TextInput from '../TextInput'
+import apiHandler from '../../helpers/apiHandler'
+
+import ButtonField from '../../components/ButtonField'
+import TopMessage from '../../components/TopMessage'
+import TextInput from '../../components/TextInput'
 
 import api from '../../services/api'
 
@@ -19,11 +21,7 @@ class SettingProfile extends Component {
       displayName: this.props.loginUser.displayName,
       email: this.props.loginUser.email,
       userId: this.props.loginUser.userId,
-      photo: this.props.loginUser.photo,
-      executing: false,
-      topMessage: "",
-      messageColor: "",
-      inputMessages: []
+      photo: this.props.loginUser.photo
     }
   }
 
@@ -32,51 +30,41 @@ class SettingProfile extends Component {
   }
 
   updateProfile (e) {
-    if (this.state.executing) return false
-
-    this.setState({ executing: true })
+    if (this.props.preventExecute()) return
 
     const { displayName, email, userId, photo } = this.state
-    api.putJson('/api/users/profile', {displayName, email, userId, photo})
-      .then(res => {
-        this.setState({
-          topMessage: res.data.message,
-          inputMessages: res.data.errors
-        })
-        if (res.ok) {
-          this.setState({ messageColor: 'info' })
-          this.props.updateLoginUser({ displayName, email, userId, photo })
-        } else {
-          this.setState({ messageColor: 'danger' })
-        }
-      })
-      .catch(err => {
-        console.log(err)
-        this.setState({ topMessage: '変更できませんでした' })
-      })
-      .then(() => this.setState({ executing: false }))
+    api.putJson('/api/users/profile', {displayName, email, userId, photo}).then(res => {
+      this.props.setTopMessage(res.data.message)
+      this.props.setInputMessages(res.data.errors)
+      this.props.setMessageColor(res.ok ? 'info' : 'danger')
+    }).catch(err => {
+      console.log(err)
+      this.props.setTopMessage('変更できませんでした')
+      this.props.setMessageColor('danger')
+    }).then(() => this.props.endExecute() )
   }
 
   render () {
+    const { topMessage, inputMessages, messageColor, executing } = this.props
     return (
       <div id="setting-profile">
         <Helmet title="プロフィール設定 | chatta" />
 
-        <TopMessage message={this.state.topMessage} color={this.state.messageColor}/>
+        <TopMessage message={topMessage} color={messageColor}/>
 
         <TextInput name="displayName" label="名前" placeholder="名前" required autoFocus
-          value={this.state.displayName} onChange={this.changeHandler} errors={this.state.inputMessages}>
+          value={this.state.displayName} onChange={this.changeHandler} errors={inputMessages}>
         </TextInput>
         <TextInput name="email" label="メールアドレス" placeholder="メールアドレス" required
-          value={this.state.email} onChange={this.changeHandler} errors={this.state.inputMessages}>
+          value={this.state.email} onChange={this.changeHandler} errors={inputMessages}>
         </TextInput>
         <TextInput name="userId" label="ID" placeholder="ID" required icon="fas fa-at"
-          value={this.state.userId} onChange={this.changeHandler} errors={this.state.inputMessages}>
+          value={this.state.userId} onChange={this.changeHandler} errors={inputMessages}>
         </TextInput>
         <TextInput name="photo" label="プロフィール写真" placeholder="プロフィール写真" required
-          value={this.state.photo} onChange={this.changeHandler} errors={this.state.inputMessages}>
+          value={this.state.photo} onChange={this.changeHandler} errors={inputMessages}>
         </TextInput>
-        <ButtonField align="center" className="is-info" loading={this.state.executing}
+        <ButtonField align="center" className="is-info" loading={executing}
           onClick={(e) => this.updateProfile(e)}>
           変更
         </ButtonField>
@@ -85,4 +73,4 @@ class SettingProfile extends Component {
   }
 }
 
-export default SettingProfile
+export default apiHandler(SettingProfile)

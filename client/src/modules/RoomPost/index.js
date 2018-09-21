@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import './index.css'
 
+import apiHandler from '../../helpers/apiHandler'
+
 import api from '../../services/api'
 import socket from '../../services/socket'
 
@@ -16,7 +18,6 @@ class RoomPost extends Component {
 
     this.state = {
       text: "",
-      executing: false,
       typeUser: ""
     }
 
@@ -76,8 +77,7 @@ class RoomPost extends Component {
   }
 
   posting (e) {
-    if (this.state.executing) return false
-    this.setState({ executing: true })
+    if (this.props.preventExecute()) return
 
     api.postJson('/api/messages', { content: this.state.text }).then(res => {
       console.log(res.data)
@@ -85,7 +85,7 @@ class RoomPost extends Component {
         this.setState({ text: "" })
       }
     }).catch(err => { console.log(err) })
-      .then(() => this.setState({ executing: false }))
+      .then(() => this.props.endExecute() )
   }
 
   postEnter (e) {
@@ -107,7 +107,7 @@ class RoomPost extends Component {
             </textarea>
           </p>
           <p className="control">
-            <button className={`button is-success ${this.state.executing ? 'is-loading' : ''}`}
+            <button className={`button is-success ${this.props.executing ? 'is-loading' : ''}`}
               onClick={(e) => this.posting(e)} disabled={this.noInput()}>
               <i className="fas fa-comment-dots fa-lg"></i>
             </button>
@@ -118,4 +118,4 @@ class RoomPost extends Component {
   }
 }
 
-export default RoomPost
+export default apiHandler(RoomPost)
