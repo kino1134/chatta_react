@@ -7,15 +7,17 @@ import RoomPost from '../RoomPost'
 
 class RoomContent extends Component {
   render () {
-    const { visibleRoomList, loginUser } = this.props
+    const { visibleRoomList, loginUser, updateLoginUser,
+      message, setMessage, joinMessage, addMessage
+    } = this.props
 
     return (
       <div id="room-main">
         <RoomHeader {...{visibleRoomList}} />
         <div className="room-wrapper">
           <div className="messages-wrapper">
-            <RoomMessageList />
-            <RoomPost {...{loginUser}} />
+            <RoomMessageList {...{loginUser, updateLoginUser, message, setMessage, joinMessage, addMessage}} />
+            <RoomPost {...{loginUser, updateLoginUser, message}} />
             {/* TODO: 右サイドバー */}
           </div>
         </div>
