@@ -13,7 +13,25 @@ export const post = (req, res, next) => {
     .catch(next)
 }
 
-// TODO: ページングできるAPI
+export const get = (req, res, next) => {
+  // 1回あたりの取得件数は20とする
+  // 残り1件は、次のページングを行うためのID取得用
+  const max = 20 + 1
+  const cond = req.query.last ? { _id: { $lte: req.query.last } } : {}
+
+  Message.find(cond).sort({ _id: -1 }).limit(max).populate('user')
+    .then(messages => {
+      const views = messages.map(m => m.view()).reverse()
+      if (views.length === max) {
+        const [head, ...rest] = views
+        return { previous: head.id, messages: rest }
+      } else {
+        return { previous: null, messages: views }
+      }
+    })
+    .then(success(res, 200))
+    .catch(next)
+}
 
 export const getOne = (req, res, next) => {
   Message.findOne().populate('user')
