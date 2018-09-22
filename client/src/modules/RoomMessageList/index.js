@@ -15,43 +15,94 @@ class RoomMessageList extends Component {
   constructor (props) {
     super(props)
 
+    this.scroll = [{ height: 0, position: 0 }]
+
     this.state = {
       list: [],
-      loading: true
+      previous: null,
+      loading: true,
+      event: null
     }
+  }
 
   selfDOM () {
     return ReactDOM.findDOMNode(this)
   }
 
-  scrollLast () {
+  scrollUp (e) {
+    // スクロール時点の位置情報を保持する
     const container = this.selfDOM()
-    container.scrollTop = container.scrollHeight
+    this.scroll[0] = { height: container.scrollHeight, position: container.scrollTop }
+
+    // 最後まで読込済み、またはローディング中の場合はAPIを呼び出さない
+    if (!this.state.previous) return
+    if (this.state.loading) return
+
+    const threshold = 60
+    if (threshold >= container.scrollTop) {
+      this.setState({ loading: true })
+      api.getJson('/api/messages?last=' + this.state.previous).then(res => {
+        if (res.ok) {
+          this.setState({
+            list: [...res.data.messages, ...this.state.list],
+            previous: res.data.previous
+          })
+        } else {
+          console.log(res.data)
+        }
+      }).catch(err => { console.log(err) })
+        .then(() => this.setState({ loading: false, event: 'scroll' }) )
+    }
   }
 
   componentDidMount () {
-    // TODO: 全件取得しているので、スクロールに応じて追加取得できるようにしたい
     // TODO: Storeに持ったほうがいいかな？
-    api.getJson('/api/messages/all').then(res => {
+    api.getJson('/api/messages').then(res => {
       if (res.ok) {
-        this.setState({ list: res.data.messages })
+        this.setState({ list: res.data.messages, previous: res.data.previous })
       } else {
         console.log(res.data)
       }
 
-      this.scrollLast()
       // TODO: ソケットのイベントリスナーを置く場所は、ここじゃない方がいいかも
+      // メッセージの読込が完了した時点でイベント受信を開始する
       socket.on('postMessage', data => {
-        this.setState({ list: [...this.state.list, data] })
+        this.setState({ list: [...this.state.list, data], event: 'posted' })
       })
     }).catch(err => { console.log(err) })
-      .then(() => this.setState({ loading: false }))
+      .then(() => this.setState({ loading: false, event: 'init' }))
   }
 
   componentDidUpdate (prevProps, prevState, snapshot) {
-    // TODO: 強制的に下に行くのは不親切かも
-    // TODO: 現在のスクロール位置に応じて判断したい
-    this.scrollLast()
+    const container = this.selfDOM()
+
+    // DOMがアップデートされた時点の位置情報を保持する
+    this.scroll[1] = { height: container.scrollHeight, position: container.scrollTop }
+
+    // 最後まで読み込んでローディングパネルがなくなった時
+    // スクロール位置がずれるので、それを補正する
+    if (prevState.loading && !this.state.loading) {
+      container.scrollTop  = this.scroll[0].position
+    }
+
+    // イベント名が設定されている場合のみ、スクロール位置を動かす
+    if (this.state.event) this.moveScroll(container)
+  }
+
+  moveScroll (container) {
+    if (this.state.event === 'scroll') {
+      container.scrollTop = container.scrollTop + (this.scroll[1].height - this.scroll[0].height)
+    } else if(this.state.event === 'init') {
+      container.scrollTop = container.scrollHeight
+    } else if (this.state.event === 'posted') {
+      // TODO: 強制的に下に行くのは不親切かも
+      // TODO: 現在のスクロール位置に応じて判断したい
+      container.scrollTop = container.scrollHeight
+    }
+
+    // スクロールを動かした後の状態を保持する
+    this.scroll = [{ height: container.scrollHeight, position: container.scrollTop }]
+    this.setState({ event: null })
   }
 
   markdown (content) {
@@ -95,14 +146,15 @@ class RoomMessageList extends Component {
   }
 
   render () {
-    let result = (<RoomLoading />)
-    if (!this.state.loading) {
-      result = this.state.list.map(m => this.showMessage(m))
+    let head = null
+    if (this.state.previous || this.state.loading) {
+      head = (<RoomLoading />)
     }
 
     return (
-      <div id="room-message-list">
-        {result}
+      <div id="room-message-list" onScroll={e => this.scrollUp(e)}>
+        {head}
+        {this.state.list.map(m => this.showMessage(m))}
       </div>
     )
   }
