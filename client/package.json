@@ -7,6 +7,7 @@
     "jwt-decode": "^2.2.0",
     "marked": "^0.5.0",
     "moment": "^2.22.2",
+    "push.js": "^1.0.7",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-helmet": "^5.2.0",
