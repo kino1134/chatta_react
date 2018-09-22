@@ -44,6 +44,10 @@ const userSchema = new Schema({
   photo: {
     type: String,
     trim: true
+  },
+  readMessage: {
+    type: Schema.Types.ObjectId,
+    ref: 'Message'
   }
 }, {
   timestamps: true
@@ -68,7 +72,7 @@ userSchema.methods = {
     let fields = ['userId', 'displayName', 'photo']
 
     if (full) {
-      fields = [...fields, 'email', 'createdAt']
+      fields = [...fields, 'email', 'createdAt', 'readMessage']
     }
 
     fields.forEach((field) => { view[field] = this[field] })
