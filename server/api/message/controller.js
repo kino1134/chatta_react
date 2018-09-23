@@ -1,5 +1,5 @@
 import emitter from '../../config/socket_io/emitter'
-import { success } from '../../service/response'
+import { success, notFound } from '../../service/response'
 import Message from '../../model/Message'
 
 export const post = (req, res, next) => {
@@ -10,6 +10,35 @@ export const post = (req, res, next) => {
       return message
     })
     .then(success(res, 201))
+    .catch(next)
+}
+
+export const update = ({ user, params, body }, res, next) => {
+  Message.findOne({ _id: params.id, user: user._id }).populate('user')
+    .then(notFound(res))
+    .then(message => {
+      if (!message) return null
+      message.content = body.content
+      message.save()
+      return message
+    })
+    .then(message => {
+      emitter.emit('updateMessage', message.view())
+      return message
+    })
+    .then(success(res))
+    .catch(next)
+}
+
+export const destroy = ({ user, params }, res, next) => {
+  Message.findOne({ _id: params.id, user: user._id }).populate('user')
+    .then(notFound(res))
+    .then(message => message ? message.remove() : null)
+    .then(message => {
+      emitter.emit('removeMessage', message.view())
+      return message
+    })
+    .then(success(res, 204))
     .catch(next)
 }
 
