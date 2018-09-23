@@ -19,10 +19,10 @@ const messageSchema = new Schema({
 messageSchema.methods = {
   view (full) {
     let view = {}
-    let fields = ['id', 'content', 'createdAt']
+    let fields = ['id', 'content', 'createdAt', 'updatedAt']
 
     if (full) {
-      fields = [...fields, 'updatedAt']
+      fields = [...fields]
     }
 
     view.user = this.user.view(full)
