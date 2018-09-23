@@ -67,7 +67,8 @@ class RoomMessageList extends Component {
 
     const unread = document.querySelector('.unread-line')
     const threshold = container.clientHeight / 2
-    if (!document.hidden && !this.reading && unread.offsetTop >= container.scrollTop + threshold) {
+    if (!this.props.loginUser.readMessage ||
+      (!document.hidden && !this.reading && unread.offsetTop >= container.scrollTop + threshold)) {
       this.reading = true
       // 未読表示を消すまで、少し猶予を与える
       setTimeout(() => {
