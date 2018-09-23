@@ -13,7 +13,7 @@ import RoomContent from '../RoomContent'
 class RoomMain extends Component {
   render () {
     const { loginUser, roomList, visibleRoomList, updateLoginUser,
-      message, setMessage, joinMessage, addMessage
+      message, setMessage, joinMessage, addMessage, editMessage, removeMessage
     } = this.props
 
     // ルームリストを表示したとき、透明なオーバレイを挟んで他項目をいじれないようにする
@@ -31,7 +31,7 @@ class RoomMain extends Component {
         <Helmet title="chatta" />
         <RoomList {...{loginUser, roomList}}  />
         <RoomContent {...{loginUser, visibleRoomList, updateLoginUser,
-          message, setMessage, joinMessage, addMessage
+          message, setMessage, joinMessage, addMessage, editMessage, removeMessage
         }} />
         {overlay}
       </div>
@@ -50,6 +50,8 @@ export default connect(
     updateLoginUser: loginUserActions.updateLoginUser,
     setMessage: messageActions.setMessage,
     joinMessage: messageActions.joinMessage,
-    addMessage: messageActions.addMessage
+    addMessage: messageActions.addMessage,
+    editMessage: messageActions.editMessage,
+    removeMessage: messageActions.removeMessage
   }
 )(RoomMain)
