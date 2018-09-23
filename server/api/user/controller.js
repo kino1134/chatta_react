@@ -16,6 +16,13 @@ export const updateProfile = ({ user, body }, res, next) => {
     .catch(uniqueError(res, next))
 }
 
+export const readMessage = ({ user, body }, res, next) => {
+  user.readMessage = body.messageId
+  user.save()
+    .then(() => res.json({ message: '既読が更新されました', id: body.messageId }))
+    .catch(next)
+}
+
 export const updatePassword = ({ user, body }, res, next) => {
   user.authenticate(body.current)
     .then(user => {

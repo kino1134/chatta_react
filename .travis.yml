@@ -1,7 +1,12 @@
 language: node_js
 node_js:
   - "lts/*"
-cache: yarn
+# cache: yarn
+cache:
+  directories:
+    - node_modules
+    - client/node_modules
+    - $HOME/.mongodb-binaries
 # The lines below should fix the travis build according to this issue (https://github.com/kelektiv/node.bcrypt.js/issues/366)
 env:
   global:

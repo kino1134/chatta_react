@@ -10,6 +10,8 @@ $sidebar-width: 250px;
   }
 }
 
+// TODO: RoomMessageListのメッセージアクション欄でも共有してしまっている
+// portalClassName オプションなどを使ってクラス分けしたい
 .ReactModal__Overlay {
   z-index: 3;
 
@@ -20,6 +22,16 @@ $sidebar-width: 250px;
       background-color: #2D9EE0;
       color: #fff;
     }
+    &.has-text-danger:hover {
+      background-color: #ff3860;
+      color: #fff !important;
+    }
+  }
+
+  hr {
+    background-color: rgb(204, 204, 204);
+    height: 1px;
+    margin: 0.75em 0.5em;
   }
 }
 

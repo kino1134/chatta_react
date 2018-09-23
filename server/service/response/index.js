@@ -13,7 +13,7 @@ export const notFound = (res) => (entity) => {
   if (entity) {
     return entity
   }
-  res.status(404).end()
+  res.status(404).json({ message: '対象が見つかりませんでした' }).end()
   return null
 }
 

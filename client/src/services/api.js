@@ -28,6 +28,8 @@ export default {
     apiCall({ method: 'GET', url }),
   put: async (url, body) =>
     apiCall({ method: 'PUT', url, body: JSON.stringify(body) }),
+  delete: async (url, body) =>
+    apiCall({ method: 'DELETE', url, body: JSON.stringify(body) }),
 
   postJson: async (url, body) =>
     json({ method: 'POST', url, body: JSON.stringify(body) }),
@@ -35,4 +37,6 @@ export default {
     json({ method: 'GET', url }),
   putJson: async (url, body) =>
     json({ method: 'PUT', url, body: JSON.stringify(body) }),
+  deleteJson: async (url, body) =>
+    json({ method: 'DELETE', url, body: JSON.stringify(body) }),
 }

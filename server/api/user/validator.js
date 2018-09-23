@@ -34,4 +34,8 @@ export const updateProfileValidator = [
   displayName, email, userId, photo
 ]
 
+export const readMessageValidator = [
+  check('messageId').trim().isMongoId().withMessage('形式が間違っています')
+]
+
 export default [ userId, displayName, email ]

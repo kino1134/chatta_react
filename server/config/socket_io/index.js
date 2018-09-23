@@ -11,20 +11,17 @@ export default () => {
   const sub = createClient({ host: redis.host, port: redis.port, password: redis.password })
   io.adapter(socketRedis({ pubClient: pub, subClient: sub }))
 
-  // TODO: Test Code
   io.on('connection', function (socket) {
-    console.log('connected socket')
-
+    // 各ユーザの入力状況を共有する
     socket.on('typing', function (displayName) {
       socket.broadcast.emit('typing', { displayName })
     })
-
     socket.on('stop_typing', function (displayName) {
       socket.broadcast.emit('stop_typing', { displayName })
     })
 
     socket.on('disconnect', function () {
-      console.log('disconnected socket')
+      // console.log('disconnected socket')
     })
   })
 

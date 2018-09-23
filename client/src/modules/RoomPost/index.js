@@ -21,6 +21,7 @@ class RoomPost extends Component {
       typeUser: ""
     }
 
+    // TODO: ここじゃない？
     socket.on('typing', ({ displayName }) => {
       this.setState({ typeUser: displayName })
     })
@@ -79,10 +80,17 @@ class RoomPost extends Component {
   posting (e) {
     if (this.props.preventExecute()) return
 
+    const lastMessage =  this.props.message.list[this.props.message.list.length - 1]
     api.postJson('/api/messages', { content: this.state.text }).then(res => {
       console.log(res.data)
       if (res.ok) {
         this.setState({ text: "" })
+        // 最後まで既読している場合、状態を変更して表示されないようにする
+        if (this.props.message.list && this.props.loginUser.readMessage === lastMessage.id) {
+          // サーバ側については投げっぱなしにする
+          api.putJson('/api/users/read', { messageId: res.data.id }).catch(err => { console.log(err) })
+          this.props.updateLoginUser({ readMessage: res.data.id })
+        }
       }
     }).catch(err => { console.log(err) })
       .then(() => this.props.endExecute() )
