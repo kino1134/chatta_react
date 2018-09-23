@@ -10,7 +10,8 @@ $sidebar-width: 250px;
   }
 }
 
-// RoomMessageListのメッセージアクション欄でも共有してしまっている
+// TODO: RoomMessageListのメッセージアクション欄でも共有してしまっている
+// portalClassName オプションなどを使ってクラス分けしたい
 .ReactModal__Overlay {
   z-index: 3;
 
