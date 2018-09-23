@@ -61,14 +61,22 @@ class RoomMessageList extends Component {
     }
   }
 
+  // TODO: 既読判定の方法はもう少し真面目に整理したほうがいい
   readAllMessage(e, container) {
+    // 当アプリが表示されていない場合、既読更新を行わない
+    if (document.hidden) return
+
+    // すでに既読状態を更新中なら、再実行はしない
+    if (this.reading) return
+
+    // 最新メッセージと既読状態が同じ場合、既読更新を行わない
     const lastMessage = this.props.message.list[this.props.message.list.length - 1]
     if (this.props.loginUser.readMessage === lastMessage.id) return
 
     const unread = document.querySelector('.unread-line')
     const threshold = container.clientHeight / 2
-    if (!this.props.loginUser.readMessage ||
-      (!document.hidden && !this.reading && unread.offsetTop >= container.scrollTop + threshold)) {
+    // 既読メッセージがない、既読はあるがメッセージそのものがなくなっている、未読の線を下の方までスクロールした時に既読更新を行う
+    if (!this.props.loginUser.readMessage || !unread || (unread.offsetTop >= container.scrollTop + threshold)) {
       this.reading = true
       // 未読表示を消すまで、少し猶予を与える
       setTimeout(() => {
