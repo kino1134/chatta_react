@@ -112,6 +112,12 @@ class RoomMessageList extends Component {
           })
         }
       })
+      socket.on('updateMessage', data => {
+        this.props.editMessage(data)
+      })
+      socket.on('removeMessage', data => {
+        this.props.removeMessage(data)
+      })
     }).catch(err => { console.log(err) })
       .then(() => this.setState({ loading: false, event: 'init' }))
   }
