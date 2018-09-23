@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import ReactDOM from 'react-dom'
+import Modal from 'react-modal'
 import moment from 'moment'
 import 'moment/locale/ja'
 import marked from 'marked'
@@ -11,6 +12,20 @@ import RoomLoading from '../RoomLoading'
 import socket from '../../services/socket'
 import api from '../../services/api'
 
+Modal.setAppElement('#root')
+const customStyles = {
+  content: {
+    top: 'auto',
+    left: 'auto',
+    right: 'auto',
+    bottom: 'auto',
+    padding: '8px 0',
+  },
+  overlay: {
+    backgroundColor: 'transparent'
+  }
+}
+
 // プロフィール変更画面から戻ってきたときにも位置を復元したい
 // TODO: 場所がかなり汚い・・
 let roomMessagePosition = [{ height: 0, position: 0 }]
@@ -20,11 +35,39 @@ class RoomMessageList extends Component {
   constructor (props) {
     super(props)
 
+    this.editing = false
     this.reading = false
 
+    this.changeHandler = this.changeHandler.bind(this)
+
     this.state = {
+      selectMessage: null,
+      editMessage: null,
+      inputText: null,
       loading: true,
       event: null
+    }
+  }
+
+  changeHandler (e) {
+    this.setState({ [e.target.name]: e.target.value })
+  }
+
+  editEnter (e) {
+    if (e.key === 'Enter' && e.ctrlKey) {
+      e.preventDefault()
+      this.editMessage(e)
+    }
+  }
+
+  rows () {
+    const num = this.state.inputText.split('\n').length
+    if (num < 1) {
+      return 1
+    } else if (num >= 5) {
+      return 5
+    } else {
+      return num
     }
   }
 
@@ -221,6 +264,8 @@ class RoomMessageList extends Component {
   }
 
   showMessage(message) {
+    if (this.state.editMessage && message.id === this.state.editMessage.id) return this.showEditMessageArea(message)
+
     return (
       <article key={message.id} className="media">
         <figure className="media-left">
@@ -231,10 +276,10 @@ class RoomMessageList extends Component {
         <div className="media-content">
           <div className="content">
             <p className="message-info">
-                <strong>{message.user.displayName}</strong>
-                <small>@{message.user.userId}</small>
-                <small> | </small>
-                <small>{moment(message.createdAt).format('llll')}</small>
+              <strong>{message.user.displayName}</strong>
+              <small>@{message.user.userId}</small>
+              <small> | </small>
+              <small>{moment(message.createdAt).format('llll')}</small>
             </p>
             <p>
               <span className="message-content"
@@ -243,8 +288,90 @@ class RoomMessageList extends Component {
             </p>
           </div>
         </div>
+        <nav className="level message-action">
+          <a className="icon is-medium" onClick={e => this.clickAction(e, message)}>
+            <i className="far fa-caret-square-down fa-lg"></i>
+          </a>
+        </nav>
       </article>
     )
+  }
+
+  // TODO: 入力中表示ができてない
+  showEditMessageArea (message) {
+    return (
+      <article key={message.id} className="media" style={{backgroundColor: '#fff5df'}}>
+        <figure className="media-left">
+          <p className="image avator">
+            <img src={message.user.photo} alt={message.user.displayName} />
+          </p>
+        </figure>
+        <div className="media-content">
+          <div className="field">
+            <div className="control">
+              <textarea name="inputText" placeholder="メッセージを編集" className="textarea" autoFocus value={this.state.inputText}
+                onChange={this.changeHandler} rows={this.rows()} onKeyDown={(e) => this.editEnter(e)} >
+              </textarea>
+            </div>
+          </div>
+          <nav className="level">
+            <div className="level-left">
+              <div className="level-item">
+                <a className="button" onClick={e => this.cancelEditMessage(e)}>キャンセル</a>
+              </div>
+              <div className="level-item">
+                <a className="button is-success" onClick={e => this.editMessage(e)}>変更</a>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </article>
+    )
+  }
+
+  clickAction (e, message) {
+    this.setState({ selectMessage: message })
+    customStyles.content.top = e.clientY - 50
+    customStyles.content.left = e.clientX - 200
+  }
+
+  selectEditMessage (e) {
+    this.setState({ selectMessage: null, editMessage: this.state.selectMessage, inputText: this.state.selectMessage.content })
+  }
+
+  cancelEditMessage (e) {
+    this.setState({ editMessage: null, inputText: null })
+  }
+
+  editMessage (e) {
+    if (this.editing) return
+    this.editing = true
+
+    // メッセージが全て消されている場合、削除に移行する
+    const promise = this.state.inputText ?
+      api.put('/api/messages/' + this.state.editMessage.id, { content: this.state.inputText }) :
+      api.delete('/api/messages/' + this.state.editMessage.id)
+
+    promise.then(res => {
+      // 何もしない
+    }).catch(err => console.log(err) )
+      .then(() => {
+        this.editing = false
+        this.setState({ editMessage: null })
+      })
+  }
+
+  deleteMessage (e) {
+    if (this.editing) return
+    this.editing = true
+
+    api.delete('/api/messages/' + this.state.selectMessage.id).then(res => {
+      // 何もしない
+    }).catch(err => console.log(err) )
+      .then(() => {
+        this.editing = false
+        this.setState({ selectMessage: null })
+      })
   }
 
   render () {
@@ -255,10 +382,34 @@ class RoomMessageList extends Component {
       head = this.showHelloMessage()
     }
 
+    let editMessage = null
+    if (this.state.selectMessage && this.props.loginUser.userId === this.state.selectMessage.user.userId) {
+      editMessage = (
+        <Fragment>
+          <li><hr/></li>
+          <li><a onClick={e => this.selectEditMessage(e) }>
+            <i className="fas fa-edit" style={{marginRight: '5px'}}></i>メッセージの編集
+          </a></li>
+          <li><a onClick={e => this.deleteMessage(e) } className="has-text-danger">
+            <i className="fas fa-trash-alt" style={{marginRight: '5px'}}></i>削除
+          </a></li>
+        </Fragment>
+      )
+    }
+
     return (
       <div id="room-message-list" onScroll={e => this.scrollUp(e)}>
         {head}
         {this.showMessageList()}
+        <Modal contentLabel="メッセージメニュー" style={customStyles} isOpen={!!this.state.selectMessage}
+          onRequestClose={e => this.setState({ selectMessage: null }) }>
+          <div className="menu" role="menu">
+            <ul className="menu-list">
+              <li><a>(仮)メッセージメニュー</a></li>
+              {editMessage}
+            </ul>
+          </div>
+        </Modal>
       </div>
     )
   }

@@ -21,6 +21,7 @@ class RoomPost extends Component {
       typeUser: ""
     }
 
+    // TODO: ここじゃない？
     socket.on('typing', ({ displayName }) => {
       this.setState({ typeUser: displayName })
     })

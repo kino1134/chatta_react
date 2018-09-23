@@ -16,6 +16,9 @@
     &:hover {
       background-color: rgba(0,0,0,.05);
     }
+    &:hover .message-action {
+      display: flex;
+    }
     & + .media {
       margin-top: 0;
       padding-top: 8px;
@@ -26,7 +29,21 @@
     margin-bottom: 0;
     width: calc(100% - 40px);
     & > * {
-    margin-right: 5px;
+      margin-right: 5px;
+    }
+  }
+
+  .message-action {
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: .5rem;
+    display: none;
+    position: absolute;
+    right: 1rem;
+    top: -0.5rem;
+    .icon:not(:last-child) {
+      border-right: 1px solid rgba(0,0,0,.15);
+    }
   }
 
   .hello {
