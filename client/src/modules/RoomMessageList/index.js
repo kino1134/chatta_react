@@ -216,14 +216,13 @@ class RoomMessageList extends Component {
         </figure>
         <div className="media-content">
           <div className="content">
-            <p>
-              <span className="message-info">
+            <p className="message-info">
                 <strong>{message.user.displayName}</strong>
                 <small>@{message.user.userId}</small>
                 <small> | </small>
                 <small>{moment(message.createdAt).format('llll')}</small>
-              </span>
-              <br/>
+            </p>
+            <p>
               <span className="message-content"
                 dangerouslySetInnerHTML={{ __html: this.markdown(message.content) }}>
               </span>
