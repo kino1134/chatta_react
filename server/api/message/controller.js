@@ -61,20 +61,3 @@ export const get = (req, res, next) => {
     .then(success(res, 200))
     .catch(next)
 }
-
-export const getOne = (req, res, next) => {
-  Message.findOne().populate('user')
-    .then(message => message.view())
-    .then(success(res, 200))
-    .catch(next)
-}
-
-export const getAll = (req, res, next) => {
-  Message.find({}).populate('user')
-    .then(messages => {
-      const result = messages.map(m => m.view())
-      return { messages: result }
-    })
-    .then(success(res, 200))
-    .catch(next)
-}
