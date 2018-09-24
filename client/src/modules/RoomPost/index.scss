@@ -20,6 +20,9 @@
     .button {
       border: none;
       height: 100%;
+      &:focus {
+        box-shadow: unset;
+      }
     }
     .control.main {
       flex: 1 1 auto;
@@ -34,5 +37,4 @@
       box-shadow: unset;
     }
   }
-
 }
