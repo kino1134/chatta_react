@@ -335,6 +335,10 @@ class RoomMessageList extends Component {
     customStyles.content.left = e.clientX - 200
   }
 
+  cancelSelectMessage (e) {
+    this.setState({ selectMessage: null })
+  }
+
   selectEditMessage (e) {
     this.setState({ selectMessage: null, editMessage: this.state.selectMessage, inputText: this.state.selectMessage.content })
   }
@@ -402,7 +406,7 @@ class RoomMessageList extends Component {
         {head}
         {this.showMessageList()}
         <Modal contentLabel="メッセージメニュー" style={customStyles} isOpen={!!this.state.selectMessage}
-          onRequestClose={e => this.setState({ selectMessage: null }) }>
+          onRequestClose={e => this.cancelSelectMessage(e) }>
           <div className="menu" role="menu">
             <ul className="menu-list">
               <li><a>(仮)メッセージメニュー</a></li>
