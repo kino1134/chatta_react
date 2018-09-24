@@ -17,6 +17,7 @@ class RoomPost extends Component {
     this.lastTypingTime = null
 
     this.state = {
+      focusTextarea: false,
       text: "",
       typeUser: ""
     }
@@ -103,15 +104,23 @@ class RoomPost extends Component {
     }
   }
 
+  hasFocusTextarea () {
+    return this.state.focusTextarea ? 'has-focus': ''
+  }
+  switchFocusTextarea (e, value) {
+    this.setState({ focusTextarea: value })
+  }
+
   render () {
     return (
       <footer id="room-post">
         {this.showTyping()}
-        <div className="field has-addons">
+        <div className={`field has-addons ${this.hasFocusTextarea()}`}>
           <p className="control main">
             <textarea name="text" className="textarea" placeholder="メッセージ" autoFocus
               rows={this.rows()} value={this.state.text} onChange={this.changeHandler}
-              onInput={(e) => this.updateTyping(e)} onKeyDown={(e) => this.postEnter(e)}>
+              onInput={(e) => this.updateTyping(e)} onKeyDown={(e) => this.postEnter(e)}
+              onFocus={e => this.switchFocusTextarea(e, true)} onBlur={e => this.switchFocusTextarea(e, false)}>
             </textarea>
           </p>
           <p className="control">
