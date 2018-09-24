@@ -9,13 +9,20 @@
   }
 
   .field {
-    border: 2px solid #919193;
+    border: 2px solid #cbced1;
     border-radius: 6px;
+    &.has-focus {
+      border-color: #717274;
+    }
   }
 
   .has-addons {
     .button {
+      border: none;
       height: 100%;
+      &:focus {
+        box-shadow: unset;
+      }
     }
     .control.main {
       flex: 1 1 auto;
@@ -24,10 +31,10 @@
 
   .textarea {
     resize: none;
+    border-radius: 0;
     &, &:focus, &:hover {
       border: none;
       box-shadow: unset;
     }
   }
-
 }

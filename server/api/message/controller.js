@@ -1,9 +1,30 @@
+import fs from 'fs'
 import emitter from '../../config/socket_io/emitter'
 import { success, notFound } from '../../service/response'
 import Message from '../../model/Message'
 
 export const post = (req, res, next) => {
   Message.create({ content: req.body.content, user: req.user })
+    .then(message => message.view())
+    .then(message => {
+      emitter.emit('postMessage', message)
+      return message
+    })
+    .then(success(res, 201))
+    .catch(next)
+}
+
+export const upload = (req, res, next) => {
+  Message.create({
+    content: req.body.content,
+    user: req.user,
+    file: {
+      name: req.file.originalname,
+      storage: 'mongo',
+      mime: req.file.mimetype,
+      data: fs.readFileSync(req.file.path)
+    }
+  })
     .then(message => message.view())
     .then(message => {
       emitter.emit('postMessage', message)
@@ -42,6 +63,13 @@ export const destroy = ({ user, params }, res, next) => {
     .catch(next)
 }
 
+export const download = ({ params }, res, next) =>
+  Message.findById(params.id)
+    .then(m => m && m.file.name ? m.file : null)
+    .then(notFound(res))
+    .then(file => res.attachment(file.name).send(file.data))
+    .catch(next)
+
 export const get = (req, res, next) => {
   // 1回あたりの取得件数は20とする
   // 残り1件は、次のページングを行うためのID取得用
@@ -57,23 +85,6 @@ export const get = (req, res, next) => {
       } else {
         return { previous: null, messages: views }
       }
-    })
-    .then(success(res, 200))
-    .catch(next)
-}
-
-export const getOne = (req, res, next) => {
-  Message.findOne().populate('user')
-    .then(message => message.view())
-    .then(success(res, 200))
-    .catch(next)
-}
-
-export const getAll = (req, res, next) => {
-  Message.find({}).populate('user')
-    .then(messages => {
-      const result = messages.map(m => m.view())
-      return { messages: result }
     })
     .then(success(res, 200))
     .catch(next)

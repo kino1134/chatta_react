@@ -1,16 +1,27 @@
 import mongoose, { Schema } from 'mongoose'
 
+const storages = [ 'local', 'mongo', 'box' ]
+
 const messageSchema = new Schema({
-  // TODO: ユーザを消したい時に問題になるかも
-  // TODO: また、N+1問題に似たことが起こるかも
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
   content: {
-    type: String,
-    required: true
+    type: String
+  },
+  file: {
+    name: {
+      type: String
+    },
+    storage: {
+      type: String,
+      enum: storages
+    },
+    mime: String,
+    path: String,
+    data: Buffer
   }
 }, {
   timestamps: true
@@ -25,7 +36,15 @@ messageSchema.methods = {
       fields = [...fields]
     }
 
-    view.user = this.user.view(full)
+    if (this.user === null) {
+      view.user = { displayName: '削除ユーザ', photo: 'favicon.ico' }
+    } else {
+      view.user = this.user.view(full)
+    }
+    if (this.file && this.file.name) {
+      view.file = {}
+      view.file.name = this.file.name
+    }
     fields.forEach(field => { view[field] = this[field] })
     return view
   }

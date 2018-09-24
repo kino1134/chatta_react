@@ -25,6 +25,22 @@ const customStyles = {
     backgroundColor: 'transparent'
   }
 }
+const deleteConfirmStyles = {
+  content: {
+    maxWidth: 'calc(100% - 32px)',
+    maxHeight: '640px',
+    top: 'auto',
+    left: 'auto',
+    right: 'auto',
+    bottom: 'auto',
+  },
+  overlay: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,.4)'
+  }
+}
 
 // プロフィール変更画面から戻ってきたときにも位置を復元したい
 // TODO: 場所がかなり汚い・・
@@ -43,6 +59,7 @@ class RoomMessageList extends Component {
     this.state = {
       selectMessage: null,
       editMessage: null,
+      deleteMessage: null,
       inputText: null,
       loading: true,
       event: null
@@ -263,8 +280,24 @@ class RoomMessageList extends Component {
     )
   }
 
+  downloadFile (e, id, name) {
+    api.downloadFile('/api/messages/download/' + id, name)
+      .catch(err => console.log(err))
+  }
+
   showMessage(message) {
-    if (this.state.editMessage && message.id === this.state.editMessage.id) return this.showEditMessageArea(message)
+    if (this.state.editMessage && message.id === this.state.editMessage.id) {
+      return this.showEditMessageArea(message)
+    }
+
+    let fileLink = null
+    if (message.file && message.file.name) {
+      fileLink = (
+        <span>
+          添付ファイル：<a onClick={e => this.downloadFile(e, message.id, message.file.name)}>{message.file.name}</a>
+        </span>
+      )
+    }
 
     return (
       <article key={message.id} className="media">
@@ -285,6 +318,7 @@ class RoomMessageList extends Component {
               <span className="message-content"
                 dangerouslySetInnerHTML={{ __html: this.markdown(message.content) }}>
               </span>
+              {fileLink}
             </p>
           </div>
         </div>
@@ -335,6 +369,10 @@ class RoomMessageList extends Component {
     customStyles.content.left = e.clientX - 200
   }
 
+  cancelSelectMessage (e) {
+    this.setState({ selectMessage: null })
+  }
+
   selectEditMessage (e) {
     this.setState({ selectMessage: null, editMessage: this.state.selectMessage, inputText: this.state.selectMessage.content })
   }
@@ -361,16 +399,25 @@ class RoomMessageList extends Component {
       })
   }
 
+
+  selectDeleteMessage (e) {
+    this.setState({ deleteMessage: this.state.selectMessage, selectMessage: null })
+  }
+
+  cancelDeleteMessage (e) {
+    this.setState({ deleteMessage: null })
+  }
+
   deleteMessage (e) {
     if (this.editing) return
     this.editing = true
 
-    api.delete('/api/messages/' + this.state.selectMessage.id).then(res => {
+    api.delete('/api/messages/' + this.state.deleteMessage.id).then(res => {
       // 何もしない
     }).catch(err => console.log(err) )
       .then(() => {
         this.editing = false
-        this.setState({ selectMessage: null })
+        this.setState({ deleteMessage: null })
       })
   }
 
@@ -382,18 +429,40 @@ class RoomMessageList extends Component {
       head = this.showHelloMessage()
     }
 
-    let editMessage = null
+    let editMessageMenu = null
     if (this.state.selectMessage && this.props.loginUser.userId === this.state.selectMessage.user.userId) {
-      editMessage = (
+      editMessageMenu = (
         <Fragment>
           <li><hr/></li>
           <li><a onClick={e => this.selectEditMessage(e) }>
             <i className="fas fa-edit" style={{marginRight: '5px'}}></i>メッセージの編集
           </a></li>
-          <li><a onClick={e => this.deleteMessage(e) } className="has-text-danger">
+          <li><a onClick={e => this.selectDeleteMessage(e) } className="has-text-danger">
             <i className="fas fa-trash-alt" style={{marginRight: '5px'}}></i>削除
           </a></li>
         </Fragment>
+      )
+    }
+
+    let deleteMessage = null
+    if (this.state.deleteMessage) {
+      deleteMessage = (
+        <article className="media">
+          <div className="media-content">
+            <div className="content">
+              <p className="message-info">
+                <strong>{this.state.deleteMessage.user.displayName}</strong>
+                <small> | </small>
+                <small>{moment(this.state.deleteMessage.createdAt).format('llll')}</small>
+              </p>
+              <p>
+                <span className="message-content"
+                  dangerouslySetInnerHTML={{ __html: this.markdown(this.state.deleteMessage.content) }}>
+                </span>
+              </p>
+            </div>
+          </div>
+        </article>
       )
     }
 
@@ -402,12 +471,37 @@ class RoomMessageList extends Component {
         {head}
         {this.showMessageList()}
         <Modal contentLabel="メッセージメニュー" style={customStyles} isOpen={!!this.state.selectMessage}
-          onRequestClose={e => this.setState({ selectMessage: null }) }>
+          onRequestClose={e => this.cancelSelectMessage(e) }>
           <div className="menu" role="menu">
             <ul className="menu-list">
               <li><a>(仮)メッセージメニュー</a></li>
-              {editMessage}
+              {editMessageMenu}
             </ul>
+          </div>
+        </Modal>
+        <Modal contentLabel="メッセージの削除" style={deleteConfirmStyles}
+          isOpen={!!this.state.deleteMessage} onRequestClose={e => this.cancelDeleteMessage(e) }>
+          <div className="content delete-message-confirm">
+            <h3 className="header">
+              メッセージの削除
+              <a onClick={e => this.cancelDeleteMessage(e) }><i className="fas fa-times"></i></a>
+            </h3>
+            <p>このメッセージを削除しますか？この操作は元に戻すことができません</p>
+            <div className="content message-container">
+              {deleteMessage}
+            </div>
+            <nav className="level">
+              <div className="level-left">
+              </div>
+              <div className="level-right">
+                <div className="level-item">
+                  <a className="button" onClick={e => this.cancelDeleteMessage(e) }>キャンセル</a>
+                </div>
+                <div className="level-item">
+                  <a className="button is-danger" onClick={e => this.deleteMessage(e)}>削除</a>
+                </div>
+              </div>
+            </nav>
           </div>
         </Modal>
       </div>

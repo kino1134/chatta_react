@@ -1,10 +1,30 @@
 import React, { Component } from 'react'
+import Modal from 'react-modal'
 import './index.css'
 
 import apiHandler from '../../helpers/apiHandler'
 
 import api from '../../services/api'
 import socket from '../../services/socket'
+
+Modal.setAppElement('#root')
+const fileUploadStyles = {
+  content: {
+    minWidth: '70%',
+    maxWidth: 'calc(100% - 32px)',
+    maxHeight: '640px',
+    top: 'auto',
+    left: 'auto',
+    right: 'auto',
+    bottom: 'auto',
+  },
+  overlay: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,.4)'
+  }
+}
 
 class RoomPost extends Component {
 
@@ -15,9 +35,14 @@ class RoomPost extends Component {
 
     this.typing = false
     this.lastTypingTime = null
+    this.fileInput = React.createRef()
 
     this.state = {
+      focusTextarea: false,
       text: "",
+      selectFile: "",
+      uploadText: "",
+      uploading: false,
       typeUser: ""
     }
 
@@ -62,8 +87,8 @@ class RoomPost extends Component {
     )
   }
 
-  rows () {
-    const num = this.state.text.split('\n').length
+  rows (text) {
+    const num = text.split('\n').length
     if (num < 1) {
       return 1
     } else if (num >= 5) {
@@ -73,8 +98,8 @@ class RoomPost extends Component {
     }
   }
 
-  noInput () {
-    return !/\S/.test(this.state.text)
+  noInput (text) {
+    return !/\S/.test(text)
   }
 
   posting (e) {
@@ -103,24 +128,99 @@ class RoomPost extends Component {
     }
   }
 
+  hasFocusTextarea () {
+    return this.state.focusTextarea ? 'has-focus': ''
+  }
+  switchFocusTextarea (e, value) {
+    this.setState({ focusTextarea: value })
+  }
+
+  selectFile (e) {
+    this.fileInput.current.click()
+    this.setState({ uploadText: this.state.text })
+  }
+
+  clearSelectFile (e) {
+    if (this.state.uploading) return
+    this.setState({ selectFile: '' })
+  }
+
+  fileUpload (e) {
+    if (this.state.uploading) return
+
+    this.setState({ uploading: true })
+    const body = new FormData()
+    body.append('attachFile', this.fileInput.current.files[0])
+    body.append('content', this.state.uploadText)
+    api.postData({ url: '/api/messages/upload', body }).catch(err => { console.log(err) })
+      .then(() => this.setState({ text: '', selectFile: '', uploading: false }) )
+  }
+
+  uploadEnter (e) {
+    if (e.key === 'Enter' && e.ctrlKey) {
+      e.preventDefault()
+      this.fileUpload(e)
+    }
+  }
+
   render () {
     return (
       <footer id="room-post">
         {this.showTyping()}
-        <div className="field has-addons">
+        <div className={`field has-addons ${this.hasFocusTextarea()}`}>
+          <p className="control">
+            <input name="selectFile" type="file" className="file-input" ref={this.fileInput}
+              value={this.state.selectFile} onChange={this.changeHandler}></input>
+            <button className="button" onClick={e => this.selectFile(e)}>
+              <i className="fas fa-plus"></i>
+            </button>
+          </p>
           <p className="control main">
             <textarea name="text" className="textarea" placeholder="メッセージ" autoFocus
-              rows={this.rows()} value={this.state.text} onChange={this.changeHandler}
-              onInput={(e) => this.updateTyping(e)} onKeyDown={(e) => this.postEnter(e)}>
+              rows={this.rows(this.state.text)} value={this.state.text} onChange={this.changeHandler}
+              onInput={(e) => this.updateTyping(e)} onKeyDown={(e) => this.postEnter(e)}
+              onFocus={e => this.switchFocusTextarea(e, true)} onBlur={e => this.switchFocusTextarea(e, false)}>
             </textarea>
           </p>
           <p className="control">
             <button className={`button is-success ${this.props.executing ? 'is-loading' : ''}`}
-              onClick={(e) => this.posting(e)} disabled={this.noInput()}>
+              onClick={(e) => this.posting(e)} disabled={this.noInput(this.state.text)}>
               <i className="fas fa-comment-dots fa-lg"></i>
             </button>
           </p>
         </div>
+        <Modal contentLabel="ファイルアップロード" style={fileUploadStyles}
+          isOpen={!!this.state.selectFile} onRequestClose={e => this.clearSelectFile(e) }>
+          <div className="content delete-message-confirm">
+            <h3 className="header">
+              ファイルアップロード
+              <a onClick={e => this.clearSelectFile(e) }><i className="fas fa-times"></i></a>
+            </h3>
+            <p>このファイルをアップロードしますか？</p>
+            <div className="content message-container">
+              {this.state.selectFile.replace('C:\\fakepath\\', '')}
+            </div>
+            <div className="field">
+              <textarea name="uploadText" className="textarea" placeholder="メッセージの追加" autoFocus
+                rows={this.rows(this.state.uploadText)} value={this.state.uploadText} onChange={this.changeHandler}
+                onInput={(e) => this.updateTyping(e)} onKeyDown={(e) => this.uploadEnter(e)}>
+              </textarea>
+            </div>
+            <nav className="level">
+              <div className="level-left">
+                <div className="level-item">
+                  <a className="button" onClick={e => this.clearSelectFile(e) }>キャンセル</a>
+                </div>
+                <div className="level-item">
+                  <a className={`button is-success ${this.state.uploading ? 'is-loading' : ''}`}
+                    onClick={e => this.fileUpload(e)}>
+                    アップロード
+                  </a>
+                </div>
+              </div>
+            </nav>
+          </div>
+        </Modal>
       </footer>
     )
   }
