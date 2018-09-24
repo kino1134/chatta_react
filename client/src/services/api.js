@@ -1,3 +1,4 @@
+import download from 'downloadjs'
 import { getAccessToken } from './storage'
 import config from '../constants'
 
@@ -39,4 +40,24 @@ export default {
     json({ method: 'PUT', url, body: JSON.stringify(body) }),
   deleteJson: async (url, body) =>
     json({ method: 'DELETE', url, body: JSON.stringify(body) }),
+
+  postData: async ({ url, body }) => {
+    const headers = {}
+    const token = getAccessToken()
+    if (token) {
+      headers['Authorization'] = 'Bearer ' + token
+    }
+    return fetch(config.api.uri + url, { method: 'POST', body, headers })
+  },
+  downloadFile: async (url, name) => {
+    try {
+      const res = await apiCall({ method: 'GET', url })
+      const data = await res.blob()
+      download(data, name)
+      res.data = data
+      return res
+    } catch (err) {
+      throw err
+    }
+  }
 }
