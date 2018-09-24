@@ -386,9 +386,9 @@ class RoomMessageList extends Component {
       head = this.showHelloMessage()
     }
 
-    let editMessage = null
+    let editMessageMenu = null
     if (this.state.selectMessage && this.props.loginUser.userId === this.state.selectMessage.user.userId) {
-      editMessage = (
+      editMessageMenu = (
         <Fragment>
           <li><hr/></li>
           <li><a onClick={e => this.selectEditMessage(e) }>
@@ -410,7 +410,7 @@ class RoomMessageList extends Component {
           <div className="menu" role="menu">
             <ul className="menu-list">
               <li><a>(仮)メッセージメニュー</a></li>
-              {editMessage}
+              {editMessageMenu}
             </ul>
           </div>
         </Modal>
