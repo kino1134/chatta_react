@@ -281,7 +281,10 @@ class RoomMessageList extends Component {
   }
 
   showMessage(message) {
-    if (this.state.editMessage && message.id === this.state.editMessage.id) return this.showEditMessageArea(message)
+    if (this.state.editMessage && message.id === this.state.editMessage.id) {
+      return this.showEditMessageArea(message)
+    }
+
 
     return (
       <article key={message.id} className="media">
