@@ -280,11 +280,24 @@ class RoomMessageList extends Component {
     )
   }
 
+  downloadFile (e, id, name) {
+    api.downloadFile('/api/messages/download/' + id, name)
+      .catch(err => console.log(err))
+  }
+
   showMessage(message) {
     if (this.state.editMessage && message.id === this.state.editMessage.id) {
       return this.showEditMessageArea(message)
     }
 
+    let fileLink = null
+    if (message.file && message.file.name) {
+      fileLink = (
+        <span>
+          添付ファイル：<a onClick={e => this.downloadFile(e, message.id, message.file.name)}>{message.file.name}</a>
+        </span>
+      )
+    }
 
     return (
       <article key={message.id} className="media">
@@ -305,6 +318,7 @@ class RoomMessageList extends Component {
               <span className="message-content"
                 dangerouslySetInnerHTML={{ __html: this.markdown(message.content) }}>
               </span>
+              {fileLink}
             </p>
           </div>
         </div>
