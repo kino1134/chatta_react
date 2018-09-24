@@ -1,8 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 
 const messageSchema = new Schema({
-  // TODO: ユーザを消したい時に問題になるかも
-  // TODO: また、N+1問題に似たことが起こるかも
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -25,7 +23,11 @@ messageSchema.methods = {
       fields = [...fields]
     }
 
+    if (this.user === null) {
+      view.user = { displayName: '削除ユーザ', photo: 'favicon.ico' }
+    } else {
     view.user = this.user.view(full)
+    }
     fields.forEach(field => { view[field] = this[field] })
     return view
   }
