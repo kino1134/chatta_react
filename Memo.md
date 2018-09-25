@@ -107,6 +107,13 @@ Homebrew で入れた時の設定ファイル `/usr/local/etc/nginx/nginx.conf`
 複数エントリポイントがある時でも、そんなに複雑な設定をしなくていいみたい
 https://qiita.com/oshiro/items/39aaed7cc2e33ce25eeb
 
+### 各ソースの行数を見る
+
+見直しの参考にする
+```bash
+find server/ client/src/ -type f -and -not -path *.css | xargs wc -l | less
+```
+
 ## 各種サービスのセットアップ手順
 
 後でまとめているので、内容はちょっとあやふや
