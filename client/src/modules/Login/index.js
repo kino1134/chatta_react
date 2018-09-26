@@ -54,7 +54,8 @@ class Login extends Component {
         window.location.href = '/'
       })
     .catch(err => {
-      this.setState({ topMessage: err.message })
+      this.props.setTopMessage(err.message)
+      this.props.setMessageColor('danger')
     // 処理中フラグを戻す
     }).then(() => this.setState({ loggingIn: false, executing: false }))
   }
