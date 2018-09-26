@@ -141,6 +141,7 @@ class RoomMessageList extends Component {
       // 未読表示を消すまで、少し猶予を与える
       setTimeout(() => {
         api.putJson('/api/users/read', { messageId: lastMessage.id }).then(res =>{
+          // TODO: 消さない方がいいかも
           if (res.ok) {
             this.props.updateLoginUser({ readMessage: res.data.id })
           } else {
@@ -167,10 +168,11 @@ class RoomMessageList extends Component {
       }
 
       // TODO: ソケットのイベントリスナーを置く場所は、ここじゃない方がいいかも
+      // TODO: [this] がメモリリークしてるみたい
       // メッセージの読込が完了した時点でイベント受信を開始する
       socket.on('postMessage', data => {
         this.props.addMessage(data)
-        this.setState({ event: 'posted' })
+        // this.setState({ event: 'posted' })
         if (document.hidden) {
           // チャット欄が隠れている場合、通知を行う
           Push.create(data.user.displayName, {
@@ -200,6 +202,12 @@ class RoomMessageList extends Component {
     // スクロール位置がずれるので、それを補正する
     if (prevState.loading && !this.state.loading) {
       container.scrollTop  = roomMessagePosition[0].position
+    }
+
+    // メッセージが追加されている場合、再度イベントの発行を行う
+    // ソケットイベントの中でstateの変更を行うと、thisがいなくなっている場合がある
+    if (prevProps.message.list && this.props.message.list.length > prevProps.message.list.length) {
+      this.setState({ event: 'posted' })
     }
 
     // イベント名が設定されている場合のみ、スクロール位置を動かす
