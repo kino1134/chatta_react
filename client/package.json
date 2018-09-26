@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "bulma": "^0.7.1",
     "downloadjs": "^1.4.7",
     "jwt-decode": "^2.2.0",

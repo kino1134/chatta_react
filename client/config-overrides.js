@@ -16,9 +16,11 @@ const setEntry = function (config, env) {
   const srcIndex = authEntry.findIndex(e => e === paths.appIndexJs)
   authEntry[srcIndex] = path.join(paths.appSrc, authIndexJs)
 
+  // IE11でreact-routerが動かなかったので、polyfillを入れてみる
+  // TODO: これだけで20KBくらいあったので、ホントは抜くか厳選したい
   config.entry = {
-    main: defaultEntry,
-    auth: authEntry
+    main: ['babel-polyfill', ...defaultEntry],
+    auth: ['babel-polyfill', ...authEntry]
   }
 }
 
