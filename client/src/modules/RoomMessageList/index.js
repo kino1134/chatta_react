@@ -233,15 +233,7 @@ class RoomMessageList extends Component {
   }
 
   markdown (content) {
-    return marked(content, {
-      sanitize: true,
-      gfm: true,
-      breaks: true
-      // TODO: コードハイライト
-      // highlight: function (code, lang) {
-      //   return lang ? highlight.highlight(lang, code).value : highlight.highlightAuto(code).value
-      // }
-    })
+    return markdownIt({ breaks: true, linkify: true }).use(markdownItEmoji).render(content)
   }
 
   showMessageList () {
