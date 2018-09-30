@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Modal from 'react-modal'
 import './index.css'
 
+import EmojiPicker from '../EmojiPicker'
+
 import apiHandler from '../../helpers/apiHandler'
 
 import api from '../../services/api'
@@ -39,6 +41,7 @@ class RoomPost extends Component {
 
     this.state = {
       focusTextarea: false,
+      openEmojiPicker: null,
       text: "",
       selectFile: "",
       uploadText: "",
@@ -163,6 +166,15 @@ class RoomPost extends Component {
     }
   }
 
+  showEmojiPicker (e) {
+    const main = document.getElementById('main')
+    const position = [
+      main.clientWidth - e.clientX - 23,
+      main.clientHeight - e.clientY
+    ]
+    this.setState({ openEmojiPicker: position })
+  }
+
   render () {
     return (
       <footer id="room-post">
@@ -183,12 +195,19 @@ class RoomPost extends Component {
             </textarea>
           </p>
           <p className="control">
+            <button className={`button`} onClick={e => this.showEmojiPicker(e) }>
+              <i className="far fa-smile fa-lg"></i>
+            </button>
+          </p>
+          <p className="control">
             <button className={`button is-success ${this.props.executing ? 'is-loading' : ''}`}
               onClick={(e) => this.posting(e)} disabled={this.noInput(this.state.text)}>
               <i className="fas fa-comment-dots fa-lg"></i>
             </button>
           </p>
         </div>
+        <EmojiPicker position={this.state.openEmojiPicker} onRequestClose={e => this.setState({ openEmojiPicker: null }) }
+         selectEmoji={k => this.setState({ text: `${this.state.text} ${k} ` }) } />
         <Modal contentLabel="ファイルアップロード" style={fileUploadStyles}
           isOpen={!!this.state.selectFile} onRequestClose={e => this.clearSelectFile(e) }>
           <div className="content delete-message-confirm">
@@ -206,7 +225,7 @@ class RoomPost extends Component {
                 onInput={(e) => this.updateTyping(e)} onKeyDown={(e) => this.uploadEnter(e)}>
               </textarea>
             </div>
-            <nav className="level">
+            <nav className="level is-mobile">
               <div className="level-left">
                 <div className="level-item">
                   <a className="button" onClick={e => this.clearSelectFile(e) }>キャンセル</a>

@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom'
 import Modal from 'react-modal'
 import moment from 'moment'
 import 'moment/locale/ja'
-import marked from 'marked'
+import markdownIt from 'markdown-it'
+import markdownItEmoji from 'markdown-it-emoji'
 import Push from 'push.js'
 import './index.css'
 
@@ -204,9 +205,10 @@ class RoomMessageList extends Component {
       container.scrollTop  = roomMessagePosition[0].position
     }
 
-    // メッセージが追加されている場合、再度イベントの発行を行う
+    // 後続メッセージが追加されている場合、再度イベントの発行を行う
     // ソケットイベントの中でstateの変更を行うと、thisがいなくなっている場合がある
-    if (prevProps.message.list && this.props.message.list.length > prevProps.message.list.length) {
+    if (prevProps.message.previous === this.props.message.previous &&
+      prevProps.message.list && this.props.message.list.length > prevProps.message.list.length) {
       this.setState({ event: 'posted' })
     }
 
@@ -231,15 +233,7 @@ class RoomMessageList extends Component {
   }
 
   markdown (content) {
-    return marked(content, {
-      sanitize: true,
-      gfm: true,
-      breaks: true
-      // TODO: コードハイライト
-      // highlight: function (code, lang) {
-      //   return lang ? highlight.highlight(lang, code).value : highlight.highlightAuto(code).value
-      // }
-    })
+    return markdownIt({ breaks: true, linkify: true }).use(markdownItEmoji).render(content)
   }
 
   showMessageList () {
@@ -330,7 +324,7 @@ class RoomMessageList extends Component {
             </p>
           </div>
         </div>
-        <nav className="level message-action">
+        <nav className="level is-mobile message-action">
           <a className="icon is-medium" onClick={e => this.clickAction(e, message)}>
             <i className="far fa-caret-square-down fa-lg"></i>
           </a>
@@ -356,7 +350,7 @@ class RoomMessageList extends Component {
               </textarea>
             </div>
           </div>
-          <nav className="level">
+          <nav className="level is-mobile">
             <div className="level-left">
               <div className="level-item">
                 <a className="button" onClick={e => this.cancelEditMessage(e)}>キャンセル</a>
@@ -499,7 +493,7 @@ class RoomMessageList extends Component {
             <div className="content message-container">
               {deleteMessage}
             </div>
-            <nav className="level">
+            <nav className="level is-mobile">
               <div className="level-left">
               </div>
               <div className="level-right">
