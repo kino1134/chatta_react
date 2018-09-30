@@ -1,0 +1,35 @@
+#emoji-picker {
+  .panel-heading, .panel-block {
+    border: none;
+  }
+  .panel-block {
+    display: block;
+    height: 265px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  .emoji {
+    display: inline-block;
+    font-size: 20px;
+    text-align: center;
+    height: 32px;
+    width: 36px;
+    &:hover {
+      background-color: #ffe1ae;
+    }
+  }
+
+  .picker-footer {
+    padding: .25em .5em;
+  }
+
+  .preview-emoji {
+    font-size: 28px;
+    margin-right: 5px;
+  }
+  .preview-title {
+    font-size: 16px;
+    vertical-align: super;
+  }
+}
