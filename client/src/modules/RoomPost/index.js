@@ -206,7 +206,7 @@ class RoomPost extends Component {
                 onInput={(e) => this.updateTyping(e)} onKeyDown={(e) => this.uploadEnter(e)}>
               </textarea>
             </div>
-            <nav className="level">
+            <nav className="level is-mobile">
               <div className="level-left">
                 <div className="level-item">
                   <a className="button" onClick={e => this.clearSelectFile(e) }>キャンセル</a>

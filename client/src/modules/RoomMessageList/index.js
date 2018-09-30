@@ -324,7 +324,7 @@ class RoomMessageList extends Component {
             </p>
           </div>
         </div>
-        <nav className="level message-action">
+        <nav className="level is-mobile message-action">
           <a className="icon is-medium" onClick={e => this.clickAction(e, message)}>
             <i className="far fa-caret-square-down fa-lg"></i>
           </a>
@@ -350,7 +350,7 @@ class RoomMessageList extends Component {
               </textarea>
             </div>
           </div>
-          <nav className="level">
+          <nav className="level is-mobile">
             <div className="level-left">
               <div className="level-item">
                 <a className="button" onClick={e => this.cancelEditMessage(e)}>キャンセル</a>
@@ -493,7 +493,7 @@ class RoomMessageList extends Component {
             <div className="content message-container">
               {deleteMessage}
             </div>
-            <nav className="level">
+            <nav className="level is-mobile">
               <div className="level-left">
               </div>
               <div className="level-right">
