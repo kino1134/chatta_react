@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom'
 import Modal from 'react-modal'
 import moment from 'moment'
 import 'moment/locale/ja'
-import marked from 'marked'
+import markdownIt from 'markdown-it'
+import markdownItEmoji from 'markdown-it-emoji'
 import Push from 'push.js'
 import './index.css'
 
@@ -204,9 +205,10 @@ class RoomMessageList extends Component {
       container.scrollTop  = roomMessagePosition[0].position
     }
 
-    // メッセージが追加されている場合、再度イベントの発行を行う
+    // 後続メッセージが追加されている場合、再度イベントの発行を行う
     // ソケットイベントの中でstateの変更を行うと、thisがいなくなっている場合がある
-    if (prevProps.message.list && this.props.message.list.length > prevProps.message.list.length) {
+    if (prevProps.message.previous === this.props.message.previous &&
+      prevProps.message.list && this.props.message.list.length > prevProps.message.list.length) {
       this.setState({ event: 'posted' })
     }
 
