@@ -3,13 +3,12 @@ import ReactDOM from 'react-dom'
 import Modal from 'react-modal'
 import moment from 'moment'
 import 'moment/locale/ja'
-import markdownIt from 'markdown-it'
-import markdownItEmoji from 'markdown-it-emoji'
 import Push from 'push.js'
 import './index.css'
 
 import RoomLoading from '../RoomLoading'
 import RoomMessage from '../RoomMessage'
+import RoomMessageDeleteModal from '../RoomMessageDeleteModal'
 
 import socket from '../../services/socket'
 import api from '../../services/api'
@@ -27,22 +26,6 @@ const customStyles = {
     backgroundColor: 'transparent'
   }
 }
-const deleteConfirmStyles = {
-  content: {
-    maxWidth: 'calc(100% - 32px)',
-    maxHeight: '640px',
-    top: 'auto',
-    left: 'auto',
-    right: 'auto',
-    bottom: 'auto',
-  },
-  overlay: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,.4)'
-  }
-}
 
 // プロフィール変更画面から戻ってきたときにも位置を復元したい
 // TODO: 場所がかなり汚い・・
@@ -57,6 +40,8 @@ class RoomMessageList extends Component {
 
     this.changeHandler = this.changeHandler.bind(this)
     this.clickAction = this.clickAction.bind(this)
+    this.cancelDeleteMessage = this.cancelDeleteMessage.bind(this)
+    this.deleteMessage = this.deleteMessage.bind(this)
 
     this.state = {
       selectMessage: null,
@@ -234,10 +219,6 @@ class RoomMessageList extends Component {
     this.setState({ event: null })
   }
 
-  markdown (content) {
-    return markdownIt({ breaks: true, linkify: true }).use(markdownItEmoji).render(content)
-  }
-
   showMessageList () {
     const result = []
 
@@ -408,28 +389,6 @@ class RoomMessageList extends Component {
       )
     }
 
-    let deleteMessage = null
-    if (this.state.deleteMessage) {
-      deleteMessage = (
-        <article className="media">
-          <div className="media-content">
-            <div className="content">
-              <p className="message-info">
-                <strong>{this.state.deleteMessage.user.displayName}</strong>
-                <small> | </small>
-                <small>{moment(this.state.deleteMessage.createdAt).format('llll')}</small>
-              </p>
-              <p>
-                <span className="message-content"
-                  dangerouslySetInnerHTML={{ __html: this.markdown(this.state.deleteMessage.content) }}>
-                </span>
-              </p>
-            </div>
-          </div>
-        </article>
-      )
-    }
-
     return (
       <div id="room-message-list" onScroll={e => this.scrollUp(e)}>
         {head}
@@ -443,32 +402,8 @@ class RoomMessageList extends Component {
             </ul>
           </div>
         </Modal>
-        <Modal contentLabel="メッセージの削除" style={deleteConfirmStyles}
-          isOpen={!!this.state.deleteMessage} onRequestClose={e => this.cancelDeleteMessage(e) }>
-          <div className="content delete-message-confirm">
-            <h3 className="header">
-              メッセージの削除
-              <a onClick={e => this.cancelDeleteMessage(e) }><i className="fas fa-times"></i></a>
-            </h3>
-            <p>このメッセージを削除しますか？この操作は元に戻すことができません</p>
-            <div className="content message-container">
-              {deleteMessage}
-            </div>
-            <nav className="level is-mobile">
-              <div className="level-left">
-              </div>
-              <div className="level-right">
-                <div className="level-item">
-                  <a className="button" onClick={e => this.cancelDeleteMessage(e) }>キャンセル</a>
-                </div>
-                <div className="level-item">
-                  <a className={`button is-danger ${this.state.editing ? 'is-loading': ''}`}
-                    onClick={e => this.deleteMessage(e)}>削除</a>
-                </div>
-              </div>
-            </nav>
-          </div>
-        </Modal>
+        <RoomMessageDeleteModal deleteMessage={this.state.deleteMessage} editing={this.state.editing}
+          onDeleteMessage={this.deleteMessage} onCancelDeleteMessage={this.cancelDeleteMessage} />
       </div>
     )
   }
