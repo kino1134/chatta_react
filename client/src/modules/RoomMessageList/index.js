@@ -8,6 +8,7 @@ import './index.css'
 import RoomLoading from '../RoomLoading'
 import RoomMessage from '../RoomMessage'
 import RoomMessageMenu from '../RoomMessageMenu'
+import RoomMessageEdit from '../RoomMessageEdit'
 import RoomMessageDeleteModal from '../RoomMessageDeleteModal'
 
 import socket from '../../services/socket'
@@ -24,45 +25,23 @@ class RoomMessageList extends Component {
 
     this.reading = false
 
-    this.changeHandler = this.changeHandler.bind(this)
     this.clickAction = this.clickAction.bind(this)
     this.cancelDeleteMessage = this.cancelDeleteMessage.bind(this)
     this.deleteMessage = this.deleteMessage.bind(this)
     this.cancelSelectMessage = this.cancelSelectMessage.bind(this)
     this.selectEditMessage = this.selectEditMessage.bind(this)
     this.selectDeleteMessage = this.selectDeleteMessage.bind(this)
+    this.cancelEditMessage = this.cancelEditMessage.bind(this)
+    this.editMessage = this.editMessage.bind(this)
 
     this.state = {
       menuPosition: {},
       selectMessage: null,
       editMessage: null,
       deleteMessage: null,
-      inputText: null,
       editing: false,
       loading: true,
       event: null
-    }
-  }
-
-  changeHandler (e) {
-    this.setState({ [e.target.name]: e.target.value })
-  }
-
-  editEnter (e) {
-    if (e.key === 'Enter' && e.ctrlKey) {
-      e.preventDefault()
-      this.editMessage(e)
-    }
-  }
-
-  rows () {
-    const num = this.state.inputText.split('\n').length
-    if (num < 1) {
-      return 1
-    } else if (num >= 5) {
-      return 5
-    } else {
-      return num
     }
   }
 
@@ -228,12 +207,16 @@ class RoomMessageList extends Component {
     return result
   }
 
-  showHelloMessage () {
-    return (
-      <article key="Hello" className="hello">
-        会話を開始しました
-      </article>
-    )
+  showListHead () {
+    if (this.props.message.previous || this.state.loading) {
+      return (
+        <RoomLoading />
+      )
+    } else {
+      return (
+        <article key="Hello" className="hello">会話を開始しました</article>
+      )
+    }
   }
 
   showUnreadLine(messageId) {
@@ -257,44 +240,14 @@ class RoomMessageList extends Component {
 
   showMessage(message) {
     if (this.state.editMessage && message.id === this.state.editMessage.id) {
-      return this.showEditMessageArea(message)
+      return (
+        <RoomMessageEdit key={this.state.editMessage.id} editMessage={this.state.editMessage} editing={this.state.editing}
+          onCancelEditMessage={this.cancelEditMessage} onEditMessage={this.editMessage} />
+      )
     }
 
     return (
       <RoomMessage key={message.id} message={message} onShowMenu={this.clickAction} />
-    )
-  }
-
-  // TODO: 入力中表示ができてない
-  showEditMessageArea (message) {
-    return (
-      <article key={message.id} className="media" style={{backgroundColor: '#fff5df'}}>
-        <figure className="media-left">
-          <p className="image avator">
-            <img src={message.user.photo} alt={message.user.displayName} />
-          </p>
-        </figure>
-        <div className="media-content">
-          <div className="field">
-            <div className="control">
-              <textarea name="inputText" placeholder="メッセージを編集" className="textarea" autoFocus value={this.state.inputText}
-                onChange={this.changeHandler} rows={this.rows()} onKeyDown={(e) => this.editEnter(e)} >
-              </textarea>
-            </div>
-          </div>
-          <nav className="level is-mobile">
-            <div className="level-left">
-              <div className="level-item">
-                <a className="button" onClick={e => this.cancelEditMessage(e)}>キャンセル</a>
-              </div>
-              <div className="level-item">
-                <a className={`button is-success ${this.state.editing ? 'is-loading': ''}`}
-                  onClick={e => this.editMessage(e)}>変更</a>
-              </div>
-            </div>
-          </nav>
-        </div>
-      </article>
     )
   }
 
@@ -311,20 +264,20 @@ class RoomMessageList extends Component {
   }
 
   selectEditMessage (e) {
-    this.setState({ selectMessage: null, editMessage: this.state.selectMessage, inputText: this.state.selectMessage.content })
+    this.setState({ selectMessage: null, editMessage: this.state.selectMessage })
   }
 
   cancelEditMessage (e) {
-    this.setState({ editMessage: null, inputText: null })
+    this.setState({ editMessage: null })
   }
 
-  editMessage (e) {
+  editMessage (e, text) {
     if (this.state.editing) return
     this.setState({ editing: true })
 
     // メッセージが全て消されている場合、削除に移行する
-    const promise = this.state.inputText ?
-      api.put('/api/messages/' + this.state.editMessage.id, { content: this.state.inputText }) :
+    const promise = text ?
+      api.put('/api/messages/' + this.state.editMessage.id, { content: text }) :
       api.delete('/api/messages/' + this.state.editMessage.id)
 
     promise.then(res => {
@@ -359,16 +312,9 @@ class RoomMessageList extends Component {
   }
 
   render () {
-    let head = null
-    if (this.props.message.previous || this.state.loading) {
-      head = (<RoomLoading />)
-    } else {
-      head = this.showHelloMessage()
-    }
-
     return (
       <div id="room-message-list" onScroll={e => this.scrollUp(e)}>
-        {head}
+        {this.showListHead()}
         {this.showMessageList()}
         <RoomMessageMenu selectMessage={this.state.selectMessage} loginUser={this.props.loginUser}
           position={this.state.menuPosition} onCancelSelectMessage={this.cancelSelectMessage}
