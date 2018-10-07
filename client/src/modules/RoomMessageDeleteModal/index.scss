@@ -1,0 +1,15 @@
+.delete-message-confirm {
+  position: relative;
+
+  .header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .message-container {
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: .5rem;
+    padding: 8px;
+  }
+}

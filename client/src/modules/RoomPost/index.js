@@ -1,32 +1,15 @@
 import React, { Component } from 'react'
-import Modal from 'react-modal'
 import './index.css'
 
+import RoomPostTextarea from '../RoomPostTextarea'
 import EmojiPicker from '../EmojiPicker'
+import RoomPostUploadModal from '../RoomPostUploadModal'
 
 import apiHandler from '../../helpers/apiHandler'
+import withFocus from '../../helpers/withFocus'
 
 import api from '../../services/api'
 import socket from '../../services/socket'
-
-Modal.setAppElement('#root')
-const fileUploadStyles = {
-  content: {
-    minWidth: '70%',
-    maxWidth: 'calc(100% - 32px)',
-    maxHeight: '640px',
-    top: 'auto',
-    left: 'auto',
-    right: 'auto',
-    bottom: 'auto',
-  },
-  overlay: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,.4)'
-  }
-}
 
 class RoomPost extends Component {
 
@@ -34,18 +17,17 @@ class RoomPost extends Component {
     super(props)
 
     this.changeHandler = this.changeHandler.bind(this)
+    this.clearSelectFile = this.clearSelectFile.bind(this)
+    this.posting = this.posting.bind(this)
 
     this.typing = false
     this.lastTypingTime = null
     this.fileInput = React.createRef()
 
     this.state = {
-      focusTextarea: false,
-      openEmojiPicker: null,
+      emojiPickerPosition: null,
       text: "",
       selectFile: "",
-      uploadText: "",
-      uploading: false,
       typeUser: ""
     }
 
@@ -62,25 +44,6 @@ class RoomPost extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  updateTyping (e) {
-    const tick = 400
-    this.lastTypingTime = (new Date()).getTime()
-
-    if (!this.typing) {
-      this.typing = true
-      socket.emit('typing', this.props.loginUser.displayName)
-    }
-
-    setTimeout(() => {
-      const time = (new Date()).getTime()
-      const diff = time - this.lastTypingTime
-      if (diff >= tick && this.typing) {
-        socket.emit('stop_typing', this.props.loginUser.displayName)
-        this.typing = false
-      }
-    }, tick)
-  }
-
   showTyping () {
     if (!this.state.typeUser) return null
     return (
@@ -88,17 +51,6 @@ class RoomPost extends Component {
         <small>{this.state.typeUser}さんが入力しています..</small>
       </div>
     )
-  }
-
-  rows (text) {
-    const num = text.split('\n').length
-    if (num < 1) {
-      return 1
-    } else if (num >= 5) {
-      return 5
-    } else {
-      return num
-    }
   }
 
   noInput (text) {
@@ -124,80 +76,63 @@ class RoomPost extends Component {
       .then(() => this.props.endExecute() )
   }
 
-  postEnter (e) {
-    if (e.key === 'Enter' && e.ctrlKey) {
-      e.preventDefault()
-      this.posting(e)
-    }
-  }
-
-  hasFocusTextarea () {
-    return this.state.focusTextarea ? 'has-focus': ''
-  }
-  switchFocusTextarea (e, value) {
-    this.setState({ focusTextarea: value })
-  }
-
   selectFile (e) {
     this.fileInput.current.click()
-    this.setState({ uploadText: this.state.text })
   }
 
-  clearSelectFile (e) {
-    if (this.state.uploading) return
-    this.setState({ selectFile: '' })
-  }
-
-  fileUpload (e) {
-    if (this.state.uploading) return
-
-    this.setState({ uploading: true })
-    const body = new FormData()
-    body.append('attachFile', this.fileInput.current.files[0])
-    body.append('content', this.state.uploadText)
-    api.postData({ url: '/api/messages/upload', body }).catch(err => { console.log(err) })
-      .then(() => this.setState({ text: '', selectFile: '', uploading: false }) )
-  }
-
-  uploadEnter (e) {
-    if (e.key === 'Enter' && e.ctrlKey) {
-      e.preventDefault()
-      this.fileUpload(e)
+  clearSelectFile (e, isAll) {
+    if (isAll) {
+      this.setState({ selectFile: '', text: '' })
+    } else {
+      this.setState({ selectFile: '' })
     }
   }
 
   showEmojiPicker (e) {
     const main = document.getElementById('main')
-    const position = [
-      main.clientWidth - e.clientX - 23,
-      main.clientHeight - e.clientY
-    ]
-    this.setState({ openEmojiPicker: position })
+    const position = {
+      bottom: main.clientWidth - e.clientX - 23,
+      right: main.clientHeight - e.clientY
+    }
+    this.setState({ emojiPickerPosition: position })
+  }
+
+  insertEmoji (emoji) {
+    const pos = document.getElementById('room-post-textarea').selectionEnd
+    const before = this.state.text.substr(0, pos)
+    const after = this.state.text.substr(pos)
+    this.setState({ text: `${before} ${emoji} ${after}` })
   }
 
   render () {
     return (
       <footer id="room-post">
         {this.showTyping()}
-        <div className={`field has-addons ${this.hasFocusTextarea()}`}>
+        <div className={`room-post-area field has-addons ${this.props.getFocusClass()}`}>
           <p className="control">
             <input name="selectFile" type="file" className="file-input" ref={this.fileInput}
               value={this.state.selectFile} onChange={this.changeHandler}></input>
             <button className="button" onClick={e => this.selectFile(e)}>
               <i className="fas fa-plus"></i>
             </button>
+            <RoomPostUploadModal uploadText={this.state.text} fileInput={this.fileInput} selectFile={this.state.selectFile}
+              loginUser={this.props.loginUser} clearSelectFile={this.clearSelectFile}
+            />
           </p>
           <p className="control main">
-            <textarea name="text" className="textarea" placeholder="メッセージ" autoFocus
-              rows={this.rows(this.state.text)} value={this.state.text} onChange={this.changeHandler}
-              onInput={(e) => this.updateTyping(e)} onKeyDown={(e) => this.postEnter(e)}
-              onFocus={e => this.switchFocusTextarea(e, true)} onBlur={e => this.switchFocusTextarea(e, false)}>
-            </textarea>
+            <RoomPostTextarea name="text" id="room-post-textarea" placeholder="メッセージ"
+              text={this.state.text} loginUser={this.props.loginUser} onEnter={this.posting}
+              onChange={this.changeHandler} onFocus={this.props.setFocus} onBlur={this.props.setBlur}
+            />
           </p>
           <p className="control">
             <button className={`button`} onClick={e => this.showEmojiPicker(e) }>
               <i className="far fa-smile fa-lg"></i>
             </button>
+            <EmojiPicker position={this.state.emojiPickerPosition}
+              onRequestClose={e => this.setState({ emojiPickerPosition: null }) }
+              selectEmoji={k => this.insertEmoji(k) }
+            />
           </p>
           <p className="control">
             <button className={`button is-success ${this.props.executing ? 'is-loading' : ''}`}
@@ -206,43 +141,9 @@ class RoomPost extends Component {
             </button>
           </p>
         </div>
-        <EmojiPicker position={this.state.openEmojiPicker} onRequestClose={e => this.setState({ openEmojiPicker: null }) }
-         selectEmoji={k => this.setState({ text: `${this.state.text} ${k} ` }) } />
-        <Modal contentLabel="ファイルアップロード" style={fileUploadStyles}
-          isOpen={!!this.state.selectFile} onRequestClose={e => this.clearSelectFile(e) }>
-          <div className="content delete-message-confirm">
-            <h3 className="header">
-              ファイルアップロード
-              <a onClick={e => this.clearSelectFile(e) }><i className="fas fa-times"></i></a>
-            </h3>
-            <p>このファイルをアップロードしますか？</p>
-            <div className="content message-container">
-              {this.state.selectFile.replace('C:\\fakepath\\', '')}
-            </div>
-            <div className="field">
-              <textarea name="uploadText" className="textarea" placeholder="メッセージの追加" autoFocus
-                rows={this.rows(this.state.uploadText)} value={this.state.uploadText} onChange={this.changeHandler}
-                onInput={(e) => this.updateTyping(e)} onKeyDown={(e) => this.uploadEnter(e)}>
-              </textarea>
-            </div>
-            <nav className="level is-mobile">
-              <div className="level-left">
-                <div className="level-item">
-                  <a className="button" onClick={e => this.clearSelectFile(e) }>キャンセル</a>
-                </div>
-                <div className="level-item">
-                  <a className={`button is-success ${this.state.uploading ? 'is-loading' : ''}`}
-                    onClick={e => this.fileUpload(e)}>
-                    アップロード
-                  </a>
-                </div>
-              </div>
-            </nav>
-          </div>
-        </Modal>
       </footer>
     )
   }
 }
 
-export default apiHandler(RoomPost)
+export default withFocus({ stateName: 'focusTextarea', className: 'has-focus' })(apiHandler(RoomPost))
