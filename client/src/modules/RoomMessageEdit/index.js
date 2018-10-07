@@ -18,7 +18,7 @@ class RoomMessageEdit extends Component {
   editEnter (e) {
     if (e.key === 'Enter' && e.ctrlKey) {
       e.preventDefault()
-      this.props.onEditMessage(e)
+      this.props.onEditMessage(e, this.state.inputText)
     }
   }
 
