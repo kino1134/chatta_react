@@ -35,6 +35,13 @@ class RoomMessageEdit extends Component {
     this.setState({ emojiPickerPosition: position })
   }
 
+  insertEmoji (emoji) {
+    const pos = document.getElementById('room-message-edit-textarea').selectionEnd
+    const before = this.state.inputText.substr(0, pos)
+    const after = this.state.inputText.substr(pos)
+    this.setState({ inputText: `${before} ${emoji} ${after}` })
+  }
+
   render () {
     const message = this.props.editMessage
 
@@ -48,9 +55,9 @@ class RoomMessageEdit extends Component {
         <div className="media-content">
           <div className={`room-post-area field has-addons ${this.props.getFocusClass()}`}>
             <p className="control main">
-              <RoomPostTextarea name="inputText" placeholder="メッセージを編集" text={this.state.inputText}
-                loginUser={this.props.loginUser} onChange={this.changeHandler} onEnter={this.enter}
-                onFocus={this.props.setFocus} onBlur={this.props.setBlur}
+              <RoomPostTextarea name="inputText" id="room-message-edit-textarea" placeholder="メッセージを編集"
+                text={this.state.inputText} loginUser={this.props.loginUser} onChange={this.changeHandler}
+                onEnter={this.enter} onFocus={this.props.setFocus} onBlur={this.props.setBlur}
               />
             </p>
             <p className="control">
@@ -59,7 +66,7 @@ class RoomMessageEdit extends Component {
               </button>
               <EmojiPicker position={this.state.emojiPickerPosition}
                 onRequestClose={e => this.setState({ emojiPickerPosition: null }) }
-                selectEmoji={k => this.setState({ inputText: `${this.state.inputText} ${k} ` }) }
+                selectEmoji={k => this.insertEmoji(k) }
               />
             </p>
           </div>

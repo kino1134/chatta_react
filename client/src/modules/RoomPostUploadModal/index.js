@@ -75,6 +75,13 @@ class RoomPostUploadModal extends Component {
     this.setState({ emojiPickerPosition: position })
   }
 
+  insertEmoji (emoji) {
+    const pos = document.getElementById('room-post-upload-modal-textarea').selectionEnd
+    const before = this.state.uploadText.substr(0, pos)
+    const after = this.state.uploadText.substr(pos)
+    this.setState({ uploadText: `${before} ${emoji} ${after}` })
+  }
+
   render () {
     if (!this.props.selectFile) return null
 
@@ -93,8 +100,9 @@ class RoomPostUploadModal extends Component {
           </div>
           <div className={`room-post-area field has-addons ${this.props.getFocusClass()}`}>
             <div className="control main">
-              <RoomPostTextarea name="uploadText" placeholder="メッセージの追加" text={this.state.uploadText}
-                loginUser={this.props.loginUser} onChange={this.changeHandler} onEnter={this.fileUpload}
+              <RoomPostTextarea name="uploadText" id="room-post-upload-modal-textarea" placeholder="メッセージの追加"
+                text={this.state.uploadText} loginUser={this.props.loginUser}
+                onChange={this.changeHandler} onEnter={this.fileUpload}
                 onFocus={this.props.setFocus} onBlur={this.props.setBlur}
               />
             </div>
@@ -104,7 +112,7 @@ class RoomPostUploadModal extends Component {
               </button>
               <EmojiPicker position={this.state.emojiPickerPosition}
                 onRequestClose={e => this.setState({ emojiPickerPosition: null }) }
-                selectEmoji={k => this.setState({ uploadText: `${this.state.uploadText} ${k} ` }) }
+                selectEmoji={k => this.insertEmoji(k) }
               />
             </p>
           </div>

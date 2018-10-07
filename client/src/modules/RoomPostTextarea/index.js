@@ -50,7 +50,7 @@ class RoomPostTextarea extends Component {
 
   render () {
     return (
-      <textarea name={this.props.name} className="textarea" placeholder={this.props.placeholder} autoFocus
+      <textarea name={this.props.name} id={this.props.id} className="textarea" placeholder={this.props.placeholder} autoFocus
         rows={this.rows(this.props.text)} value={this.props.text} onChange={this.props.onChange}
         onInput={(e) => this.updateTyping(e)} onKeyDown={(e) => this.postEnter(e)}
         onFocus={this.props.onFocus} onBlur={this.props.onBlur}>

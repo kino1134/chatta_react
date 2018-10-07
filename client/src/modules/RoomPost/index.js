@@ -97,6 +97,13 @@ class RoomPost extends Component {
     this.setState({ emojiPickerPosition: position })
   }
 
+  insertEmoji (emoji) {
+    const pos = document.getElementById('room-post-textarea').selectionEnd
+    const before = this.state.text.substr(0, pos)
+    const after = this.state.text.substr(pos)
+    this.setState({ text: `${before} ${emoji} ${after}` })
+  }
+
   render () {
     return (
       <footer id="room-post">
@@ -113,8 +120,9 @@ class RoomPost extends Component {
             />
           </p>
           <p className="control main">
-            <RoomPostTextarea name="text" placeholder="メッセージ" text={this.state.text} loginUser={this.props.loginUser}
-              onChange={this.changeHandler} onEnter={this.posting} onFocus={this.props.setFocus} onBlur={this.props.setBlur}
+            <RoomPostTextarea name="text" id="room-post-textarea" placeholder="メッセージ"
+              text={this.state.text} loginUser={this.props.loginUser} onEnter={this.posting}
+              onChange={this.changeHandler} onFocus={this.props.setFocus} onBlur={this.props.setBlur}
             />
           </p>
           <p className="control">
@@ -123,7 +131,7 @@ class RoomPost extends Component {
             </button>
             <EmojiPicker position={this.state.emojiPickerPosition}
               onRequestClose={e => this.setState({ emojiPickerPosition: null }) }
-              selectEmoji={k => this.setState({ text: `${this.state.text} ${k} ` }) }
+              selectEmoji={k => this.insertEmoji(k) }
             />
           </p>
           <p className="control">
