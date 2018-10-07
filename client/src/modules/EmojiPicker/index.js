@@ -25,12 +25,17 @@ class EmojiPicker extends Component {
     super(props)
 
     this.changeHandler = this.changeHandler.bind(this)
+    this.initSearch = this.initSearch.bind(this)
 
     this.state = {
       searchText: '',
       title: '',
       emoji: '　'
     }
+  }
+
+  initSearch () {
+    this.setState({ searchText: '' })
   }
 
   changeHandler (e) {
@@ -63,12 +68,13 @@ class EmojiPicker extends Component {
     ))
 
     return (
-      <Modal {...rest} isOpen={!!position} style={style}>
+      <Modal {...rest} isOpen={!!position} style={style} onAfterOpen={this.initSearch}>
         <div id="emoji-picker" className="panel">
           <p className="panel-heading">ヘッダ</p>
           <div className="panel-block">
             <p className="control has-icons-left">
-              <input name="searchText" type="text" className="input" placeholder="検索" onChange={this.changeHandler} />
+              <input name="searchText" type="text" className="input" placeholder="検索" autoFocus
+                onChange={this.changeHandler} />
               <span className="icon is-left">
                 <i className="fas fa-search"></i>
               </span>
