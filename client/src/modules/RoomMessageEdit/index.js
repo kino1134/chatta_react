@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 
+import RoomPostTextarea from '../RoomPostTextarea'
+
 class RoomMessageEdit extends Component {
   constructor (props) {
     super(props)
 
     this.changeHandler = this.changeHandler.bind(this)
+    this.enter = this.enter.bind(this)
 
     this.state = {
       inputText: this.props.editMessage.content
@@ -15,22 +18,8 @@ class RoomMessageEdit extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  editEnter (e) {
-    if (e.key === 'Enter' && e.ctrlKey) {
-      e.preventDefault()
-      this.props.onEditMessage(e, this.state.inputText)
-    }
-  }
-
-  rows () {
-    const num = this.state.inputText.split('\n').length
-    if (num < 1) {
-      return 1
-    } else if (num >= 5) {
-      return 5
-    } else {
-      return num
-    }
+  enter (e) {
+    this.props.onEditMessage(e, this.state.inputText)
   }
 
   render () {
@@ -47,10 +36,9 @@ class RoomMessageEdit extends Component {
         <div className="media-content">
           <div className="field">
             <div className="control">
-              <textarea name="inputText" placeholder="メッセージを編集" className="textarea" autoFocus
-                value={this.state.inputText} rows={this.rows()}
-                onChange={this.changeHandler} onKeyDown={(e) => this.editEnter(e)} >
-              </textarea>
+              <RoomPostTextarea name="inputText" placeholder="メッセージを編集" text={this.state.inputText}
+                loginUser={this.props.loginUser} onChange={this.changeHandler} onEnter={this.enter}
+              />
             </div>
           </div>
           <nav className="level is-mobile">

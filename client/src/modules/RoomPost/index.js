@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './index.css'
 
+import RoomPostTextarea from '../RoomPostTextarea'
 import EmojiPicker from '../EmojiPicker'
 import RoomPostUploadModal from '../RoomPostUploadModal'
 
@@ -16,7 +17,9 @@ class RoomPost extends Component {
 
     this.changeHandler = this.changeHandler.bind(this)
     this.clearSelectFile = this.clearSelectFile.bind(this)
-    this.updateTyping = this.updateTyping.bind(this)
+    this.posting = this.posting.bind(this)
+    this.focusTextarea = this.focusTextarea.bind(this)
+    this.blurTextarea = this.blurTextarea.bind(this)
 
     this.typing = false
     this.lastTypingTime = null
@@ -43,25 +46,6 @@ class RoomPost extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  updateTyping (e) {
-    const tick = 400
-    this.lastTypingTime = (new Date()).getTime()
-
-    if (!this.typing) {
-      this.typing = true
-      socket.emit('typing', this.props.loginUser.displayName)
-    }
-
-    setTimeout(() => {
-      const time = (new Date()).getTime()
-      const diff = time - this.lastTypingTime
-      if (diff >= tick && this.typing) {
-        socket.emit('stop_typing', this.props.loginUser.displayName)
-        this.typing = false
-      }
-    }, tick)
-  }
-
   showTyping () {
     if (!this.state.typeUser) return null
     return (
@@ -69,17 +53,6 @@ class RoomPost extends Component {
         <small>{this.state.typeUser}さんが入力しています..</small>
       </div>
     )
-  }
-
-  rows (text) {
-    const num = text.split('\n').length
-    if (num < 1) {
-      return 1
-    } else if (num >= 5) {
-      return 5
-    } else {
-      return num
-    }
   }
 
   noInput (text) {
@@ -105,18 +78,14 @@ class RoomPost extends Component {
       .then(() => this.props.endExecute() )
   }
 
-  postEnter (e) {
-    if (e.key === 'Enter' && e.ctrlKey) {
-      e.preventDefault()
-      this.posting(e)
-    }
-  }
-
   hasFocusTextarea () {
     return this.state.focusTextarea ? 'has-focus': ''
   }
-  switchFocusTextarea (e, value) {
-    this.setState({ focusTextarea: value })
+  focusTextarea (e) {
+    this.setState({ focusTextarea: true })
+  }
+  blurTextarea (e) {
+    this.setState({ focusTextarea: false })
   }
 
   selectFile (e) {
@@ -152,15 +121,13 @@ class RoomPost extends Component {
               <i className="fas fa-plus"></i>
             </button>
             <RoomPostUploadModal uploadText={this.state.text} fileInput={this.fileInput} selectFile={this.state.selectFile}
-              rows={this.rows} updateTyping={this.updateTyping} clearSelectFile={this.clearSelectFile}
+              loginUser={this.props.loginUser} clearSelectFile={this.clearSelectFile}
             />
           </p>
           <p className="control main">
-            <textarea name="text" className="textarea" placeholder="メッセージ" autoFocus
-              rows={this.rows(this.state.text)} value={this.state.text} onChange={this.changeHandler}
-              onInput={(e) => this.updateTyping(e)} onKeyDown={(e) => this.postEnter(e)}
-              onFocus={e => this.switchFocusTextarea(e, true)} onBlur={e => this.switchFocusTextarea(e, false)}>
-            </textarea>
+            <RoomPostTextarea name="text" placeholder="メッセージ" text={this.state.text} loginUser={this.props.loginUser}
+              onChange={this.changeHandler} onEnter={this.posting} onFocus={this.focusTextarea} onBlur={this.blurTextarea}
+            />
           </p>
           <p className="control">
             <button className={`button`} onClick={e => this.showEmojiPicker(e) }>

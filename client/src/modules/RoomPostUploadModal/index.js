@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Modal from 'react-modal'
 
+import RoomPostTextarea from '../RoomPostTextarea'
+
 import api from '../../services/api'
 
 Modal.setAppElement('#root')
@@ -27,6 +29,7 @@ class RoomPostUploadModal extends Component {
     super(props)
 
     this.changeHandler = this.changeHandler.bind(this)
+    this.fileUpload = this.fileUpload.bind(this)
 
     this.state = {
       uploading: false,
@@ -75,10 +78,9 @@ class RoomPostUploadModal extends Component {
             {this.props.selectFile.replace('C:\\fakepath\\', '')}
           </div>
           <div className="field">
-            <textarea name="uploadText" className="textarea" placeholder="メッセージの追加" autoFocus
-              rows={this.props.rows(this.state.uploadText)} value={this.state.uploadText} onChange={this.changeHandler}
-              onInput={(e) => this.props.updateTyping(e)} onKeyDown={(e) => this.uploadEnter(e)}>
-            </textarea>
+            <RoomPostTextarea name="uploadText" placeholder="メッセージの追加" text={this.state.uploadText}
+              loginUser={this.props.loginUser} onChange={this.changeHandler} onEnter={this.fileUpload}
+            />
           </div>
           <nav className="level is-mobile">
             <div className="level-left">

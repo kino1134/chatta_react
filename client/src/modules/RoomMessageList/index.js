@@ -293,7 +293,7 @@ class RoomMessageList extends Component {
     if (this.state.editMessage && message.id === this.state.editMessage.id) {
       return (
         <RoomMessageEdit key={this.state.editMessage.id} editMessage={this.state.editMessage} editing={this.state.editing}
-          onCancelEditMessage={this.cancelEditMessage} onEditMessage={this.editMessage} />
+          onCancelEditMessage={this.cancelEditMessage} onEditMessage={this.editMessage} loginUser={this.props.loginUser} />
       )
     }
 
