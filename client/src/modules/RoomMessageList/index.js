@@ -35,7 +35,7 @@ class RoomMessageList extends Component {
     this.editMessage = this.editMessage.bind(this)
 
     this.state = {
-      menuPosition: {},
+      menuPosition: null,
       selectMessage: null,
       editMessage: null,
       deleteMessage: null,

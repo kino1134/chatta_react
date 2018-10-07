@@ -60,6 +60,8 @@ class RoomPostUploadModal extends Component {
   }
 
   render () {
+    if (!this.props.selectFile) return null
+
     return (
       <Modal contentLabel="ファイルアップロード" style={fileUploadStyles} isOpen={!!this.props.selectFile}
         onAfterOpen={e => this.setState({ uploadText: this.props.uploadText })} onRequestClose={e => this.props.clearSelectFile(e) }>

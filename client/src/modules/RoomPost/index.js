@@ -24,7 +24,7 @@ class RoomPost extends Component {
 
     this.state = {
       focusTextarea: false,
-      openEmojiPicker: null,
+      emojiPickerPosition: null,
       text: "",
       selectFile: "",
       typeUser: ""
@@ -133,11 +133,11 @@ class RoomPost extends Component {
 
   showEmojiPicker (e) {
     const main = document.getElementById('main')
-    const position = [
-      main.clientWidth - e.clientX - 23,
-      main.clientHeight - e.clientY
-    ]
-    this.setState({ openEmojiPicker: position })
+    const position = {
+      bottom: main.clientWidth - e.clientX - 23,
+      right: main.clientHeight - e.clientY
+    }
+    this.setState({ emojiPickerPosition: position })
   }
 
   render () {
@@ -151,6 +151,9 @@ class RoomPost extends Component {
             <button className="button" onClick={e => this.selectFile(e)}>
               <i className="fas fa-plus"></i>
             </button>
+            <RoomPostUploadModal uploadText={this.state.text} fileInput={this.fileInput} selectFile={this.state.selectFile}
+              rows={this.rows} updateTyping={this.updateTyping} clearSelectFile={this.clearSelectFile}
+            />
           </p>
           <p className="control main">
             <textarea name="text" className="textarea" placeholder="メッセージ" autoFocus
@@ -163,6 +166,10 @@ class RoomPost extends Component {
             <button className={`button`} onClick={e => this.showEmojiPicker(e) }>
               <i className="far fa-smile fa-lg"></i>
             </button>
+            <EmojiPicker position={this.state.emojiPickerPosition}
+              onRequestClose={e => this.setState({ emojiPickerPosition: null }) }
+              selectEmoji={k => this.setState({ text: `${this.state.text} ${k} ` }) }
+            />
           </p>
           <p className="control">
             <button className={`button is-success ${this.props.executing ? 'is-loading' : ''}`}
@@ -171,10 +178,6 @@ class RoomPost extends Component {
             </button>
           </p>
         </div>
-        <EmojiPicker position={this.state.openEmojiPicker} onRequestClose={e => this.setState({ openEmojiPicker: null }) }
-          selectEmoji={k => this.setState({ text: `${this.state.text} ${k} ` }) } />
-        <RoomPostUploadModal uploadText={this.state.text} fileInput={this.fileInput} selectFile={this.state.selectFile}
-          rows={this.rows} updateTyping={this.updateTyping} clearSelectFile={this.clearSelectFile} />
       </footer>
     )
   }

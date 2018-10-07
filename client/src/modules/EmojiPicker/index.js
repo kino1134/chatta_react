@@ -47,10 +47,12 @@ class EmojiPicker extends Component {
 
   render () {
     const { position, selectEmoji, ...rest } = this.props
+    if (!position) return null
+
     const style = {...pickerStyle}
     if (position) {
-      style.content.bottom = position[0]
-      style.content.right = position[1]
+      style.content.bottom = position.bottom
+      style.content.right = position.right
     }
     const list = Object.keys(emojis).filter(k => k.indexOf(this.state.searchText.toLowerCase()) > -1).map((k) => (
       <a key={k} className="emoji" title={k} onClick={e => selectEmoji(`:${k}:`)}
