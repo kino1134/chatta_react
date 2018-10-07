@@ -1,6 +1,5 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import Modal from 'react-modal'
 import moment from 'moment'
 import 'moment/locale/ja'
 import Push from 'push.js'
@@ -8,24 +7,11 @@ import './index.css'
 
 import RoomLoading from '../RoomLoading'
 import RoomMessage from '../RoomMessage'
+import RoomMessageMenu from '../RoomMessageMenu'
 import RoomMessageDeleteModal from '../RoomMessageDeleteModal'
 
 import socket from '../../services/socket'
 import api from '../../services/api'
-
-Modal.setAppElement('#root')
-const customStyles = {
-  content: {
-    top: 'auto',
-    left: 'auto',
-    right: 'auto',
-    bottom: 'auto',
-    padding: '8px 0',
-  },
-  overlay: {
-    backgroundColor: 'transparent'
-  }
-}
 
 // プロフィール変更画面から戻ってきたときにも位置を復元したい
 // TODO: 場所がかなり汚い・・
@@ -42,8 +28,12 @@ class RoomMessageList extends Component {
     this.clickAction = this.clickAction.bind(this)
     this.cancelDeleteMessage = this.cancelDeleteMessage.bind(this)
     this.deleteMessage = this.deleteMessage.bind(this)
+    this.cancelSelectMessage = this.cancelSelectMessage.bind(this)
+    this.selectEditMessage = this.selectEditMessage.bind(this)
+    this.selectDeleteMessage = this.selectDeleteMessage.bind(this)
 
     this.state = {
+      menuPosition: {},
       selectMessage: null,
       editMessage: null,
       deleteMessage: null,
@@ -309,9 +299,11 @@ class RoomMessageList extends Component {
   }
 
   clickAction (e, message) {
-    this.setState({ selectMessage: message })
-    customStyles.content.top = e.clientY - 50
-    customStyles.content.left = e.clientX - 200
+    const position = {
+      top: e.clientY - 50,
+      left: e.clientX - 200
+    }
+    this.setState({ selectMessage: message, menuPosition: position })
   }
 
   cancelSelectMessage (e) {
@@ -374,36 +366,17 @@ class RoomMessageList extends Component {
       head = this.showHelloMessage()
     }
 
-    let editMessageMenu = null
-    if (this.state.selectMessage && this.props.loginUser.userId === this.state.selectMessage.user.userId) {
-      editMessageMenu = (
-        <Fragment>
-          <li><hr/></li>
-          <li><a onClick={e => this.selectEditMessage(e) }>
-            <i className="fas fa-edit" style={{marginRight: '5px'}}></i>メッセージの編集
-          </a></li>
-          <li><a onClick={e => this.selectDeleteMessage(e) } className="has-text-danger">
-            <i className="fas fa-trash-alt" style={{marginRight: '5px'}}></i>削除
-          </a></li>
-        </Fragment>
-      )
-    }
-
     return (
       <div id="room-message-list" onScroll={e => this.scrollUp(e)}>
         {head}
         {this.showMessageList()}
-        <Modal contentLabel="メッセージメニュー" style={customStyles} isOpen={!!this.state.selectMessage}
-          onRequestClose={e => this.cancelSelectMessage(e) }>
-          <div className="menu" role="menu">
-            <ul className="menu-list">
-              <li><a>(仮)メッセージメニュー</a></li>
-              {editMessageMenu}
-            </ul>
-          </div>
-        </Modal>
+        <RoomMessageMenu selectMessage={this.state.selectMessage} loginUser={this.props.loginUser}
+          position={this.state.menuPosition} onCancelSelectMessage={this.cancelSelectMessage}
+          onSelectEditMessage={this.selectEditMessage} onSelectDeleteMessage={this.selectDeleteMessage}
+        />
         <RoomMessageDeleteModal deleteMessage={this.state.deleteMessage} editing={this.state.editing}
-          onDeleteMessage={this.deleteMessage} onCancelDeleteMessage={this.cancelDeleteMessage} />
+          onDeleteMessage={this.deleteMessage} onCancelDeleteMessage={this.cancelDeleteMessage}
+        />
       </div>
     )
   }
