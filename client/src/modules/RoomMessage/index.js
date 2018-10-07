@@ -4,9 +4,16 @@ import 'moment/locale/ja'
 import markdownIt from 'markdown-it'
 import markdownItEmoji from 'markdown-it-emoji'
 
+import api from '../../services/api'
+
 class RoomMessage extends Component {
   markdown (content) {
     return markdownIt({ breaks: true, linkify: true }).use(markdownItEmoji).render(content)
+  }
+
+  downloadFile (e, id, name) {
+    api.downloadFile('/api/messages/download/' + id, name)
+      .catch(err => console.log(err))
   }
 
   render () {

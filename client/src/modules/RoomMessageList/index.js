@@ -284,11 +284,6 @@ class RoomMessageList extends Component {
     )
   }
 
-  downloadFile (e, id, name) {
-    api.downloadFile('/api/messages/download/' + id, name)
-      .catch(err => console.log(err))
-  }
-
   showMessage(message) {
     if (this.state.editMessage && message.id === this.state.editMessage.id) {
       return this.showEditMessageArea(message)
