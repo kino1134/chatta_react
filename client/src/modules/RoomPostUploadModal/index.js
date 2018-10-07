@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import Modal from 'react-modal'
 
+import withFocus from '../../helpers/withFocus'
+
 import RoomPostTextarea from '../RoomPostTextarea'
+import EmojiPicker from '../EmojiPicker'
 
 import api from '../../services/api'
 
@@ -32,6 +35,7 @@ class RoomPostUploadModal extends Component {
     this.fileUpload = this.fileUpload.bind(this)
 
     this.state = {
+      emojiPickerPosition: null,
       uploading: false,
       uploadText: ''
     }
@@ -62,12 +66,22 @@ class RoomPostUploadModal extends Component {
     }
   }
 
+  showEmojiPicker (e) {
+    const main = document.getElementById('main')
+    const position = {
+      bottom: Math.min(main.clientHeight - e.clientY - 23, 320),
+      right: main.clientWidth - e.clientX
+    }
+    this.setState({ emojiPickerPosition: position })
+  }
+
   render () {
     if (!this.props.selectFile) return null
 
     return (
       <Modal contentLabel="ファイルアップロード" style={fileUploadStyles} isOpen={!!this.props.selectFile}
-        onAfterOpen={e => this.setState({ uploadText: this.props.uploadText })} onRequestClose={e => this.props.clearSelectFile(e) }>
+        onAfterOpen={e => this.setState({ uploadText: this.props.uploadText })}
+        onRequestClose={e => this.props.clearSelectFile(e) }>
         <div className="content delete-message-confirm">
           <h3 className="header">
             ファイルアップロード
@@ -77,10 +91,22 @@ class RoomPostUploadModal extends Component {
           <div className="content message-container">
             {this.props.selectFile.replace('C:\\fakepath\\', '')}
           </div>
-          <div className="field">
-            <RoomPostTextarea name="uploadText" placeholder="メッセージの追加" text={this.state.uploadText}
-              loginUser={this.props.loginUser} onChange={this.changeHandler} onEnter={this.fileUpload}
-            />
+          <div className={`room-post-area field has-addons ${this.props.getFocusClass()}`}>
+            <div className="control main">
+              <RoomPostTextarea name="uploadText" placeholder="メッセージの追加" text={this.state.uploadText}
+                loginUser={this.props.loginUser} onChange={this.changeHandler} onEnter={this.fileUpload}
+                onFocus={this.props.setFocus} onBlur={this.props.setBlur}
+              />
+            </div>
+            <p className="control">
+              <button className={`button`} onClick={e => this.showEmojiPicker(e) }>
+                <i className="far fa-smile fa-lg"></i>
+              </button>
+              <EmojiPicker position={this.state.emojiPickerPosition}
+                onRequestClose={e => this.setState({ emojiPickerPosition: null }) }
+                selectEmoji={k => this.setState({ uploadText: `${this.state.uploadText} ${k} ` }) }
+              />
+            </p>
           </div>
           <nav className="level is-mobile">
             <div className="level-left">
@@ -101,4 +127,4 @@ class RoomPostUploadModal extends Component {
   }
 }
 
-export default RoomPostUploadModal
+export default withFocus({ stateName: 'focusTextArea', className: 'has-focus' })(RoomPostUploadModal)

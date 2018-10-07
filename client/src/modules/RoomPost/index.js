@@ -6,6 +6,7 @@ import EmojiPicker from '../EmojiPicker'
 import RoomPostUploadModal from '../RoomPostUploadModal'
 
 import apiHandler from '../../helpers/apiHandler'
+import withFocus from '../../helpers/withFocus'
 
 import api from '../../services/api'
 import socket from '../../services/socket'
@@ -18,15 +19,12 @@ class RoomPost extends Component {
     this.changeHandler = this.changeHandler.bind(this)
     this.clearSelectFile = this.clearSelectFile.bind(this)
     this.posting = this.posting.bind(this)
-    this.focusTextarea = this.focusTextarea.bind(this)
-    this.blurTextarea = this.blurTextarea.bind(this)
 
     this.typing = false
     this.lastTypingTime = null
     this.fileInput = React.createRef()
 
     this.state = {
-      focusTextarea: false,
       emojiPickerPosition: null,
       text: "",
       selectFile: "",
@@ -78,16 +76,6 @@ class RoomPost extends Component {
       .then(() => this.props.endExecute() )
   }
 
-  hasFocusTextarea () {
-    return this.state.focusTextarea ? 'has-focus': ''
-  }
-  focusTextarea (e) {
-    this.setState({ focusTextarea: true })
-  }
-  blurTextarea (e) {
-    this.setState({ focusTextarea: false })
-  }
-
   selectFile (e) {
     this.fileInput.current.click()
   }
@@ -113,7 +101,7 @@ class RoomPost extends Component {
     return (
       <footer id="room-post">
         {this.showTyping()}
-        <div className={`room-post-area field has-addons ${this.hasFocusTextarea()}`}>
+        <div className={`room-post-area field has-addons ${this.props.getFocusClass()}`}>
           <p className="control">
             <input name="selectFile" type="file" className="file-input" ref={this.fileInput}
               value={this.state.selectFile} onChange={this.changeHandler}></input>
@@ -126,7 +114,7 @@ class RoomPost extends Component {
           </p>
           <p className="control main">
             <RoomPostTextarea name="text" placeholder="メッセージ" text={this.state.text} loginUser={this.props.loginUser}
-              onChange={this.changeHandler} onEnter={this.posting} onFocus={this.focusTextarea} onBlur={this.blurTextarea}
+              onChange={this.changeHandler} onEnter={this.posting} onFocus={this.props.setFocus} onBlur={this.props.setBlur}
             />
           </p>
           <p className="control">
@@ -150,4 +138,4 @@ class RoomPost extends Component {
   }
 }
 
-export default apiHandler(RoomPost)
+export default withFocus({ stateName: 'focusTextarea', className: 'has-focus' })(apiHandler(RoomPost))
