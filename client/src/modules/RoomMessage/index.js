@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import moment from 'moment'
 import 'moment/locale/ja'
 import markdownIt from 'markdown-it'
@@ -6,7 +6,7 @@ import markdownItEmoji from 'markdown-it-emoji'
 
 import api from '../../services/api'
 
-class RoomMessage extends Component {
+class RoomMessage extends PureComponent {
   markdown (content) {
     return markdownIt({ breaks: true, linkify: true }).use(markdownItEmoji).render(content)
   }
