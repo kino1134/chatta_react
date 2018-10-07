@@ -113,7 +113,7 @@ class RoomPost extends Component {
     return (
       <footer id="room-post">
         {this.showTyping()}
-        <div className={`field has-addons ${this.hasFocusTextarea()}`}>
+        <div className={`room-post-area field has-addons ${this.hasFocusTextarea()}`}>
           <p className="control">
             <input name="selectFile" type="file" className="file-input" ref={this.fileInput}
               value={this.state.selectFile} onChange={this.changeHandler}></input>
