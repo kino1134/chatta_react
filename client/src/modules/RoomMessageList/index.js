@@ -188,69 +188,7 @@ class RoomMessageList extends Component {
     this.setState({ event: null })
   }
 
-  showMessageList () {
-    const result = []
-    if (this.props.message.list === null) return result
-
-    this.props.message.list.forEach((m, i, arr) => {
-      if (i === 0 || !moment(m.createdAt).isSame(arr[i - 1].createdAt, 'day')) {
-        result.push(this.showDateLine(m))
-      }
-
-      result.push(this.showMessage(m))
-
-      if (i !== this.props.message.list.length - 1 && this.props.loginUser.readMessage === m.id) {
-        result.push(this.showUnreadLine(this.props.loginUser.readMessage))
-      }
-    })
-
-    return result
-  }
-
-  showListHead () {
-    if (this.props.message.previous || this.state.loading) {
-      return (
-        <RoomLoading />
-      )
-    } else {
-      return (
-        <article key="Hello" className="hello">会話を開始しました</article>
-      )
-    }
-  }
-
-  showUnreadLine(messageId) {
-    return (
-      <div key={`read-${messageId}`} className="unread-line">
-        <hr />
-        <span className="content">未読</span>
-      </div>
-    )
-  }
-
-  showDateLine (message) {
-    const date = moment(message.createdAt)
-    return (
-      <div key={date.format('YYYYMMDD')} className="date-line">
-        <hr />
-        <strong className="content">{date.format('MMMMDo(ddd)')}</strong>
-      </div>
-    )
-  }
-
-  showMessage(message) {
-    if (this.state.editMessage && message.id === this.state.editMessage.id) {
-      return (
-        <RoomMessageEdit key={this.state.editMessage.id} editMessage={this.state.editMessage} editing={this.state.editing}
-          onCancelEditMessage={this.cancelEditMessage} onEditMessage={this.editMessage} />
-      )
-    }
-
-    return (
-      <RoomMessage key={message.id} message={message} onShowMenu={this.clickAction} />
-    )
-  }
-
+  // メッセージメニューのハンドラ群
   clickAction (e, message) {
     const position = {
       top: e.clientY - 50,
@@ -258,19 +196,20 @@ class RoomMessageList extends Component {
     }
     this.setState({ selectMessage: message, menuPosition: position })
   }
-
   cancelSelectMessage (e) {
     this.setState({ selectMessage: null })
   }
-
   selectEditMessage (e) {
     this.setState({ selectMessage: null, editMessage: this.state.selectMessage })
   }
+  selectDeleteMessage (e) {
+    this.setState({ deleteMessage: this.state.selectMessage, selectMessage: null })
+  }
 
+  // メッセージ編集のハンドラ群
   cancelEditMessage (e) {
     this.setState({ editMessage: null })
   }
-
   editMessage (e, text) {
     if (this.state.editing) return
     this.setState({ editing: true })
@@ -289,15 +228,10 @@ class RoomMessageList extends Component {
       })
   }
 
-
-  selectDeleteMessage (e) {
-    this.setState({ deleteMessage: this.state.selectMessage, selectMessage: null })
-  }
-
+  // メッセージ削除のハンドラ群
   cancelDeleteMessage (e) {
     this.setState({ deleteMessage: null })
   }
-
   deleteMessage (e) {
     if (this.state.editing) return
     this.setState({ editing: true })
@@ -305,10 +239,67 @@ class RoomMessageList extends Component {
     api.delete('/api/messages/' + this.state.deleteMessage.id).then(res => {
       // 何もしない
     }).catch(err => console.log(err) )
-      .then(() => {
-        this.setState({ editing: false })
-        this.setState({ deleteMessage: null })
-      })
+      .then(() => this.setState({ editing: false, deleteMessage: null }) )
+  }
+
+  // レンダリングを行うメソッド群
+  showListHead () {
+    if (this.props.message.previous || this.state.loading) {
+      return (
+        <RoomLoading />
+      )
+    } else {
+      return (
+        <article key="Hello" className="hello">会話を開始しました</article>
+      )
+    }
+  }
+  showMessageList () {
+    const result = []
+    if (this.props.message.list === null) return result
+
+    this.props.message.list.forEach((m, i, arr) => {
+      if (i === 0 || !moment(m.createdAt).isSame(arr[i - 1].createdAt, 'day')) {
+        result.push(this.showDateLine(m))
+      }
+
+      result.push(this.showMessage(m))
+
+      if (i !== this.props.message.list.length - 1 && this.props.loginUser.readMessage === m.id) {
+        result.push(this.showUnreadLine(this.props.loginUser.readMessage))
+      }
+    })
+
+    return result
+  }
+  showUnreadLine(messageId) {
+    return (
+      <div key={`read-${messageId}`} className="unread-line">
+        <hr />
+        <span className="content">未読</span>
+      </div>
+    )
+  }
+  showDateLine (message) {
+    const date = moment(message.createdAt)
+    return (
+      <div key={date.format('YYYYMMDD')} className="date-line">
+        <hr />
+        <strong className="content">{date.format('MMMMDo(ddd)')}</strong>
+      </div>
+    )
+  }
+  showMessage(message) {
+    if (this.state.editMessage && message.id === this.state.editMessage.id) {
+      return (
+        <RoomMessageEdit key={this.state.editMessage.id} editMessage={this.state.editMessage} editing={this.state.editing}
+          onCancelEditMessage={this.cancelEditMessage} onEditMessage={this.editMessage} />
+      )
+    }
+
+    return (
+      <RoomMessage key={message.id} message={message} onShowMenu={this.clickAction} />
+    )
   }
 
   render () {
