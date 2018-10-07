@@ -190,8 +190,8 @@ class RoomMessageList extends Component {
 
   showMessageList () {
     const result = []
-
     if (this.props.message.list === null) return result
+
     this.props.message.list.forEach((m, i, arr) => {
       if (i === 0 || !moment(m.createdAt).isSame(arr[i - 1].createdAt, 'day')) {
         result.push(this.showDateLine(m))

@@ -52,6 +52,8 @@ class RoomMessageDeleteModal extends Component {
   }
 
   render () {
+    if (!this.props.deleteMessage) return null
+
     return (
       <Modal contentLabel="メッセージの削除" style={deleteConfirmStyles}
         isOpen={!!this.props.deleteMessage} onRequestClose={e => this.props.onCancelDeleteMessage(e) }>

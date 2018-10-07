@@ -34,6 +34,8 @@ class RoomMessageMenu extends Component {
   }
 
   render () {
+    if (!this.props.selectMessage) return null
+
     customStyles.content.top = this.props.position.top
     customStyles.content.left = this.props.position.left
 
