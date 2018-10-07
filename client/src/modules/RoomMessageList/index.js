@@ -9,6 +9,7 @@ import Push from 'push.js'
 import './index.css'
 
 import RoomLoading from '../RoomLoading'
+import RoomMessage from '../RoomMessage'
 
 import socket from '../../services/socket'
 import api from '../../services/api'
@@ -55,6 +56,7 @@ class RoomMessageList extends Component {
     this.reading = false
 
     this.changeHandler = this.changeHandler.bind(this)
+    this.clickAction = this.clickAction.bind(this)
 
     this.state = {
       selectMessage: null,
@@ -292,44 +294,8 @@ class RoomMessageList extends Component {
       return this.showEditMessageArea(message)
     }
 
-    let fileLink = null
-    if (message.file && message.file.name) {
-      fileLink = (
-        <span>
-          添付ファイル：<a onClick={e => this.downloadFile(e, message.id, message.file.name)}>{message.file.name}</a>
-        </span>
-      )
-    }
-
     return (
-      <article key={message.id} className="media">
-        <figure className="media-left">
-          <p className="image avator">
-            <img src={message.user.photo} alt={message.user.displayName} />
-          </p>
-        </figure>
-        <div className="media-content">
-          <div className="content">
-            <p className="message-info">
-              <strong>{message.user.displayName}</strong>
-              <small>@{message.user.userId}</small>
-              <small> | </small>
-              <small>{moment(message.createdAt).format('llll')}</small>
-            </p>
-            <p>
-              <span className="message-content"
-                dangerouslySetInnerHTML={{ __html: this.markdown(message.content) }}>
-              </span>
-              {fileLink}
-            </p>
-          </div>
-        </div>
-        <nav className="level is-mobile message-action">
-          <a className="icon is-medium" onClick={e => this.clickAction(e, message)}>
-            <i className="far fa-caret-square-down fa-lg"></i>
-          </a>
-        </nav>
-      </article>
+      <RoomMessage key={message.id} message={message} onShowMenu={this.clickAction} />
     )
   }
 
