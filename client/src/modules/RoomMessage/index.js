@@ -1,16 +1,12 @@
 import React, { PureComponent } from 'react'
 import moment from 'moment'
 import 'moment/locale/ja'
-import markdownIt from 'markdown-it'
-import markdownItEmoji from 'markdown-it-emoji'
+
+import Markdown from '../../components/Markdown'
 
 import api from '../../services/api'
 
 class RoomMessage extends PureComponent {
-  markdown (content) {
-    return markdownIt({ breaks: true, linkify: true }).use(markdownItEmoji).render(content)
-  }
-
   downloadFile (e, id, name) {
     api.downloadFile('/api/messages/download/' + id, name)
       .catch(err => console.log(err))
@@ -44,9 +40,7 @@ class RoomMessage extends PureComponent {
               <small>{moment(message.createdAt).format('llll')}</small>
             </p>
             <p>
-              <span className="message-content"
-                dangerouslySetInnerHTML={{ __html: this.markdown(message.content) }}>
-              </span>
+              <Markdown className="message-content" content={message.content} />
               {fileLink}
             </p>
           </div>
