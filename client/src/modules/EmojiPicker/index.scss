@@ -4,19 +4,28 @@
   }
   .picker-main {
     display: block;
-    height: 213px;
+    height: 210px;
     overflow-x: hidden;
     overflow-y: scroll;
   }
 
-  .emoji {
+  .emoji-item {
     display: inline-block;
     font-size: 20px;
     text-align: center;
     height: 32px;
-    width: 36px;
+    width: 32px;
+    padding: 4px;
     &:hover {
       background-color: #ffe1ae;
+    }
+  }
+
+  .picker-category {
+    color: #a0a0a0;
+    font-size: 28px;
+    &:hover {
+      color: #363636;
     }
   }
 
@@ -26,7 +35,12 @@
 
   .preview-emoji {
     font-size: 28px;
-    margin-right: 5px;
+    vertical-align: middle;
+    img.emoji {
+      height: 32px;
+      width: 32px;
+      margin-right: 5px;
+    }
   }
   .preview-title {
     font-size: 16px;

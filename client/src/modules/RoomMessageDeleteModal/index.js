@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import Modal from 'react-modal'
 import moment from 'moment'
 import 'moment/locale/ja'
-import markdownIt from 'markdown-it'
-import markdownItEmoji from 'markdown-it-emoji'
 import './index.css'
+
+import Markdown from '../../components/Markdown'
 
 Modal.setAppElement('#root')
 const deleteConfirmStyles = {
@@ -25,10 +25,6 @@ const deleteConfirmStyles = {
 }
 
 class RoomMessageDeleteModal extends Component {
-  markdown (content) {
-    return markdownIt({ breaks: true, linkify: true }).use(markdownItEmoji).render(content)
-  }
-
   showDeleteMessage (message) {
     if (!message) return null
     return (
@@ -41,9 +37,7 @@ class RoomMessageDeleteModal extends Component {
               <small>{moment(message.createdAt).format('llll')}</small>
             </p>
             <p>
-              <span className="message-content"
-                dangerouslySetInnerHTML={{ __html: this.markdown(message.content) }}>
-              </span>
+              <Markdown className="message-content" content={message.content} />
             </p>
           </div>
         </div>
