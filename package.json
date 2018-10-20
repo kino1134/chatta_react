@@ -14,7 +14,7 @@
     "now-build": "NODE_ENV=production npm run clean && babel server -d dist",
     "now-start": "NODE_ENV=production node dist/index.js",
     "lint": "eslint server",
-    "test": "jest --forceExit"
+    "test": "jest"
   },
   "jest": {
     "testEnvironment": "node",
@@ -67,6 +67,7 @@
     "eslint-plugin-standard": "^3.1.0",
     "jest": "^23.5.0",
     "mongodb-memory-server": "^2.0.0",
+    "nock": "^10.0.1",
     "nodemon": "^1.18.3",
     "now": "^11.4.2",
     "npm-run-all": "^4.1.3",
