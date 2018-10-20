@@ -1,30 +1,12 @@
-import fs from 'fs'
 import { Router } from 'express'
-import multer from 'multer'
-import onFinished from 'on-finished'
 import { token } from '../../service/passport'
 import { validate } from '../../service/response'
+import uploadFile from '../../service/upload_file'
 
 import { post, get, download, update, destroy, upload } from './controller'
 import validator, { getValidator, updateValidator, uploadValidator, idValidator } from './validator'
 
 const router = new Router()
-
-// TODO: 共通化したい
-const uploadSingle = (name) => (req, res, next) => {
-  multer({ dest: 'upload/' }).single(name)(req, res, err => {
-    if (err) {
-      return res.status(400).json({ message: '添付ファイルが処理できません' })
-    }
-    // レスポンスを返す際、一時ファイルを削除する
-    onFinished(res, function (_, res) {
-      if (req.file) {
-        fs.unlinkSync(req.file.path)
-      }
-    })
-    next()
-  })
-}
 
 // 指定されたメッセージから最新２０件を取得する
 router.get('/',
@@ -46,7 +28,7 @@ router.post('/',
 
 // メッセージ＋ファイルを登録する
 router.post('/upload',
-  uploadSingle('attachFile'),
+  uploadFile.single('attachFile'),
   validate(uploadValidator, 'パラメータが間違っています'),
   token(),
   upload)
