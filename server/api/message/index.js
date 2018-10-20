@@ -16,6 +16,7 @@ const fileUpload = (req, res, next) => {
     if (err) {
       return res.status(400).json({ message: '添付ファイルが処理できません' })
     }
+    // レスポンスを返す際、一時ファイルを削除する
     onFinished(res, function (_, res) {
       fs.unlinkSync(req.file.path)
     })
@@ -23,11 +24,41 @@ const fileUpload = (req, res, next) => {
   })
 }
 
-router.get('/', validate(getValidator, 'パラメータが間違っています'), token(), get)
-router.get('/download/:id', validate(idValidator, 'パラメータが間違っています'), token(), download)
-router.post('/', validate(validator, 'パラメータが間違っています'), token(), post)
-router.post('/upload', fileUpload, token(), upload)
-router.put('/:id', validate(updateValidator, 'パラメータが間違っています'), token(), update)
-router.delete('/:id', validate(idValidator, 'パラメータが間違っています'), token(), destroy)
+// 指定されたメッセージから最新２０件を取得する
+router.get('/',
+  validate(getValidator, 'パラメータが間違っています'),
+  token(),
+  get)
+
+// メッセージに添付されたファイルを取得する
+router.get('/download/:id',
+  validate(idValidator, 'パラメータが間違っています'),
+  token(),
+  download)
+
+// メッセージを登録する
+router.post('/',
+  validate(validator, 'パラメータが間違っています'),
+  token(),
+  post)
+
+// メッセージ＋ファイルを登録する
+// TODO: ファイル以外のチェックをしていない
+router.post('/upload',
+  fileUpload,
+  token(),
+  upload)
+
+// メッセージを更新する
+router.put('/:id',
+  validate(updateValidator, 'パラメータが間違っています'),
+  token(),
+  update)
+
+// メッセージを削除する
+router.delete('/:id',
+  validate(idValidator, 'パラメータが間違っています'),
+  token(),
+  destroy)
 
 export default router
