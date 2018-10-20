@@ -2,7 +2,7 @@ import request from 'supertest'
 import { signSync } from '../../service/jwt'
 import { api } from '../../config'
 import express from '../../config/express'
-import routes from '../../api/user'
+import routes from '.'
 import User from '../../model/User'
 
 const app = () => express(api.root, routes)
