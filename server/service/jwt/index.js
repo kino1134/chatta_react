@@ -9,6 +9,8 @@ export const signSync = (payload, opts) => {
   return jwt.sign(payload, config.jwt.secret, Object.assign(option, opts))
 }
 
-export const sign = (payload, opts) => {
-  return new Promise(resolve => resolve(signSync(payload, opts)))
-}
+export const sign = (payload, opts) =>
+  new Promise(resolve => resolve(signSync(payload, opts)))
+
+export const verify = (token) =>
+  new Promise(resolve => resolve(jwt.verify(token, config.jwt.secret)))
