@@ -6,19 +6,21 @@ import { token } from '../../service/passport'
 import { validate } from '../../service/response'
 
 import { post, get, download, update, destroy, upload } from './controller'
-import validator, { getValidator, updateValidator, idValidator } from './validator'
+import validator, { getValidator, updateValidator, uploadValidator, idValidator } from './validator'
 
 const router = new Router()
 
 // TODO: 共通化したい
-const fileUpload = (req, res, next) => {
-  multer({ dest: 'upload/' }).single('attachFile')(req, res, err => {
+const uploadSingle = (name) => (req, res, next) => {
+  multer({ dest: 'upload/' }).single(name)(req, res, err => {
     if (err) {
       return res.status(400).json({ message: '添付ファイルが処理できません' })
     }
     // レスポンスを返す際、一時ファイルを削除する
     onFinished(res, function (_, res) {
-      fs.unlinkSync(req.file.path)
+      if (req.file) {
+        fs.unlinkSync(req.file.path)
+      }
     })
     next()
   })
@@ -43,9 +45,9 @@ router.post('/',
   post)
 
 // メッセージ＋ファイルを登録する
-// TODO: ファイル以外のチェックをしていない
 router.post('/upload',
-  fileUpload,
+  uploadSingle('attachFile'),
+  validate(uploadValidator, 'パラメータが間違っています'),
   token(),
   upload)
 
