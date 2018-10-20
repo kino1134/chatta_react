@@ -5,7 +5,7 @@ const passwordChars = idChars + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' + '-'
 
 const random = (size) => crypto.randomBytes(size)
 
-// 文字種をすべてカバーする最小のマスク値を決定する
+// 文字種の数、マスク値を決定する
 const calcParams = (chars) => {
   const length = chars.length
   if (length <= 1) throw new Error('invalid chars')
@@ -20,15 +20,16 @@ const randomString = (size, chars) => {
 
   const params = calcParams(chars)
 
-  let id = ''
+  let ret = ''
   random(size).forEach(v => {
+    // ランダム値をマスクして、文字種を取得するインデックスに変換する
     const index = v & params.mask
-    // マスクした結果、文字種の長さに収まっていた場合は結果に加える
-    if (index < params.length) id += chars[index]
+    // インデックスが文字種の長さに収まっていた場合は結果に加える
+    if (index < params.length) ret += chars[index]
   })
 
   // 足りない分は再度取得する
-  return id + randomString(size - id.length, chars)
+  return ret + randomString(size - ret.length, chars)
 }
 
 export const randomId = (size) => randomString(size, idChars)
