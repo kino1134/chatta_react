@@ -38,7 +38,7 @@ const config = {
     uri: required('MONGO_URI'),
     user: required('MONGO_USER'),
     password: required('MONGO_PASSWORD'),
-    debug: process.env.MONGO_DEBUG || true
+    debug: process.env.MONGO_DEBUG === 'true'
   },
   redis: {
     host: process.env.REDIS_HOST || 'localhost',
