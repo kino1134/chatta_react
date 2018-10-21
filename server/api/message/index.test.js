@@ -3,7 +3,7 @@ import { api } from '../../config'
 import express from '../../config/express'
 import routes from '.'
 
-jest.requireMock('redis')
+jest.mock('redis')
 
 const app = () => express(api.root, routes)
 
