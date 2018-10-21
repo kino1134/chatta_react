@@ -1,9 +1,8 @@
-import { createClient } from 'redis'
 import socketIo from 'socket.io'
 import socketRedis from 'socket.io-redis'
 import { redis } from '../'
 
-export default () => {
+export default (createClient) => {
   const io = socketIo()
 
   // 裏にRedisを設けて、APIからのemit、およびスケーリングを行う

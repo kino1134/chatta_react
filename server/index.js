@@ -1,4 +1,5 @@
 import http from 'http'
+import { createClient } from 'redis'
 import config from './config'
 import express from './config/express'
 import mongoose from './config/mongoose'
@@ -7,7 +8,7 @@ import api from './api'
 
 const app = express(config.api.root, api)
 const server = http.createServer(app)
-const io = socketIo()
+const io = socketIo(createClient)
 
 mongoose.connect(config.mongo.uri, {
   useNewUrlParser: true,
