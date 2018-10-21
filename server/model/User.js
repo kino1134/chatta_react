@@ -81,7 +81,7 @@ userSchema.methods = {
     return view
   },
 
-  // パスワードのよる認証を行う
+  // パスワードによる認証を行う
   authenticate (password) {
     if (!this.password) return Promise.resolve(false)
     return bcrypt.compare(password, this.password).then((valid) => valid ? this : false)
@@ -101,6 +101,7 @@ userSchema.statics = {
       } else {
         const createUserId = () => {
           const userId = randomId(8)
+          // IDが重複した場合、再度採番する
           return this.count({ userId }).then(cnt => {
             return cnt === 0 ? userId : createUserId()
           })
