@@ -10,7 +10,7 @@ export default {
     if (sendgrid.enabled === 'false') {
       console.log(text)
       console.log(html)
-      return true
+      return new Promise(resolve => resolve())
     }
 
     mailer.setApiKey(sendgrid.apiKey)
@@ -22,7 +22,7 @@ export default {
     if (text) message.text = text
     if (html) message.html = html
 
-    mailer.send(message)
+    return mailer.send(message)
   },
 
   render (fileName, data) {

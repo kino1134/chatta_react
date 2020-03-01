@@ -67,7 +67,7 @@ export const download = ({ params }, res, next) =>
   Message.findById(params.id)
     .then(m => m && m.file.name ? m.file : null)
     .then(notFound(res))
-    .then(file => res.attachment(file.name).send(file.data))
+    .then(file => file ? res.attachment(file.name).send(file.data) : null)
     .catch(next)
 
 export const get = (req, res, next) => {

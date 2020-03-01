@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`render passwordInit 1`] = `
+"なまえ さんのパスワードが初期化されました。<br/><br/>
+ID：1234<br/>
+新しいパスワード：newPassword
+"
+`;
+
+exports[`render singUp 1`] = `
+"なまえ さんのユーザが登録されました。<br/><br/>
+ID：1234<br/>
+パスワード：Password1
+"
+`;
